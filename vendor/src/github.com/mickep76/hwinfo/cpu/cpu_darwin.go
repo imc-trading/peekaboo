@@ -18,32 +18,32 @@ func GetInfo() (Info, error) {
 		"machdep.cpu.features",
 	}
 
-	c := Info{}
+	i := Info{}
 
 	o, err := common.ExecCmdFields("/usr/sbin/sysctl", []string{"-a"}, ":", fields)
 	if err != nil {
 		return Info{}, err
 	}
 
-	c.CoresPerSocket, err = strconv.Atoi(o["machdep.cpu.core_count"])
+	i.CoresPerSocket, err = strconv.Atoi(o["machdep.cpu.core_count"])
 	if err != nil {
 		return Info{}, err
 	}
 
-	c.Physical, err = strconv.Atoi(o["hw.physicalcpu_max"])
+	i.Physical, err = strconv.Atoi(o["hw.physicalcpu_max"])
 	if err != nil {
 		return Info{}, err
 	}
 
-	c.Logical, err = strconv.Atoi(o["hw.logicalcpu_max"])
+	i.Logical, err = strconv.Atoi(o["hw.logicalcpu_max"])
 	if err != nil {
 		return Info{}, err
 	}
 
-	c.Sockets = c.Physical / c.CoresPerSocket
-	c.ThreadsPerCore = c.Logical / c.Sockets / c.CoresPerSocket
-	c.Flags = strings.ToLower(o["cpu_flags"])
-	c.Model = o["machdep.cpu.brand_string"]
+	i.Sockets = i.Physical / i.CoresPerSocket
+	i.ThreadsPerCore = i.Logical / i.Sockets / i.CoresPerSocket
+	i.Model = o["machdep.cpu.brand_string"]
+	i.Flags = strings.ToLower(o["machdep.cpu.features"])
 
-	return c, nil
+	return i, nil
 }

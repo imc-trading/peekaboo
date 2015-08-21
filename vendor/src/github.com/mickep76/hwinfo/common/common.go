@@ -27,7 +27,7 @@ func LoadFileFields(fn string, del string, fields []string) (map[string]string, 
 	return r, nil
 }
 
-// ExecCmdFields returns fields from command output.
+// ExecCmdFields returns fields from output.
 func ExecCmdFields(cmd string, args []string, del string, fields []string) (map[string]string, error) {
 	o, err := exec.Command(cmd, args...).Output()
 	if err != nil {
