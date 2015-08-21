@@ -8,7 +8,6 @@ import (
 	"github.com/Unknwon/macaron"
 	flags "github.com/jessevdk/go-flags"
 	"github.com/mickep76/hwinfo"
-	"github.com/mickep76/iodatafmt"
 )
 
 func main() {
@@ -44,24 +43,15 @@ func main() {
 	}
 
 	m := macaron.Classic()
-	m.Get("/", func() string {
+	m.Use(macaron.Renderer())
+
+	m.Get("/json", func(ctx *macaron.Context) {
 		d, err := hwinfo.HWInfo()
 		if err != nil {
 			log.Fatal(err.Error())
 		}
 
-		// Unecessary conversion hwinfo should return map[string]interface{}
-		r := map[string]interface{}{}
-		for k, v := range d {
-			r[k] = v
-		}
-
-		b, err2 := iodatafmt.Marshal(r, iodatafmt.JSON)
-		if err2 != nil {
-			log.Fatal(err2.Error())
-		}
-
-		return string(b)
+		ctx.JSON(200, &d)
 	})
 
 	m.Run("0.0.0.0", 8080)
