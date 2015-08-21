@@ -7,8 +7,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/Unknwon/macaron"
 	flags "github.com/jessevdk/go-flags"
-	"github.com/mickep76/hwinfo"
-	"github.com/mickep76/iodatafmt"
+	//	"github.com/mickep76/hwinfo"
 )
 
 func main() {
@@ -45,23 +44,7 @@ func main() {
 
 	m := macaron.Classic()
 	m.Get("/", func() string {
-		d, err := hwinfo.HWInfo()
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-
-		// Unecessary conversion hwinfo should return map[string]interface{}
-		r := map[string]interface{}{}
-		for k, v := range d {
-			r[k] = v
-		}
-
-		b, err2 := iodatafmt.Marshal(r, iodatafmt.JSON)
-		if err2 != nil {
-			log.Fatal(err2.Error())
-		}
-
-		return string(b)
+		return "Hello world!"
 	})
 
 	m.Run("0.0.0.0", 8080)

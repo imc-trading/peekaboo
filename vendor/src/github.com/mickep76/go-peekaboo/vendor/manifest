@@ -2,12 +2,6 @@
 	"version": 0,
 	"dependencies": [
 		{
-			"importpath": "github.com/BurntSushi/toml",
-			"repository": "https://github.com/BurntSushi/toml",
-			"revision": "056c9bc7be7190eaa7715723883caffa5f8fa3e4",
-			"branch": "master"
-		},
-		{
 			"importpath": "github.com/Sirupsen/logrus",
 			"repository": "https://github.com/Sirupsen/logrus",
 			"revision": "27b713cfd2742876645e3692a488c5e3fd65361d",
@@ -56,18 +50,6 @@
 			"branch": "master"
 		},
 		{
-			"importpath": "github.com/mickep76/go-peekaboo",
-			"repository": "https://github.com/mickep76/go-peekaboo",
-			"revision": "63cf0d875e3d7d336d87451cba6b317f2698f29a",
-			"branch": "master"
-		},
-		{
-			"importpath": "github.com/mickep76/iodatafmt",
-			"repository": "https://github.com/mickep76/iodatafmt",
-			"revision": "59ffc80835fd66a87ff6fe1d2285ac674b44a376",
-			"branch": "master"
-		},
-		{
 			"importpath": "github.com/tobi/airbrake-go",
 			"repository": "https://github.com/tobi/airbrake-go",
 			"revision": "5b5e269e1bc398d43f67e43dafff3414a59cd5a2",
@@ -78,12 +60,6 @@
 			"repository": "https://gopkg.in/ini.v1",
 			"revision": "45bf59e51e747b1d61b3108a97549497a6efd3bc",
 			"branch": "v1"
-		},
-		{
-			"importpath": "gopkg.in/yaml.v2",
-			"repository": "https://gopkg.in/yaml.v2",
-			"revision": "7ad95dd0798a40da1ccdff6dff35fd177b5edf40",
-			"branch": "v2"
 		}
 	]
 }
