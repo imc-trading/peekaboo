@@ -7,7 +7,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/Unknwon/macaron"
 	flags "github.com/jessevdk/go-flags"
-	"github.com/mickep76/hwinfo"
+	"github.com/mickep76/hwinfo/cpu"
 )
 
 func main() {
@@ -46,7 +46,7 @@ func main() {
 	m.Use(macaron.Renderer())
 
 	m.Get("/json", func(ctx *macaron.Context) {
-		d, err := hwinfo.HWInfo()
+		d, err := cpu.GetInfo()
 		if err != nil {
 			log.Fatal(err.Error())
 		}
