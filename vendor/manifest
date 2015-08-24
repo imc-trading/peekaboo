@@ -4,7 +4,7 @@
 		{
 			"importpath": "github.com/Sirupsen/logrus",
 			"repository": "https://github.com/Sirupsen/logrus",
-			"revision": "27b713cfd2742876645e3692a488c5e3fd65361d",
+			"revision": "44512f0d08f7f81a75f5b04a2cb6d81ed25431ca",
 			"branch": "master"
 		},
 		{
@@ -52,20 +52,20 @@
 		{
 			"importpath": "github.com/mickep76/hwinfo",
 			"repository": "https://github.com/mickep76/hwinfo",
-			"revision": "e60c8582666f6061edb541927ed0f2c6224d973a",
+			"revision": "9dff98fee17252d649a8799897c9ea140da77530",
 			"branch": "master"
 		},
 		{
 			"importpath": "github.com/mickep76/hwinfo/common",
 			"repository": "https://github.com/mickep76/hwinfo",
-			"revision": "375ac2e9c1deae27001975363b793fa431c084b2",
+			"revision": "52bcb0c5f204ab3842c2483aee0056f3741c350f",
 			"branch": "master",
 			"path": "/common"
 		},
 		{
 			"importpath": "github.com/mickep76/hwinfo/cpu",
 			"repository": "https://github.com/mickep76/hwinfo",
-			"revision": "375ac2e9c1deae27001975363b793fa431c084b2",
+			"revision": "52bcb0c5f204ab3842c2483aee0056f3741c350f",
 			"branch": "master",
 			"path": "/cpu"
 		},

@@ -2,6 +2,8 @@ package os
 
 // Info structure for information about the operating system.
 type Info struct {
-	Product string `json:"product"`
-	Version string `json:"version"`
+	Kernel         string `json:"kernel"`
+	KernelVersion  string `json:"kernel_version"`
+	Product        string `json:"product"`
+	ProductVersion string `json:"product_version"`
 }

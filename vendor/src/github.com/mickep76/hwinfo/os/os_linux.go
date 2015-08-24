@@ -4,6 +4,7 @@ package os
 
 import (
 	"github.com/mickep76/hwinfo/common"
+	"runtime"
 )
 
 // GetInfo return information about the operating system.
@@ -20,8 +21,14 @@ func GetInfo() (Info, error) {
 		return Info{}, err
 	}
 
+	i.Kernel = runtime.GOOS
 	i.Product = o["Distributor ID"]
-	i.Version = o["Release"]
+	i.ProductVersion = o["Release"]
+
+	i.KernelVersion, err = common.ExecCmd("uname", []string{"-r"})
+	if err != nil {
+		return Info{}, err
+	}
 
 	return i, nil
 }

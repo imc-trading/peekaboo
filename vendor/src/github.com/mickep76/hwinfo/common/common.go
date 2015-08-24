@@ -5,8 +5,29 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path"
 	"strings"
 )
+
+// LoadFiles returns field from multiple files.
+func LoadFiles(files []string) (map[string]string, error) {
+	r := make(map[string]string)
+
+	for _, fn := range files {
+		if _, err := os.Stat(fn); os.IsNotExist(err) {
+			return map[string]string{}, fmt.Errorf("file doesn't exist: %s", fn)
+		}
+
+		o, err := ioutil.ReadFile(fn)
+		if err != nil {
+			return map[string]string{}, err
+		}
+
+		r[path.Base(fn)] = strings.TrimRight(string(o), "\n")
+	}
+
+	return r, nil
+}
 
 // LoadFileFields returns fields from file.
 func LoadFileFields(fn string, del string, fields []string) (map[string]string, error) {
@@ -25,6 +46,16 @@ func LoadFileFields(fn string, del string, fields []string) (map[string]string, 
 	}
 
 	return r, nil
+}
+
+// ExecCmd returns output.
+func ExecCmd(cmd string, args []string) (string, error) {
+	o, err := exec.Command(cmd, args...).Output()
+	if err != nil {
+		return "", err
+	}
+
+	return strings.TrimRight(string(o), "\n"), err
 }
 
 // ExecCmdFields returns fields from output.
@@ -52,7 +83,7 @@ func parseFields(o string, del string, fields []string) (map[string]string, erro
 		}
 
 		for _, f := range fields {
-			if strings.HasPrefix(line, f) {
+			if strings.HasPrefix(strings.TrimLeft(line, " \t"), f) {
 				r[f] = strings.Trim(strings.Join(vals[1:], " "), " \t")
 			}
 		}

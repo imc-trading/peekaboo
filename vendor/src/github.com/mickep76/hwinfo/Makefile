@@ -7,9 +7,12 @@ test:
 	make
 	cd mem ;\
 	make
+	cd sys ;\
+	make
 
 readme:
 	godoc2md github.com/mickep76/hwinfo | grep -v Generated >README.md
 	godoc2md github.com/mickep76/hwinfo/cpu | grep -v Generated >>README.md
 	godoc2md github.com/mickep76/hwinfo/mem | grep -v Generated >>README.md
 	godoc2md github.com/mickep76/hwinfo/os | grep -v Generated >>README.md
+	godoc2md github.com/mickep76/hwinfo/sys | grep -v Generated >>README.md

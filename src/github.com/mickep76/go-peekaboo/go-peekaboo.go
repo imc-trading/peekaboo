@@ -8,6 +8,7 @@ import (
 	"github.com/Unknwon/macaron"
 	flags "github.com/jessevdk/go-flags"
 	"github.com/mickep76/hwinfo"
+	"github.com/mickep76/hwinfo/cpu"
 )
 
 func main() {
@@ -47,6 +48,15 @@ func main() {
 
 	m.Get("/json", func(ctx *macaron.Context) {
 		d, err := hwinfo.GetInfo()
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+
+		ctx.JSON(200, &d)
+	})
+
+	m.Get("/cpu/json", func(ctx *macaron.Context) {
+		d, err := cpu.GetInfo()
 		if err != nil {
 			log.Fatal(err.Error())
 		}

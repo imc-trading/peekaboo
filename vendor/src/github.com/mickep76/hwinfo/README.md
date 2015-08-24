@@ -11,9 +11,11 @@
 ## type Info
 ``` go
 type Info struct {
-    CPU *cpu.Info `json:"cpu"`
-    Mem *mem.Info `json:"mem"`
-    OS  *os.Info  `json:"os"`
+    Hostname string     `json:"hostname"`
+    CPU      *cpu.Info  `json:"cpu"`
+    Mem      *mem.Info  `json:"mem"`
+    OS       *hwos.Info `json:"os"`
+    Sys      *sys.Info  `json:"sys"`
 }
 ```
 Info structure for information a system.
@@ -145,8 +147,10 @@ GetInfo return information about a systems memory.
 ## type Info
 ``` go
 type Info struct {
-    Product string `json:"product"`
-    Version string `json:"version"`
+    Kernel         string `json:"kernel"`
+    KernelVersion  string `json:"kernel_version"`
+    Product        string `json:"product"`
+    ProductVersion string `json:"product_version"`
 }
 ```
 Info structure for information about the operating system.
@@ -164,6 +168,56 @@ Info structure for information about the operating system.
 func GetInfo() (Info, error)
 ```
 GetInfo return information about the operating system.
+
+
+
+
+
+
+
+
+
+
+- - -
+
+# sys
+    import "github.com/mickep76/hwinfo/sys"
+
+
+
+
+
+
+
+## type Info
+``` go
+type Info struct {
+    Manufacturer   string `json:"manufacturer"`
+    Product        string `json:"product"`
+    ProductVersion string `json:"product_version"`
+    SerialNumber   string `json:"serial_number"`
+    BIOSVendor     string `json:"bios_vendor,omitempty"`
+    BIOSDate       string `json:"bios_date,omitempty"`
+    BIOSVersion    string `json:"bios_version,omitempty"`
+    BootROMVersion string `json:"boot_rom_version,omitempty"`
+    SMCVersion     string `json:"smc_version,omitempty"`
+}
+```
+Info structure for information about a system.
+
+
+
+
+
+
+
+
+
+### func GetInfo
+``` go
+func GetInfo() (Info, error)
+```
+GetInfo return information about a systems memory.
 
 
 
