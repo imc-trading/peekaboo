@@ -1,12 +1,16 @@
-// +build darwin
-
 package netinfo
 
 import (
-	//	"github.com/mickep76/hwinfo/common"
-	//	"fmt"
 	"net"
 )
+
+// Info structure for information about a systems memory.
+type Info struct {
+	Name   string   `json:"name"`
+	MTU    int      `json:"mtu"`
+	IPAddr []string `json:"ipaddr"`
+	HWAddr string   `json:"hwaddr"`
+}
 
 // GetInfo return information about a systems memory.
 func GetInfo() ([]Info, error) {
@@ -40,16 +44,5 @@ func GetInfo() ([]Info, error) {
 		})
 	}
 
-	/*
-		interfaces, _ := net.Interfaces()
-		for _, inter := range interfaces {
-			fmt.Println(inter.Name, inter.HardwareAddr)
-			if addrs, err := inter.Addrs(); err == nil {
-				for _, addr := range addrs {
-					fmt.Println(inter.Name, "->", addr)
-				}
-			}
-		}
-	*/
 	return i, nil
 }

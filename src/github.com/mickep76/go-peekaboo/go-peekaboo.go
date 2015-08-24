@@ -8,11 +8,11 @@ import (
 	"github.com/Unknwon/macaron"
 	flags "github.com/jessevdk/go-flags"
 	"github.com/mickep76/hwinfo"
-	"github.com/mickep76/hwinfo/cpu"
-	"github.com/mickep76/hwinfo/mem"
+	"github.com/mickep76/hwinfo/cpuinfo"
+	"github.com/mickep76/hwinfo/meminfo"
 	"github.com/mickep76/hwinfo/netinfo"
-	hwos "github.com/mickep76/hwinfo/os"
-	"github.com/mickep76/hwinfo/sys"
+	"github.com/mickep76/hwinfo/osinfo"
+	"github.com/mickep76/hwinfo/sysinfo"
 )
 
 func main() {
@@ -60,7 +60,7 @@ func main() {
 	})
 
 	m.Get("/cpu/json", func(ctx *macaron.Context) {
-		d, err := cpu.GetInfo()
+		d, err := cpuinfo.GetInfo()
 		if err != nil {
 			log.Fatal(err.Error())
 		}
@@ -69,7 +69,7 @@ func main() {
 	})
 
 	m.Get("/mem/json", func(ctx *macaron.Context) {
-		d, err := mem.GetInfo()
+		d, err := meminfo.GetInfo()
 		if err != nil {
 			log.Fatal(err.Error())
 		}
@@ -78,7 +78,7 @@ func main() {
 	})
 
 	m.Get("/os/json", func(ctx *macaron.Context) {
-		d, err := hwos.GetInfo()
+		d, err := osinfo.GetInfo()
 		if err != nil {
 			log.Fatal(err.Error())
 		}
@@ -87,7 +87,7 @@ func main() {
 	})
 
 	m.Get("/sys/json", func(ctx *macaron.Context) {
-		d, err := sys.GetInfo()
+		d, err := sysinfo.GetInfo()
 		if err != nil {
 			log.Fatal(err.Error())
 		}
@@ -96,7 +96,7 @@ func main() {
 	})
 
 	m.Get("/mem/json", func(ctx *macaron.Context) {
-		d, err := mem.GetInfo()
+		d, err := meminfo.GetInfo()
 		if err != nil {
 			log.Fatal(err.Error())
 		}

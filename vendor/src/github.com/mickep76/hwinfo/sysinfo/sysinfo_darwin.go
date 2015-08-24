@@ -1,6 +1,6 @@
 // +build darwin
 
-package sys
+package sysinfo
 
 import (
 	"github.com/mickep76/hwinfo/common"

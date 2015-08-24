@@ -1,4 +1,4 @@
-package sys
+package sysinfo
 
 // Info structure for information about a system.
 type Info struct {

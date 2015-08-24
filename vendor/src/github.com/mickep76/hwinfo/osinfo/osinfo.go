@@ -1,4 +1,4 @@
-package os
+package osinfo
 
 // Info structure for information about the operating system.
 type Info struct {

@@ -1,6 +1,6 @@
 // +build linux
 
-package mem
+package meminfo
 
 import (
 	"github.com/mickep76/hwinfo/common"

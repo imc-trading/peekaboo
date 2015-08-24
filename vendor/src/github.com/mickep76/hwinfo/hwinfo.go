@@ -1,22 +1,22 @@
 package hwinfo
 
 import (
-	"github.com/mickep76/hwinfo/cpu"
-	"github.com/mickep76/hwinfo/mem"
+	"github.com/mickep76/hwinfo/cpuinfo"
+	"github.com/mickep76/hwinfo/meminfo"
 	"github.com/mickep76/hwinfo/netinfo"
-	hwos "github.com/mickep76/hwinfo/os"
-	"github.com/mickep76/hwinfo/sys"
+	"github.com/mickep76/hwinfo/osinfo"
+	"github.com/mickep76/hwinfo/sysinfo"
 	"os"
 )
 
 // Info structure for information a system.
 type Info struct {
 	Hostname string          `json:"hostname"`
-	CPU      *cpu.Info       `json:"cpu"`
-	Mem      *mem.Info       `json:"memory"`
-	OS       *hwos.Info      `json:"os"`
-	Sys      *sys.Info       `json:"system"`
-	Net      *[]netinfo.Info `json:"network"`
+	CPU      *cpuinfo.Info   `json:"cpu"`
+	Mem      *meminfo.Info   `json:"mem"`
+	OS       *osinfo.Info    `json:"os"`
+	Sys      *sysinfo.Info   `json:"sys"`
+	Net      *[]netinfo.Info `json:"net"`
 }
 
 // GetInfo return information about a system.
@@ -29,25 +29,25 @@ func GetInfo() (Info, error) {
 	}
 	h.Hostname = host
 
-	c, err := cpu.GetInfo()
+	c, err := cpuinfo.GetInfo()
 	if err != nil {
 		return Info{}, err
 	}
 	h.CPU = &c
 
-	m, err := mem.GetInfo()
+	m, err := meminfo.GetInfo()
 	if err != nil {
 		return Info{}, err
 	}
 	h.Mem = &m
 
-	o, err := hwos.GetInfo()
+	o, err := osinfo.GetInfo()
 	if err != nil {
 		return Info{}, err
 	}
 	h.OS = &o
 
-	s, err := sys.GetInfo()
+	s, err := sysinfo.GetInfo()
 	if err != nil {
 		return Info{}, err
 	}

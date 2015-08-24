@@ -1,6 +1,6 @@
 // +build darwin
 
-package cpu
+package cpuinfo
 
 import (
 	"github.com/mickep76/hwinfo/common"

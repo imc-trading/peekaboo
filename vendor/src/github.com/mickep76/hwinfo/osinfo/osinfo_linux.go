@@ -1,6 +1,6 @@
-// +build darwin
+// +build linux
 
-package os
+package osinfo
 
 import (
 	"github.com/mickep76/hwinfo/common"
@@ -10,20 +10,20 @@ import (
 // GetInfo return information about the operating system.
 func GetInfo() (Info, error) {
 	fields := []string{
-		"ProductName",
-		"ProductVersion",
+		"Distributor ID",
+		"Release",
 	}
 
 	i := Info{}
 
-	o, err := common.ExecCmdFields("/usr/bin/sw_vers", []string{}, ":", fields)
+	o, err := common.ExecCmdFields("/usr/bin/lsb_release", []string{"-a"}, ":", fields)
 	if err != nil {
 		return Info{}, err
 	}
 
 	i.Kernel = runtime.GOOS
-	i.Product = o["ProductName"]
-	i.ProductVersion = o["ProductVersion"]
+	i.Product = o["Distributor ID"]
+	i.ProductVersion = o["Release"]
 
 	i.KernelVersion, err = common.ExecCmd("uname", []string{"-r"})
 	if err != nil {

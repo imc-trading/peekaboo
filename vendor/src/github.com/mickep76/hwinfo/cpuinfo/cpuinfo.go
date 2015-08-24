@@ -1,4 +1,4 @@
-package cpu
+package cpuinfo
 
 // Info structure for information about a systems CPU(s).
 type Info struct {

@@ -1,6 +1,6 @@
 // +build linux
 
-package cpu
+package cpuinfo
 
 import (
 	"errors"
