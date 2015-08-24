@@ -58,14 +58,14 @@
 		{
 			"importpath": "github.com/mickep76/hwinfo/common",
 			"repository": "https://github.com/mickep76/hwinfo",
-			"revision": "52bcb0c5f204ab3842c2483aee0056f3741c350f",
+			"revision": "9dff98fee17252d649a8799897c9ea140da77530",
 			"branch": "master",
 			"path": "/common"
 		},
 		{
 			"importpath": "github.com/mickep76/hwinfo/cpu",
 			"repository": "https://github.com/mickep76/hwinfo",
-			"revision": "52bcb0c5f204ab3842c2483aee0056f3741c350f",
+			"revision": "9dff98fee17252d649a8799897c9ea140da77530",
 			"branch": "master",
 			"path": "/cpu"
 		},

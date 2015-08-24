@@ -9,6 +9,10 @@ import (
 	flags "github.com/jessevdk/go-flags"
 	"github.com/mickep76/hwinfo"
 	"github.com/mickep76/hwinfo/cpu"
+	"github.com/mickep76/hwinfo/mem"
+	"github.com/mickep76/hwinfo/netinfo"
+	hwos "github.com/mickep76/hwinfo/os"
+	"github.com/mickep76/hwinfo/sys"
 )
 
 func main() {
@@ -57,6 +61,51 @@ func main() {
 
 	m.Get("/cpu/json", func(ctx *macaron.Context) {
 		d, err := cpu.GetInfo()
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+
+		ctx.JSON(200, &d)
+	})
+
+	m.Get("/mem/json", func(ctx *macaron.Context) {
+		d, err := mem.GetInfo()
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+
+		ctx.JSON(200, &d)
+	})
+
+	m.Get("/os/json", func(ctx *macaron.Context) {
+		d, err := hwos.GetInfo()
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+
+		ctx.JSON(200, &d)
+	})
+
+	m.Get("/sys/json", func(ctx *macaron.Context) {
+		d, err := sys.GetInfo()
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+
+		ctx.JSON(200, &d)
+	})
+
+	m.Get("/mem/json", func(ctx *macaron.Context) {
+		d, err := mem.GetInfo()
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+
+		ctx.JSON(200, &d)
+	})
+
+	m.Get("/net/json", func(ctx *macaron.Context) {
+		d, err := netinfo.GetInfo()
 		if err != nil {
 			log.Fatal(err.Error())
 		}
