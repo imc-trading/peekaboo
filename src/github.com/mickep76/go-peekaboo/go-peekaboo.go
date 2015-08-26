@@ -7,6 +7,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/Unknwon/macaron"
 	flags "github.com/jessevdk/go-flags"
+	//	"github.com/macaron-contrib/pongo2"
 	"github.com/mickep76/hwinfo"
 	"github.com/mickep76/hwinfo/cpuinfo"
 	"github.com/mickep76/hwinfo/meminfo"
@@ -50,6 +51,19 @@ func main() {
 
 	m := macaron.Classic()
 	m.Use(macaron.Renderer())
+	//	m.Use(pongo2.Pongoer())
+
+	/*
+		m.Use(pongo2.Pongoer(pongo2.Options{
+			IndentJSON: true,
+			IndentXML:  true,
+		}))
+	*/
+
+	m.Get("/pci", func(ctx *macaron.Context) {
+		ctx.Data["title"] = "PCI"
+		ctx.HTML(200, "pci")
+	})
 
 	m.Get("/json", func(ctx *macaron.Context) {
 		d, err := hwinfo.GetInfo()
@@ -120,7 +134,7 @@ func main() {
 			log.Fatal(err.Error())
 		}
 
-		ctx.JSON(200, &d)
+		ctx.JSON(200, &d.PCI)
 	})
 
 	/*

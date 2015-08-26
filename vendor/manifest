@@ -50,9 +50,15 @@
 			"branch": "master"
 		},
 		{
+			"importpath": "github.com/macaron-contrib/pongo2",
+			"repository": "https://github.com/macaron-contrib/pongo2",
+			"revision": "cd6601358a1ede736a1a6c349f5b5551595230ab",
+			"branch": "master"
+		},
+		{
 			"importpath": "github.com/mickep76/hwinfo",
 			"repository": "https://github.com/mickep76/hwinfo",
-			"revision": "4e9901bed4c5a81b12b2aac2b07d2bf7e45b82dc",
+			"revision": "d6e1f2fc662dc106f15f8c64dfd094846296dce5",
 			"branch": "master"
 		},
 		{
@@ -73,6 +79,12 @@
 			"importpath": "github.com/tobi/airbrake-go",
 			"repository": "https://github.com/tobi/airbrake-go",
 			"revision": "5b5e269e1bc398d43f67e43dafff3414a59cd5a2",
+			"branch": "master"
+		},
+		{
+			"importpath": "gopkg.in/flosch/pongo2.v3",
+			"repository": "https://gopkg.in/flosch/pongo2.v3",
+			"revision": "5e81b817a0c48c1c57cdf1a9056cf76bdee02ca9",
 			"branch": "master"
 		},
 		{

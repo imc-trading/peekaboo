@@ -10,18 +10,16 @@ import (
 )
 
 type PCI struct {
-	BusNum      string `json:"bus_number"`
-	DeviceNum   string `json:"device_number"`
-	DeviceFunc  string `json:"device_function"`
-	ClassID     string `json:"class_id"`
-	ClassName   string `json:"class_name"`
-	VendorID    string `json:"vendor_id"`
-	DeviceID    string `json:"device_id"`
-	SubVendorID string `json:"subsys_vendor_id"`
-	SubDeviceID string `json:"subsys_device_id"`
-	VendorName  string `json:"vendor_name"`
-	DeviceName  string `json:"device_name"`
-	SubsysName  string `json:"subsys_name,omitempty"`
+	Slot      string `json:"slot"`
+	ClassID   string `json:"class_id"`
+	Class     string `json:"class"`
+	VendorID  string `json:"vendor_id"`
+	DeviceID  string `json:"device_id"`
+	Vendor    string `json:"vendor"`
+	Device    string `json:"device"`
+	SVendorID string `json:"svendor_id"`
+	SDeviceID string `json:"sdevice_id"`
+	SName     string `json:"sname,omiempty"`
 }
 
 // Info structure for information about a systems memory.
@@ -46,13 +44,7 @@ type Info struct {
 */
 
 // TODO: Cache PCI database as a map[string]string
-func getPCIVendor(vendorID string, deviceID string, subsysVendorID string, subsysDeviceID string) (string, string, string, error) {
-
-	vendorID = strings.Replace(vendorID, "0x", "", 1)
-	deviceID = strings.Replace(deviceID, "0x", "", 1)
-	subsysVendorID = strings.Replace(subsysVendorID, "0x", "", 1)
-	subsysDeviceID = strings.Replace(subsysDeviceID, "0x", "", 1)
-
+func getPCIVendor(vendorID string, deviceID string, sVendorID string, sDeviceID string) (string, string, string, error) {
 	fn := "/usr/share/hwdata/pci.ids"
 	if _, err := os.Stat(fn); os.IsNotExist(err) {
 		return "", "", "", fmt.Errorf("file doesn't exist: %s", fn)
@@ -65,7 +57,7 @@ func getPCIVendor(vendorID string, deviceID string, subsysVendorID string, subsy
 
 	vendor := ""
 	device := ""
-	subsysName := ""
+	sName := ""
 	cols := 2
 	for _, line := range strings.Split(string(o), "\n") {
 		vals := strings.SplitN(line, " ", cols)
@@ -88,8 +80,8 @@ func getPCIVendor(vendorID string, deviceID string, subsysVendorID string, subsy
 			continue
 		}
 
-		if vendor != "" && device != "" && strings.LastIndex(line, "\t") == 1 && vals[0] == subsysVendorID && vals[1] == subsysDeviceID {
-			subsysName = vals[2]
+		if vendor != "" && device != "" && strings.LastIndex(line, "\t") == 1 && vals[0] == sVendorID && vals[1] == sDeviceID {
+			sName = vals[2]
 			break
 		}
 
@@ -98,7 +90,7 @@ func getPCIVendor(vendorID string, deviceID string, subsysVendorID string, subsy
 		}
 	}
 
-	return vendor, device, subsysName, nil
+	return vendor, device, sName, nil
 }
 
 /*
@@ -123,13 +115,13 @@ C 01  Mass storage controller
 
 // TODO: Cache PCI database as a map[string]string
 func getPCIClass(classID string) (string, string, string, error) {
-	if len(classID) < 8 {
+	if len(classID) < 6 {
 		return "", "", "", fmt.Errorf("Class string is to short: %s", classID)
 	}
 
-	subClassID := classID[4:6]
-	progIntfID := classID[6:8]
-	classID = classID[2:4]
+	subClassID := classID[2:4]
+	progIntfID := classID[4:6]
+	classID = classID[0:2]
 
 	fn := "/usr/share/hwdata/pci.ids"
 	if _, err := os.Stat(fn); os.IsNotExist(err) {
@@ -194,8 +186,7 @@ func GetInfo() (Info, error) {
 	}
 
 	for _, path := range files {
-		pci := strings.Split(path, ":")
-		dev := strings.Split(pci[2], ".")
+		slot := strings.SplitN(path, ":", 2)
 
 		o, err := common.LoadFiles([]string{
 			filepath.Join(path, "class"),
@@ -208,7 +199,7 @@ func GetInfo() (Info, error) {
 			return Info{}, err
 		}
 
-		classID := o["class"]
+		classID := o["class"][2:]
 		class, subClass, _, err := getPCIClass(classID)
 		if err != nil {
 			return Info{}, err
@@ -217,28 +208,26 @@ func GetInfo() (Info, error) {
 			class = subClass
 		}
 
-		vendorID := o["vendor"]
-		deviceID := o["device"]
-		subVendorID := o["subsystem_vendor"]
-		subDeviceID := o["subsystem_device"]
-		vendor, device, subsysName, err := getPCIVendor(vendorID, deviceID, subVendorID, subDeviceID)
+		vendorID := o["vendor"][2:]
+		deviceID := o["device"][2:]
+		sVendorID := o["subsystem_vendor"][2:]
+		sDeviceID := o["subsystem_device"][2:]
+		vendor, device, sName, err := getPCIVendor(vendorID, deviceID, sVendorID, sDeviceID)
 		if err != nil {
 			return Info{}, err
 		}
 
 		i.PCI = append(i.PCI, PCI{
-			BusNum:      pci[1],
-			DeviceNum:   dev[0],
-			DeviceFunc:  dev[1],
-			ClassID:     classID,
-			ClassName:   class,
-			VendorID:    vendorID,
-			DeviceID:    deviceID,
-			SubDeviceID: subDeviceID,
-			SubVendorID: subVendorID,
-			VendorName:  vendor,
-			DeviceName:  device,
-			SubsysName:  subsysName,
+			Slot:      slot[1],
+			ClassID:   classID,
+			Class:     class,
+			VendorID:  vendorID,
+			DeviceID:  deviceID,
+			SDeviceID: sDeviceID,
+			SVendorID: sVendorID,
+			Vendor:    vendor,
+			Device:    device,
+			SName:     sName,
 		})
 	}
 
