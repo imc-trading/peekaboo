@@ -51,6 +51,10 @@ func main() {
 	m := macaron.Classic()
 	m.Use(macaron.Renderer())
 
+	m.Get("/", func(ctx *macaron.Context) {
+		ctx.Redirect("/system")
+	})
+
 	m.Get("/system", func(ctx *macaron.Context) {
 		ctx.Data["Title"] = "System"
 		ctx.Data["CPU"] = info.CPU
