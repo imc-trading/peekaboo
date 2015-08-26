@@ -7,14 +7,8 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/Unknwon/macaron"
 	flags "github.com/jessevdk/go-flags"
-	//	"github.com/macaron-contrib/pongo2"
+
 	"github.com/mickep76/hwinfo"
-	"github.com/mickep76/hwinfo/cpuinfo"
-	"github.com/mickep76/hwinfo/meminfo"
-	"github.com/mickep76/hwinfo/netinfo"
-	"github.com/mickep76/hwinfo/osinfo"
-	"github.com/mickep76/hwinfo/pciinfo"
-	"github.com/mickep76/hwinfo/sysinfo"
 )
 
 func main() {
@@ -49,127 +43,68 @@ func main() {
 		log.SetLevel(log.InfoLevel)
 	}
 
+	info, err := hwinfo.GetInfo()
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
 	m := macaron.Classic()
 	m.Use(macaron.Renderer())
 
 	m.Get("/system", func(ctx *macaron.Context) {
-		ctx.Data["title"] = "System"
-		d, err := cpuinfo.GetInfo()
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-		ctx.Data["CPU"] = d
-
-		d2, err2 := meminfo.GetInfo()
-		if err2 != nil {
-			log.Fatal(err2.Error())
-		}
-		ctx.Data["Mem"] = d2
-
-		d3, err3 := osinfo.GetInfo()
-		if err3 != nil {
-			log.Fatal(err3.Error())
-		}
-		ctx.Data["OS"] = d3
-
-		d4, err4 := sysinfo.GetInfo()
-		if err4 != nil {
-			log.Fatal(err4.Error())
-		}
-		ctx.Data["Sys"] = d4
+		ctx.Data["Title"] = "System"
+		ctx.Data["CPU"] = info.CPU
+		ctx.Data["Memory"] = info.Memory
+		ctx.Data["OS"] = info.OS
+		ctx.Data["System"] = info.System
 
 		ctx.HTML(200, "system")
 	})
 
 	m.Get("/network", func(ctx *macaron.Context) {
-		ctx.Data["title"] = "Network"
+		ctx.Data["Title"] = "Network"
 		ctx.HTML(200, "network")
 	})
 
 	m.Get("/pci", func(ctx *macaron.Context) {
-		ctx.Data["title"] = "PCI"
+		ctx.Data["Title"] = "PCI"
 		ctx.HTML(200, "pci")
 	})
 
 	m.Get("/json", func(ctx *macaron.Context) {
-		d, err := hwinfo.GetInfo()
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-
-		ctx.JSON(200, &d)
+		ctx.JSON(200, &info)
 	})
 
 	m.Get("/cpu/json", func(ctx *macaron.Context) {
-		d, err := cpuinfo.GetInfo()
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-
-		ctx.JSON(200, &d)
+		ctx.JSON(200, &info.CPU)
 	})
 
-	m.Get("/mem/json", func(ctx *macaron.Context) {
-		d, err := meminfo.GetInfo()
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-
-		ctx.JSON(200, &d)
+	m.Get("/memory/json", func(ctx *macaron.Context) {
+		ctx.JSON(200, &info.Memory)
 	})
 
 	m.Get("/os/json", func(ctx *macaron.Context) {
-		d, err := osinfo.GetInfo()
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-
-		ctx.JSON(200, &d)
+		ctx.JSON(200, &info.OS)
 	})
 
-	m.Get("/sys/json", func(ctx *macaron.Context) {
-		d, err := sysinfo.GetInfo()
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-
-		ctx.JSON(200, &d)
+	m.Get("/system/json", func(ctx *macaron.Context) {
+		ctx.JSON(200, &info.System)
 	})
 
-	m.Get("/mem/json", func(ctx *macaron.Context) {
-		d, err := meminfo.GetInfo()
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-
-		ctx.JSON(200, &d)
+	m.Get("/memory/json", func(ctx *macaron.Context) {
+		ctx.JSON(200, &info.Memory)
 	})
 
 	m.Get("/network/json", func(ctx *macaron.Context) {
-		d, err := netinfo.GetInfo()
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-
-		ctx.JSON(200, &d)
+		ctx.JSON(200, &info.Network)
 	})
 
 	m.Get("/network/interfaces/json", func(ctx *macaron.Context) {
-		d, err := netinfo.GetInfo()
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-
-		ctx.JSON(200, &d.Interfaces)
+		ctx.JSON(200, &info.Network.Interfaces)
 	})
 
 	m.Get("/pci/json", func(ctx *macaron.Context) {
-		d, err := pciinfo.GetInfo()
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-
-		ctx.JSON(200, &d.PCI)
+		ctx.JSON(200, &info.PCI.PCI)
 	})
 
 	/*

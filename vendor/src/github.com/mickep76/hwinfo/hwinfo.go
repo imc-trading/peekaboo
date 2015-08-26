@@ -14,58 +14,58 @@ import (
 type Info struct {
 	Hostname string        `json:"hostname"`
 	CPU      *cpuinfo.Info `json:"cpu"`
-	Mem      *meminfo.Info `json:"memory"`
+	Memory   *meminfo.Info `json:"memory"`
 	OS       *osinfo.Info  `json:"os"`
-	Sys      *sysinfo.Info `json:"system"`
-	Net      *netinfo.Info `json:"network"`
+	System   *sysinfo.Info `json:"system"`
+	Network  *netinfo.Info `json:"network"`
 	PCI      *pciinfo.Info `json:"pci,omitempty"`
 }
 
 // GetInfo return information about a system.
 func GetInfo() (Info, error) {
-	h := Info{}
+	i := Info{}
 
 	host, err := os.Hostname()
 	if err != nil {
 		return Info{}, err
 	}
-	h.Hostname = host
+	i.Hostname = host
 
-	c, err := cpuinfo.GetInfo()
+	i2, err := cpuinfo.GetInfo()
 	if err != nil {
 		return Info{}, err
 	}
-	h.CPU = &c
+	i.CPU = &i2
 
-	m, err := meminfo.GetInfo()
+	i3, err := meminfo.GetInfo()
 	if err != nil {
 		return Info{}, err
 	}
-	h.Mem = &m
+	i.Memory = &i3
 
-	o, err := osinfo.GetInfo()
+	i4, err := osinfo.GetInfo()
 	if err != nil {
 		return Info{}, err
 	}
-	h.OS = &o
+	i.OS = &i4
 
-	s, err := sysinfo.GetInfo()
+	i5, err := sysinfo.GetInfo()
 	if err != nil {
 		return Info{}, err
 	}
-	h.Sys = &s
+	i.System = &i5
 
-	n, err := netinfo.GetInfo()
+	i6, err := netinfo.GetInfo()
 	if err != nil {
 		return Info{}, err
 	}
-	h.Net = &n
+	i.Network = &i6
 
-	p, err := pciinfo.GetInfo()
+	i7, err := pciinfo.GetInfo()
 	if err != nil {
 		return Info{}, err
 	}
-	h.PCI = &p
+	i.PCI = &i7
 
-	return h, nil
+	return i, nil
 }

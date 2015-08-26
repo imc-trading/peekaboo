@@ -14,7 +14,7 @@ func GetInfo() (Info, error) {
 		"/sys/devices/virtual/dmi/id/chassis_vendor",
 		"/sys/devices/virtual/dmi/id/product_name",
 		"/sys/devices/virtual/dmi/id/product_version",
-		//		"/sys/devices/virtual/dmi/id/product_serial",
+		"/sys/devices/virtual/dmi/id/product_serial",
 		"/sys/devices/virtual/dmi/id/bios_vendor",
 		"/sys/devices/virtual/dmi/id/bios_date",
 		"/sys/devices/virtual/dmi/id/bios_version",
@@ -28,7 +28,7 @@ func GetInfo() (Info, error) {
 	i.Manufacturer = o["chassis_vendor"]
 	i.Product = o["product_name"]
 	i.ProductVersion = o["product_version"]
-	//	i.SerialNumber = o["product_serial"]
+	i.SerialNumber = o["product_serial"]
 	i.BIOSVendor = o["bios_vendor"]
 	i.BIOSDate = o["bios_date"]
 	i.BIOSVersion = o["bios_version"]
