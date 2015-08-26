@@ -77,7 +77,7 @@ func parseFields(o string, del string, fields []string) (map[string]string, erro
 	r := make(map[string]string)
 
 	for _, line := range strings.Split(string(o), "\n") {
-		vals := strings.Split(line, del)
+		vals := strings.SplitN(line, del, 2)
 		if len(vals) < 1 {
 			continue
 		}

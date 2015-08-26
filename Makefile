@@ -11,3 +11,6 @@ build: test
 
 update:
 	gb vendor update --all
+
+hwinfo:
+	gb vendor update github.com/mickep76/hwinfo

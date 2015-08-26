@@ -12,6 +12,7 @@ import (
 	"github.com/mickep76/hwinfo/meminfo"
 	"github.com/mickep76/hwinfo/netinfo"
 	"github.com/mickep76/hwinfo/osinfo"
+	"github.com/mickep76/hwinfo/pciinfo"
 	"github.com/mickep76/hwinfo/sysinfo"
 )
 
@@ -112,6 +113,29 @@ func main() {
 
 		ctx.JSON(200, &d)
 	})
+
+	m.Get("/pci/json", func(ctx *macaron.Context) {
+		d, err := pciinfo.GetInfo()
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+
+		ctx.JSON(200, &d)
+	})
+
+	/*
+	       m.Get("/pci/:bus/json", func(ctx *macaron.Context) {
+
+	   		ctx.Params("bus")
+
+	           d, err := pciinfo.GetInfo()
+	           if err != nil {
+	               log.Fatal(err.Error())
+	           }
+
+	           ctx.JSON(200, &d)
+	       })
+	*/
 
 	m.Run("0.0.0.0", 8080)
 }
