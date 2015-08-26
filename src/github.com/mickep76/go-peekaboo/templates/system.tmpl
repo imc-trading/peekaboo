@@ -1,0 +1,57 @@
+{{template "head" .}}
+<fieldset>
+<legend>CPU</legend>
+  <dl class="dl-horizontal">
+    <dt>Model</dt>
+    <dd>{{.CPU.Model}}</dd>
+    <dt>Flags</dt>
+    <dd>{{.CPU.Flags}}</dd>
+    <dt>Logical CPU's</dt>
+    <dd>{{.CPU.Logical}}</dd>
+    <dt>Physical CPU's</dt>
+    <dd>{{.CPU.Physical}}</dd>
+    <dt>Sockets</dt>
+    <dd>{{.CPU.Sockets}}</dd>
+    <dt>Cores Per Socket</dt>
+    <dd>{{.CPU.CoresPerSocket}}</dd>
+  </dl>
+</fieldset>
+<fieldset>
+<legend>Memory</legend>
+  <dl class="dl-horizontal">
+    <dt>Total KB</dt>
+    <dd>{{.Mem.TotalKB}}</dd>
+  </dl>
+</fieldset>
+<fieldset>
+<legend>OS</legend>
+  <dl class="dl-horizontal">
+    <dt>Kernel</dt>
+    <dd>{{.OS.Kernel}}</dd>
+    <dt>Kernel Version</dt>
+    <dd>{{.OS.KernelVersion}}</dd>
+    <dt>Kernel Version</dt>
+    <dd>{{.OS.Product}}</dd>
+    <dt>Product Version</dt>
+    <dd>{{.OS.ProductVersion}}</dd>
+  </dl>
+</fieldset>
+<legend>System</legend>
+  <dl class="dl-horizontal">
+    <dt>Manufacturer</dt>
+    <dd>{{.Sys.Manufacturer}}</dd>
+    <dt>Product</dt>
+    <dd>{{.Sys.Product}}</dd>
+    <dt>Product Version</dt>
+    <dd>{{.Sys.ProductVersion}}</dd>
+    <dt>Serial Number</dt>
+    <dd>{{.Sys.SerialNumber}}</dd>
+    <dt>BIOS Vendor</dt>
+    <dd>{{.Sys.BIOSVendor}}</dd>
+    <dt>BIOS Date</dt>
+    <dd>{{.Sys.BIOSDate}}</dd>
+    <dt>BIOS Version</dt>
+    <dd>{{.Sys.BIOSVersion}}</dd>
+  </dl>
+</fieldset>
+{{template "footer" .}}

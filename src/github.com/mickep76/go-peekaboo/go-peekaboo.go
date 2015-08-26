@@ -51,14 +51,40 @@ func main() {
 
 	m := macaron.Classic()
 	m.Use(macaron.Renderer())
-	//	m.Use(pongo2.Pongoer())
 
-	/*
-		m.Use(pongo2.Pongoer(pongo2.Options{
-			IndentJSON: true,
-			IndentXML:  true,
-		}))
-	*/
+	m.Get("/system", func(ctx *macaron.Context) {
+		ctx.Data["title"] = "System"
+		d, err := cpuinfo.GetInfo()
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+		ctx.Data["CPU"] = d
+
+		d2, err2 := meminfo.GetInfo()
+		if err2 != nil {
+			log.Fatal(err2.Error())
+		}
+		ctx.Data["Mem"] = d2
+
+		d3, err3 := osinfo.GetInfo()
+		if err3 != nil {
+			log.Fatal(err3.Error())
+		}
+		ctx.Data["OS"] = d3
+
+		d4, err4 := sysinfo.GetInfo()
+		if err4 != nil {
+			log.Fatal(err4.Error())
+		}
+		ctx.Data["Sys"] = d4
+
+		ctx.HTML(200, "system")
+	})
+
+	m.Get("/network", func(ctx *macaron.Context) {
+		ctx.Data["title"] = "Network"
+		ctx.HTML(200, "network")
+	})
 
 	m.Get("/pci", func(ctx *macaron.Context) {
 		ctx.Data["title"] = "PCI"
@@ -119,13 +145,22 @@ func main() {
 		ctx.JSON(200, &d)
 	})
 
-	m.Get("/net/json", func(ctx *macaron.Context) {
+	m.Get("/network/json", func(ctx *macaron.Context) {
 		d, err := netinfo.GetInfo()
 		if err != nil {
 			log.Fatal(err.Error())
 		}
 
 		ctx.JSON(200, &d)
+	})
+
+	m.Get("/network/interfaces/json", func(ctx *macaron.Context) {
+		d, err := netinfo.GetInfo()
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+
+		ctx.JSON(200, &d.Interfaces)
 	})
 
 	m.Get("/pci/json", func(ctx *macaron.Context) {

@@ -10,9 +10,10 @@
     <link rel="stylesheet" href="/css/bootstrap-table.css">
 
     <!-- jQuery JS
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="js/jquery.min.js"></script>
 -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
     <!-- Bootstrap JS -->
     <script src="/bootstrap/js/bootstrap.min.js"></script>
@@ -30,11 +31,13 @@
     <nav class="navbar navbar-inverse navbar-static-top">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="/">Peekaboo</a>
+          <a class="navbar-brand" href="/system">Peekaboo</a>
         </div>
         <div>
           <ul class="nav navbar-nav">
-            <li><a href="/">PCI</a></li>
+            <li {{if eq .title "System"}}class="active"{{end}}><a href="/system">System</a></li>
+            <li {{if eq .title "Network"}}class="active"{{end}}><a href="/network">Network</a></li>
+            <li {{if eq .title "PCI"}}class="active"{{end}}><a href="/pci">PCI</a></li>
           </ul>
         </div>
       </div>
