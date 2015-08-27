@@ -70,6 +70,11 @@ func main() {
 		ctx.HTML(200, "network")
 	})
 
+	m.Get("/storage", func(ctx *macaron.Context) {
+		ctx.Data["Title"] = "Storage"
+		ctx.HTML(200, "storage")
+	})
+
 	m.Get("/pci", func(ctx *macaron.Context) {
 		ctx.Data["Title"] = "PCI"
 		ctx.HTML(200, "pci")
@@ -109,6 +114,10 @@ func main() {
 
 	m.Get("/pci/json", func(ctx *macaron.Context) {
 		ctx.JSON(200, &info.PCI.PCI)
+	})
+
+	m.Get("/disks/json", func(ctx *macaron.Context) {
+		ctx.JSON(200, &info.Disk.Disks)
 	})
 
 	/*

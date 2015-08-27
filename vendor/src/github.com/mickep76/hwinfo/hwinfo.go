@@ -2,6 +2,7 @@ package hwinfo
 
 import (
 	"github.com/mickep76/hwinfo/cpuinfo"
+	"github.com/mickep76/hwinfo/diskinfo"
 	"github.com/mickep76/hwinfo/meminfo"
 	"github.com/mickep76/hwinfo/netinfo"
 	"github.com/mickep76/hwinfo/osinfo"
@@ -12,13 +13,14 @@ import (
 
 // Info structure for information a system.
 type Info struct {
-	Hostname string        `json:"hostname"`
-	CPU      *cpuinfo.Info `json:"cpu"`
-	Memory   *meminfo.Info `json:"memory"`
-	OS       *osinfo.Info  `json:"os"`
-	System   *sysinfo.Info `json:"system"`
-	Network  *netinfo.Info `json:"network"`
-	PCI      *pciinfo.Info `json:"pci,omitempty"`
+	Hostname string         `json:"hostname"`
+	CPU      *cpuinfo.Info  `json:"cpu"`
+	Memory   *meminfo.Info  `json:"memory"`
+	OS       *osinfo.Info   `json:"os"`
+	System   *sysinfo.Info  `json:"system"`
+	Network  *netinfo.Info  `json:"network"`
+	PCI      *pciinfo.Info  `json:"pci,omitempty"`
+	Disk     *diskinfo.Info `json:"disk"`
 }
 
 // GetInfo return information about a system.
@@ -66,6 +68,12 @@ func GetInfo() (Info, error) {
 		return Info{}, err
 	}
 	i.PCI = &i7
+
+	i8, err := diskinfo.GetInfo()
+	if err != nil {
+		return Info{}, err
+	}
+	i.Disk = &i8
 
 	return i, nil
 }

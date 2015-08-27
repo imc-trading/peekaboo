@@ -1,14 +1,12 @@
 {{template "head" .}}
+<fieldset>
+<legend>Interfaces</legend>
 <table data-toggle="table"
        data-url="/network/interfaces/json"
-       data-query-params="queryParams"
-       data-pagination="true"
        data-sort-name="name"
        data-sort-order="asc"
        data-show-toggle="true"
        data-show-columns="true"
-       data-search="true"
-       data-select-item-name="toolbar"
        data-cache="true"
        class="table table-striped table-hover table-condensed">
   <thead>
@@ -24,4 +22,5 @@
     </tr>
   </thead>
 </table>
+</fieldset>
 {{template "footer" .}}

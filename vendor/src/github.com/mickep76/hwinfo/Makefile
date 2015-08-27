@@ -1,18 +1,10 @@
-all: test readme
-
-test:
-	cd common ;\
-	make
-	cd cpu ;\
-	make
-	cd mem ;\
-	make
-	cd sys ;\
-	make
+all: readme
 
 readme:
 	godoc2md github.com/mickep76/hwinfo | grep -v Generated >README.md
-	godoc2md github.com/mickep76/hwinfo/cpu | grep -v Generated >>README.md
-	godoc2md github.com/mickep76/hwinfo/mem | grep -v Generated >>README.md
-	godoc2md github.com/mickep76/hwinfo/os | grep -v Generated >>README.md
-	godoc2md github.com/mickep76/hwinfo/sys | grep -v Generated >>README.md
+	godoc2md github.com/mickep76/hwinfo/cpuinfo | grep -v Generated >>README.md
+	godoc2md github.com/mickep76/hwinfo/meminfo | grep -v Generated >>README.md
+	godoc2md github.com/mickep76/hwinfo/osinfo | grep -v Generated >>README.md
+	godoc2md github.com/mickep76/hwinfo/sysinfo | grep -v Generated >>README.md
+	godoc2md github.com/mickep76/hwinfo/pciinfo | grep -v Generated >>README.md
+	godoc2md github.com/mickep76/hwinfo/diskinfo | grep -v Generated >>README.md

@@ -11,11 +11,14 @@
 ## type Info
 ``` go
 type Info struct {
-    Hostname string     `json:"hostname"`
-    CPU      *cpu.Info  `json:"cpu"`
-    Mem      *mem.Info  `json:"mem"`
-    OS       *hwos.Info `json:"os"`
-    Sys      *sys.Info  `json:"sys"`
+    Hostname string         `json:"hostname"`
+    CPU      *cpuinfo.Info  `json:"cpu"`
+    Memory   *meminfo.Info  `json:"memory"`
+    OS       *osinfo.Info   `json:"os"`
+    System   *sysinfo.Info  `json:"system"`
+    Network  *netinfo.Info  `json:"network"`
+    PCI      *pciinfo.Info  `json:"pci,omitempty"`
+    Disk     *diskinfo.Info `json:"disk"`
 }
 ```
 Info structure for information a system.
@@ -45,8 +48,8 @@ GetInfo return information about a system.
 
 - - -
 
-# cpu
-    import "github.com/mickep76/hwinfo/cpu"
+# cpuinfo
+    import "github.com/mickep76/hwinfo/cpuinfo"
 
 
 
@@ -93,8 +96,8 @@ GetInfo return information about a systems CPU(s).
 
 - - -
 
-# mem
-    import "github.com/mickep76/hwinfo/mem"
+# meminfo
+    import "github.com/mickep76/hwinfo/meminfo"
 
 
 
@@ -135,8 +138,8 @@ GetInfo return information about a systems memory.
 
 - - -
 
-# os
-    import "github.com/mickep76/hwinfo/os"
+# osinfo
+    import "github.com/mickep76/hwinfo/osinfo"
 
 
 
@@ -180,8 +183,8 @@ GetInfo return information about the operating system.
 
 - - -
 
-# sys
-    import "github.com/mickep76/hwinfo/sys"
+# sysinfo
+    import "github.com/mickep76/hwinfo/sysinfo"
 
 
 
@@ -219,6 +222,134 @@ func GetInfo() (Info, error)
 ```
 GetInfo return information about a systems memory.
 
+
+
+
+
+
+
+
+
+
+- - -
+
+# pciinfo
+    import "github.com/mickep76/hwinfo/pciinfo"
+
+
+
+
+
+
+
+## type Info
+``` go
+type Info struct {
+    PCI []PCI `json:"pci"`
+}
+```
+Info structure for information about a systems memory.
+
+
+
+
+
+
+
+
+
+### func GetInfo
+``` go
+func GetInfo() (Info, error)
+```
+GetInfo return information about PCI devices.
+
+
+
+
+## type PCI
+``` go
+type PCI struct {
+    Slot      string `json:"slot"`
+    ClassID   string `json:"class_id"`
+    Class     string `json:"class"`
+    VendorID  string `json:"vendor_id"`
+    DeviceID  string `json:"device_id"`
+    Vendor    string `json:"vendor"`
+    Device    string `json:"device"`
+    SVendorID string `json:"svendor_id"`
+    SDeviceID string `json:"sdevice_id"`
+    SName     string `json:"sname,omiempty"`
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+- - -
+
+# diskinfo
+    import "github.com/mickep76/hwinfo/diskinfo"
+
+
+
+
+
+
+
+## type Disk
+``` go
+type Disk struct {
+    Device string `json:"device"`
+    Name   string `json:"name"`
+    //	Major  int    `json:"major"`
+    //	Minor  int    `json:"minor"`
+    //	Blocks int    `json:"blocks"`
+    SizeGB int `json:"size_gb"`
+}
+```
+
+
+
+
+
+
+
+
+
+
+## type Info
+``` go
+type Info struct {
+    Disks []Disk `json:"disk"`
+}
+```
+Info structure for information about a systems memory.
+
+
+
+
+
+
+
+
+
+### func GetInfo
+``` go
+func GetInfo() (Info, error)
+```
 
 
 
