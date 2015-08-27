@@ -1,6 +1,9 @@
 {{template "head" .}}
-<fieldset>
-<legend>Interfaces</legend>
+<ul class="nav nav-tabs">
+  <li role="presentation" class="active"><a href="#">Interfaces</a></li>
+  <li role="presentation"><a href="#">Routes</a></li>
+  <li role="presentation"><a href="#">Sysctl</a></li>
+</ul>
 <table data-toggle="table"
        data-url="/network/interfaces/json"
        data-sort-name="name"
@@ -22,5 +25,4 @@
     </tr>
   </thead>
 </table>
-</fieldset>
 {{template "footer" .}}

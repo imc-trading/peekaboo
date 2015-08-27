@@ -1,6 +1,9 @@
 {{template "head" .}}
-<fieldset>
-<legend>Disks</legend>
+<ul class="nav nav-tabs">
+  <li role="presentation" class="active"><a href="#">Disks</a></li>
+  <li role="presentation"><a href="#">LVM</a></li>
+  <li role="presentation"><a href="#">File Systems</a></li>
+</ul>
 <table data-toggle="table"
        data-url="/disks/json"
        data-sort-name="name"
@@ -13,9 +16,8 @@
     <tr>
       <th data-field="name" data-sortable="true">Name</th>
       <th data-field="device" data-sortable="true">Device</th>
-      <th data-field="size_gb" data-sortable="true">Size GB</th>
+      <th data-field="size_gb" data-sortable="true">Size (GB)</th>
     </tr>
   </thead>
 </table>
-</fieldset>
 {{template "footer" .}}

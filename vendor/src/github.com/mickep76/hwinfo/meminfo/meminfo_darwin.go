@@ -20,11 +20,11 @@ func GetInfo() (Info, error) {
 		return Info{}, err
 	}
 
-	i.TotalKB, err = strconv.Atoi(o["hw.memsize"])
-	i.TotalKB = i.TotalKB / 1024
+	i.TotalGB, err = strconv.Atoi(o["hw.memsize"])
 	if err != nil {
 		return Info{}, err
 	}
+	i.TotalGB = i.TotalGB / 1024 / 1024 / 1024
 
 	return i, nil
 }
