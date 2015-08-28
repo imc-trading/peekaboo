@@ -80,6 +80,11 @@ func main() {
 		ctx.HTML(200, "pci")
 	})
 
+	m.Get("/sysctl", func(ctx *macaron.Context) {
+		ctx.Data["Title"] = "Sysctl"
+		ctx.HTML(200, "sysctl")
+	})
+
 	m.Get("/json", func(ctx *macaron.Context) {
 		ctx.JSON(200, &info)
 	})
@@ -112,12 +117,20 @@ func main() {
 		ctx.JSON(200, &info.Network.Interfaces)
 	})
 
+	m.Get("/network/routes/json", func(ctx *macaron.Context) {
+		ctx.JSON(200, &info.Routes)
+	})
+
 	m.Get("/pci/json", func(ctx *macaron.Context) {
 		ctx.JSON(200, &info.PCI.PCI)
 	})
 
 	m.Get("/disks/json", func(ctx *macaron.Context) {
 		ctx.JSON(200, &info.Disk.Disks)
+	})
+
+	m.Get("/sysctl/json", func(ctx *macaron.Context) {
+		ctx.JSON(200, &info.Sysctl)
 	})
 
 	/*
