@@ -5,6 +5,7 @@ import (
 	"github.com/mickep76/hwinfo/diskinfo"
 	"github.com/mickep76/hwinfo/lvm"
 	"github.com/mickep76/hwinfo/meminfo"
+	"github.com/mickep76/hwinfo/mounts"
 	"github.com/mickep76/hwinfo/netinfo"
 	"github.com/mickep76/hwinfo/osinfo"
 	"github.com/mickep76/hwinfo/pciinfo"
@@ -27,6 +28,7 @@ type Info struct {
 	Routes   *[]routes.Route  `json:"routes"`
 	Sysctl   *[]sysctl.Sysctl `json:"sysctl"`
 	LVM      *lvm.LVM         `json:"lvm"`
+	Mounts   *[]mounts.Mount  `json:"mounts"`
 }
 
 // GetInfo return information about a system.
@@ -98,6 +100,12 @@ func GetInfo() (Info, error) {
 		return Info{}, err
 	}
 	i.LVM = &i11
+
+	i12, err := mounts.Get()
+	if err != nil {
+		return Info{}, err
+	}
+	i.Mounts = &i12
 
 	return i, nil
 }

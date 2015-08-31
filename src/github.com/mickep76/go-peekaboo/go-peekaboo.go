@@ -149,6 +149,10 @@ func main() {
 		ctx.JSON(200, &info.LVM.VolGrps)
 	})
 
+	m.Get("/mounts/json", func(ctx *macaron.Context) {
+		ctx.JSON(200, &info.Mounts)
+	})
+
 	/*
 	       m.Get("/pci/:bus/json", func(ctx *macaron.Context) {
 
