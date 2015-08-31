@@ -133,6 +133,22 @@ func main() {
 		ctx.JSON(200, &info.Sysctl)
 	})
 
+	m.Get("/lvm/json", func(ctx *macaron.Context) {
+		ctx.JSON(200, &info.LVM)
+	})
+
+	m.Get("/lvm/phys_vols/json", func(ctx *macaron.Context) {
+		ctx.JSON(200, &info.LVM.PhysVols)
+	})
+
+	m.Get("/lvm/log_vols/json", func(ctx *macaron.Context) {
+		ctx.JSON(200, &info.LVM.LogVols)
+	})
+
+	m.Get("/lvm/vol_grps/json", func(ctx *macaron.Context) {
+		ctx.JSON(200, &info.LVM.VolGrps)
+	})
+
 	/*
 	       m.Get("/pci/:bus/json", func(ctx *macaron.Context) {
 

@@ -1,9 +1,19 @@
 {{template "head" .}}
-<ul class="nav nav-tabs">
-  <li role="presentation" class="active"><a href="#">Disks</a></li>
-  <li role="presentation"><a href="#">LVM</a></li>
-  <li role="presentation"><a href="#">File Systems</a></li>
+<ul class="nav nav-tabs" data-tabs="tabs">
+  <li class="active"><a href="#disks" data-toggle="tab">Disks</a></li>
+  <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">LVM<span class="caret"></span></a>
+    <ul class="dropdown-menu">
+      <li><a href="#phys_vols" data-toggle="tab">Physical Volumes</a></li>
+      <li><a href="#log_vols" data-toggle="tab">Logical Volumes</a></li>
+      <li><a href="#vol_grps" data-toggle="tab">Volume Groups</a></li>
+    </ul>
+  </li>
+  <li><a href="#file_systems" data-toggle="tab">File Systems</a></li>
 </ul>
+
+<div class="tab-content">
+
+<div class="tab-pane active" id="disks">
 <table data-toggle="table"
        data-url="/disks/json"
        data-sort-name="name"
@@ -20,4 +30,73 @@
     </tr>
   </thead>
 </table>
+</div>
+
+<div class="tab-pane" id="phys_vols">
+<table data-toggle="table"
+       data-url="/lvm/phys_vols/json"
+       data-sort-name="name"
+       data-sort-order="asc"
+       data-show-toggle="true"
+       data-show-columns="true"
+       data-cache="true"
+       class="table table-striped table-hover table-condensed">
+  <thead>
+    <tr>
+      <th data-field="name" data-sortable="true">Name</th>
+      <th data-field="vol_grp" data-sortable="true">Vol. Grp</th>
+      <th data-field="format" data-sortable="true">Format</th>
+      <th data-field="attr" data-sortable="true">Attr</th>
+      <th data-field="size_gb" data-sortable="true">Size (GB)</th>
+      <th data-field="free_gb" data-sortable="true">Free (GB)</th>
+    </tr>
+  </thead>
+</table>
+</div>
+
+<div class="tab-pane" id="log_vols">
+<table data-toggle="table"
+       data-url="/lvm/log_vols/json"
+       data-sort-name="name"
+       data-sort-order="asc"
+       data-show-toggle="true"
+       data-show-columns="true"
+       data-cache="true"
+       class="table table-striped table-hover table-condensed">
+  <thead>
+    <tr>
+      <th data-field="name" data-sortable="true">Name</th>
+      <th data-field="vol_grp" data-sortable="true">Vol. Grp</th>
+      <th data-field="attr" data-sortable="true">Attr</th>
+      <th data-field="size_gb" data-sortable="true">Size (GB)</th>
+    </tr>
+  </thead>
+</table>
+</div>
+
+<div class="tab-pane" id="vol_grps">
+<table data-toggle="table"
+       data-url="/lvm/vol_grps/json"
+       data-sort-name="name"
+       data-sort-order="asc"
+       data-show-toggle="true"
+       data-show-columns="true"
+       data-cache="true"
+       class="table table-striped table-hover table-condensed">
+  <thead>
+    <tr>
+      <th data-field="name" data-sortable="true">Name</th>
+      <th data-field="attr" data-sortable="true">Attr</th>
+      <th data-field="size_gb" data-sortable="true">Size (GB)</th>
+      <th data-field="free_gb" data-sortable="true">Free (GB)</th>
+    </tr>
+  </thead>
+</table>
+</div>
+
+<div class="tab-pane active" id="file_systems">
+
+</div>
+
+</div>
 {{template "footer" .}}

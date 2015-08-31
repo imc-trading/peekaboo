@@ -3,6 +3,7 @@ package hwinfo
 import (
 	"github.com/mickep76/hwinfo/cpuinfo"
 	"github.com/mickep76/hwinfo/diskinfo"
+	"github.com/mickep76/hwinfo/lvm"
 	"github.com/mickep76/hwinfo/meminfo"
 	"github.com/mickep76/hwinfo/netinfo"
 	"github.com/mickep76/hwinfo/osinfo"
@@ -25,6 +26,7 @@ type Info struct {
 	Disk     *diskinfo.Info   `json:"disk"`
 	Routes   *[]routes.Route  `json:"routes"`
 	Sysctl   *[]sysctl.Sysctl `json:"sysctl"`
+	LVM      *lvm.LVM         `json:"lvm"`
 }
 
 // GetInfo return information about a system.
@@ -90,6 +92,12 @@ func GetInfo() (Info, error) {
 		return Info{}, err
 	}
 	i.Sysctl = &i10
+
+	i11, err := lvm.Get()
+	if err != nil {
+		return Info{}, err
+	}
+	i.LVM = &i11
 
 	return i, nil
 }

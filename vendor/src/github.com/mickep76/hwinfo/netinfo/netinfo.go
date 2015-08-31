@@ -20,6 +20,12 @@ type Interface struct {
 	FirmwareVersion string   `json:"firmware_version,omitempty"`
 	PCIBus          string   `json:"pci_bus,omitempty"`
 	PCIBusURL       string   `json:"pci_bus_url,omitempty"`
+	SwChassisID     string   `json:"sw_chassis_id"`
+	SwName          string   `json:"sw_name"`
+	SwDescr         string   `json:"sw_descr"`
+	SwPortID        string   `json:"sw_port_id"`
+	SwPortDescr     string   `json:"sw_port_descr"`
+	SwVLAN          string   `json:"sw_vlan"`
 }
 
 // Info structure for information about a systems network.
@@ -96,6 +102,25 @@ func GetInfo() (Info, error) {
 				nintf.PCIBus = o["bus-info"]
 				nintf.PCIBusURL = fmt.Sprintf("/pci/%v", o["bus-info"])
 			}
+
+			o2, err := common.ExecCmdFields("/usr/sbin/lldpctl", []string{intf.Name}, ":", []string{
+				"ChassisID",
+				"SysName",
+				"SysDescr",
+				"PortID",
+				"PortDescr",
+				"VLAN",
+			})
+			if err != nil {
+				return Info{}, err
+			}
+
+			nintf.SwChassisID = o2["ChassisID"]
+			nintf.SwName = o2["SysName"]
+			nintf.SwDescr = o2["SysDescr"]
+			nintf.SwPortID = o2["PortID"]
+			nintf.SwPortDescr = o2["PortDescr"]
+			nintf.SwVLAN = o2["VLAN"]
 		}
 
 		info.Interfaces = append(info.Interfaces, nintf)
