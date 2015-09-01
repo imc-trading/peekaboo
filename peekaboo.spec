@@ -23,8 +23,11 @@ cp %{sources}/bin/* %{buildroot}/usr/bin
 mkdir -p %{buildroot}/var/lib/%{name}
 cp -r %{sources}/templates %{buildroot}/var/lib/%{name}
 cp -r %{sources}/public %{buildroot}/var/lib/%{name}
+mkdir -p %{buildroot}/etc/systemd/system
+cp %{sources}/files/%{name}.service %{buildroot}/etc/systemd/system/%{name}.service
 
 %files
 %defattr(-,root,root)
-/usr/bin
+/usr/bin/%{name}
 /var/lib/%{name}
+/etc/systemd/system/%{name}.service
