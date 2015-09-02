@@ -18,10 +18,12 @@ func main() {
 
 	// Options.
 	var opts struct {
-		Verbose  bool   `short:"v" long:"verbose" description:"Verbose"`
-		Version  bool   `long:"version" description:"Version"`
-		BindAddr string `short:"b" long:"bind-addr" description:"Bind to address" default:"0.0.0.0"`
-		Port     int    `short:"p" long:"port" description:"Port" default:"5050"`
+		Verbose     bool   `short:"v" long:"verbose" description:"Verbose"`
+		Version     bool   `long:"version" description:"Version"`
+		BindAddr    string `short:"b" long:"bind-addr" description:"Bind to address" default:"0.0.0.0"`
+		Port        int    `short:"p" long:"port" description:"Port" default:"5050"`
+		StaticDir   string `short:"s" long:"static-dir" description:"Static content" default:"static"`
+		TemplateDir string `short:"t" long:"template-dir" description:"Templates" default:"templates"`
 	}
 
 	// Parse options.
@@ -56,7 +58,11 @@ func main() {
 	}
 
 	m := macaron.Classic()
-	m.Use(macaron.Renderer())
+	m.Use(macaron.Static(opts.StaticDir))
+	m.Use(macaron.Renderer(macaron.RenderOptions{
+		Directory:  opts.TemplateDir,
+		IndentJSON: true,
+	}))
 
 	routes(m, info)
 	m.Run(opts.BindAddr, opts.Port)
