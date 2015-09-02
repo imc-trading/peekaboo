@@ -1,16 +1,12 @@
 [Unit]
-Description=Peekaboo exposes hardware info as HTTP REST
-ConditionFileIsExecutable=/usr/bin/peekaboo
-Wants=network.target network-online.target
-After=network.target network-online.target
+Description=Peekaboo
+After=network.target
 
 [Service]
-Type=oneshot
-ExecStart=/usr/bin/peekaboo
-TimeoutSec=0
-StandardOutput=tty
-RemainAfterExit=yes
-SysVStartPriority=99
+Type=simple
+User=root
+Group=root
+ExecStart=/usr/bin/peekaboo -s /var/lib/peekaboo/static -t /var/lib/peekaboo/templates
 
 [Install]
 WantedBy=multi-user.target

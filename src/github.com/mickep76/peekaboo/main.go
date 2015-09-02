@@ -38,7 +38,7 @@ func main() {
 
 	// Print version.
 	if opts.Version {
-		fmt.Printf("go-peekaboo %s\n", Version)
+		fmt.Printf("peekaboo %s\n", Version)
 		os.Exit(0)
 	}
 
@@ -48,7 +48,7 @@ func main() {
 	}
 
 	// Check root.
-	if runtime.GOOS != "darinw" && os.Getuid() != 0 {
+	if runtime.GOOS != "darwin" && os.Getuid() != 0 {
 		log.Fatal("This application requires root privileges to run.")
 	}
 
@@ -56,6 +56,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+
+	log.Infof("Using static dir: %s", opts.StaticDir)
+	log.Infof("Using template dir: %s", opts.TemplateDir)
 
 	m := macaron.Classic()
 	m.Use(macaron.Static(opts.StaticDir))
