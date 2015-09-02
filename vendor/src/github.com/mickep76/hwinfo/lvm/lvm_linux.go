@@ -3,6 +3,7 @@
 package lvm
 
 import (
+	"errors"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -34,6 +35,11 @@ func Get() (LVM, error) {
 
 func GetPhysVols() ([]PhysVol, error) {
 	pvs := []PhysVol{}
+
+	_, err := exec.LookPath("pvs")
+	if err != nil {
+		return []PhysVol{}, errors.New("command doesn't exist: pvs")
+	}
 
 	o, err := exec.Command("pvs", "--units", "B").Output()
 	if err != nil {
@@ -74,6 +80,11 @@ func GetPhysVols() ([]PhysVol, error) {
 func GetLogVols() ([]LogVol, error) {
 	lvs := []LogVol{}
 
+	_, err := exec.LookPath("lvs")
+	if err != nil {
+		return []LogVol{}, errors.New("command doesn't exist: lvs")
+	}
+
 	o, err := exec.Command("lvs", "--units", "B").Output()
 	if err != nil {
 		return []LogVol{}, err
@@ -105,6 +116,11 @@ func GetLogVols() ([]LogVol, error) {
 
 func GetVolGrps() ([]VolGrp, error) {
 	vgs := []VolGrp{}
+
+	_, err := exec.LookPath("vgs")
+	if err != nil {
+		return []VolGrp{}, errors.New("command doesn't exist: vgs")
+	}
 
 	o, err := exec.Command("vgs", "--units", "B").Output()
 	if err != nil {

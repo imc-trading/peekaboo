@@ -1,7 +1,7 @@
-package sysinfo
+package system
 
-// Info structure for information about a system.
-type Info struct {
+// System information.
+type System struct {
 	Manufacturer   string `json:"manufacturer"`
 	Product        string `json:"product"`
 	ProductVersion string `json:"product_version"`

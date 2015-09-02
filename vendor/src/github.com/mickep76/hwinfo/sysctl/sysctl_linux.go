@@ -4,7 +4,6 @@ package sysctl
 
 import (
 	"os/exec"
-	//	"strconv"
 	"strings"
 )
 

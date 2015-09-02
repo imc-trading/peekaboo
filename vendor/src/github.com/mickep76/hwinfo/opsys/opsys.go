@@ -1,7 +1,7 @@
-package osinfo
+package opsys
 
-// Info structure for information about the operating system.
-type Info struct {
+// OpSys information.
+type OpSys struct {
 	Kernel         string `json:"kernel"`
 	KernelVersion  string `json:"kernel_version"`
 	Product        string `json:"product"`

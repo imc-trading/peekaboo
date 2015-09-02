@@ -1,7 +1,7 @@
-package cpuinfo
+package cpu
 
-// Info structure for information about a systems CPU(s).
-type Info struct {
+// CPU information.
+type CPU struct {
 	Model          string `json:"model"`
 	Flags          string `json:"flags"`
 	Logical        int    `json:"logical"`

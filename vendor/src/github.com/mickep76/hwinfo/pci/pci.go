@@ -1,4 +1,4 @@
-package pciinfo
+package pci
 
 import (
 	"fmt"
@@ -21,27 +21,6 @@ type PCI struct {
 	SDeviceID string `json:"sdevice_id"`
 	SName     string `json:"sname,omiempty"`
 }
-
-// Info structure for information about a systems memory.
-type Info struct {
-	PCI []PCI `json:"pci"`
-}
-
-/*
-# Syntax:
-# vendor  vendor_name
-#       device  device_name                             <-- single tab
-#               subvendor subdevice  subsystem_name     <-- two tabs
-
-0010  Allied Telesis, Inc (Wrong ID)
-# This is a relabelled RTL-8139
-        8139  AT-2500TX V3 Ethernet
-001c  PEAK-System Technik GmbH
-        0001  PCAN-PCI CAN-Bus controller
-                001c 0004  2 Channel CAN Bus SJC1000
-                001c 0005  2 Channel CAN Bus SJC1000 (Optically Isolated)
-...
-*/
 
 // TODO: Cache PCI database as a map[string]string
 func getPCIVendor(vendorID string, deviceID string, sVendorID string, sDeviceID string) (string, string, string, error) {
@@ -92,26 +71,6 @@ func getPCIVendor(vendorID string, deviceID string, sVendorID string, sDeviceID 
 
 	return vendor, device, sName, nil
 }
-
-/*
-# List of known device classes, subclasses and programming interfaces
-
-# Syntax:
-# C class       class_name
-#       subclass        subclass_name           <-- single tab
-#               prog-if  prog-if_name   <-- two tabs
-
-C 01  Mass storage controller
-        00  SCSI storage controller
-        01  IDE interface
-        02  Floppy disk controller
-        03  IPI bus controller
-        04  RAID bus controller
-        05  ATA controller
-                20  ADMA single stepping
-                30  ADMA continuous operation
-...
-*/
 
 // TODO: Cache PCI database as a map[string]string
 func getPCIClass(classID string) (string, string, string, error) {
@@ -176,13 +135,13 @@ func getPCIClass(classID string) (string, string, string, error) {
 	return class, subClass, progIntf, nil
 }
 
-// GetInfo return information about PCI devices.
-func GetInfo() (Info, error) {
-	i := Info{}
+// Get information about system PCI slots.
+func Get() ([]PCI, error) {
+	p := []PCI{}
 
 	files, err := filepath.Glob("/sys/bus/pci/devices/*")
 	if err != nil {
-		return Info{}, err
+		return []PCI{}, err
 	}
 
 	for _, path := range files {
@@ -196,13 +155,13 @@ func GetInfo() (Info, error) {
 			filepath.Join(path, "subsystem_device"),
 		})
 		if err != nil {
-			return Info{}, err
+			return []PCI{}, err
 		}
 
 		classID := o["class"][2:]
 		class, subClass, _, err := getPCIClass(classID)
 		if err != nil {
-			return Info{}, err
+			return []PCI{}, err
 		}
 		if subClass != "" {
 			class = subClass
@@ -214,10 +173,10 @@ func GetInfo() (Info, error) {
 		sDeviceID := o["subsystem_device"][2:]
 		vendor, device, sName, err := getPCIVendor(vendorID, deviceID, sVendorID, sDeviceID)
 		if err != nil {
-			return Info{}, err
+			return []PCI{}, err
 		}
 
-		i.PCI = append(i.PCI, PCI{
+		p = append(p, PCI{
 			Slot:      slot[1],
 			ClassID:   classID,
 			Class:     class,
@@ -231,5 +190,5 @@ func GetInfo() (Info, error) {
 		})
 	}
 
-	return i, nil
+	return p, nil
 }

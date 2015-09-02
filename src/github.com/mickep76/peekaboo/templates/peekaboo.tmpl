@@ -1,4 +1,11 @@
 {{template "head" .}}
+  <dl class="dl-horizontal">
+    <dt>Hostname</dt>
+    <dd>{{.Hostname}}</dd>
+    <dt>Version</dt>
+    <dd>{{.Version}}</dd>
+  </dl>
+<fieldset>
 <legend>System</legend>
   <dl class="dl-horizontal">
     <dt>Manufacturer</dt>
@@ -44,16 +51,16 @@
   </dl>
 </fieldset>
 <fieldset>
-<legend>OS</legend>
+<legend>Operating System</legend>
   <dl class="dl-horizontal">
     <dt>Kernel</dt>
-    <dd>{{.OS.Kernel}}</dd>
+    <dd>{{.OpSys.Kernel}}</dd>
     <dt>Kernel Version</dt>
-    <dd>{{.OS.KernelVersion}}</dd>
+    <dd>{{.OpSys.KernelVersion}}</dd>
     <dt>Kernel Version</dt>
-    <dd>{{.OS.Product}}</dd>
+    <dd>{{.OpSys.Product}}</dd>
     <dt>Product Version</dt>
-    <dd>{{.OS.ProductVersion}}</dd>
+    <dd>{{.OpSys.ProductVersion}}</dd>
   </dl>
 </fieldset>
 {{template "footer" .}}

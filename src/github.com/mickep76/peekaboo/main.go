@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"runtime"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/Unknwon/macaron"
@@ -43,7 +44,7 @@ func main() {
 		log.SetLevel(log.InfoLevel)
 	}
 
-	info, err := hwinfo.GetInfo()
+	info, err := hwinfo.Get()
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -52,17 +53,15 @@ func main() {
 	m.Use(macaron.Renderer())
 
 	m.Get("/", func(ctx *macaron.Context) {
-		ctx.Redirect("/system")
-	})
-
-	m.Get("/system", func(ctx *macaron.Context) {
-		ctx.Data["Title"] = "System"
+		ctx.Data["Title"] = "Peekaboo"
+		ctx.Data["Version"] = Version
+		ctx.Data["Hostname"] = info.Hostname
 		ctx.Data["CPU"] = info.CPU
 		ctx.Data["Memory"] = info.Memory
-		ctx.Data["OS"] = info.OS
+		ctx.Data["OpSys"] = info.OpSys
 		ctx.Data["System"] = info.System
 
-		ctx.HTML(200, "system")
+		ctx.HTML(200, "peekaboo")
 	})
 
 	m.Get("/network", func(ctx *macaron.Context) {
@@ -70,20 +69,23 @@ func main() {
 		ctx.HTML(200, "network")
 	})
 
-	m.Get("/storage", func(ctx *macaron.Context) {
-		ctx.Data["Title"] = "Storage"
-		ctx.HTML(200, "storage")
-	})
+	switch runtime.GOOS {
+	case "linux":
+		m.Get("/storage", func(ctx *macaron.Context) {
+			ctx.Data["Title"] = "Storage"
+			ctx.HTML(200, "storage")
+		})
 
-	m.Get("/pci", func(ctx *macaron.Context) {
-		ctx.Data["Title"] = "PCI"
-		ctx.HTML(200, "pci")
-	})
+		m.Get("/pci", func(ctx *macaron.Context) {
+			ctx.Data["Title"] = "PCI"
+			ctx.HTML(200, "pci")
+		})
 
-	m.Get("/sysctl", func(ctx *macaron.Context) {
-		ctx.Data["Title"] = "Sysctl"
-		ctx.HTML(200, "sysctl")
-	})
+		m.Get("/sysctl", func(ctx *macaron.Context) {
+			ctx.Data["Title"] = "Sysctl"
+			ctx.HTML(200, "sysctl")
+		})
+	}
 
 	m.Get("/json", func(ctx *macaron.Context) {
 		ctx.JSON(200, &info)
@@ -93,20 +95,16 @@ func main() {
 		ctx.JSON(200, &info.CPU)
 	})
 
-	m.Get("/memory/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &info.Memory)
-	})
-
-	m.Get("/os/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &info.OS)
-	})
-
-	m.Get("/system/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &info.System)
+	m.Get("/disks/json", func(ctx *macaron.Context) {
+		ctx.JSON(200, &info.Disks)
 	})
 
 	m.Get("/memory/json", func(ctx *macaron.Context) {
 		ctx.JSON(200, &info.Memory)
+	})
+
+	m.Get("/mounts/json", func(ctx *macaron.Context) {
+		ctx.JSON(200, &info.Mounts)
 	})
 
 	m.Get("/network/json", func(ctx *macaron.Context) {
@@ -121,12 +119,16 @@ func main() {
 		ctx.JSON(200, &info.Routes)
 	})
 
-	m.Get("/pci/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &info.PCI.PCI)
+	m.Get("/opsys/json", func(ctx *macaron.Context) {
+		ctx.JSON(200, &info.OpSys)
 	})
 
-	m.Get("/disks/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &info.Disk.Disks)
+	m.Get("/pci/json", func(ctx *macaron.Context) {
+		ctx.JSON(200, &info.PCI)
+	})
+
+	m.Get("/network/json", func(ctx *macaron.Context) {
+		ctx.JSON(200, &info.Network)
 	})
 
 	m.Get("/sysctl/json", func(ctx *macaron.Context) {
@@ -148,24 +150,6 @@ func main() {
 	m.Get("/lvm/vol_grps/json", func(ctx *macaron.Context) {
 		ctx.JSON(200, &info.LVM.VolGrps)
 	})
-
-	m.Get("/mounts/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &info.Mounts)
-	})
-
-	/*
-	       m.Get("/pci/:bus/json", func(ctx *macaron.Context) {
-
-	   		ctx.Params("bus")
-
-	           d, err := pciinfo.GetInfo()
-	           if err != nil {
-	               log.Fatal(err.Error())
-	           }
-
-	           ctx.JSON(200, &d)
-	       })
-	*/
 
 	m.Run("0.0.0.0", 8080)
 }

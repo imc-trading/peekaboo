@@ -1,9 +1,10 @@
-package netinfo
+package network
 
 import (
 	"fmt"
 	"github.com/mickep76/hwinfo/common"
 	"net"
+	"os/exec"
 	"runtime"
 	"strings"
 )
@@ -29,32 +30,27 @@ type Interface struct {
 }
 
 // Info structure for information about a systems network.
-type Info struct {
+type Network struct {
 	Interfaces    []Interface `json:"interfaces"`
 	OnloadVersion string      `json:"onload_version,omitempty"`
 }
 
 // GetInfo return information about a systems memory.
-func GetInfo() (Info, error) {
-	fields := []string{
-		"driver",
-		"version",
-		"firmware-version",
-		"bus-info",
-	}
-
-	info := Info{}
+func Get() (Network, error) {
+	network := Network{}
 
 	intfs, err := net.Interfaces()
 	if err != nil {
-		return Info{}, err
+		return Network{}, err
 	}
 
 	for _, intf := range intfs {
+		// Skip loopback interfaces
 		if intf.Flags&net.FlagLoopback != 0 {
 			continue
 		}
 		/*
+			// Skip interfaces that are down
 			if intf.Flags&net.FlagUp == 0 {
 				continue
 			}
@@ -62,7 +58,7 @@ func GetInfo() (Info, error) {
 
 		addrs, err := intf.Addrs()
 		if err != nil {
-			return Info{}, err
+			return Network{}, err
 		}
 
 		nintf := Interface{
@@ -90,9 +86,14 @@ func GetInfo() (Info, error) {
 
 		switch runtime.GOOS {
 		case "linux":
-			o, err := common.ExecCmdFields("/usr/sbin/ethtool", []string{"-i", intf.Name}, ":", fields)
+			o, err := common.ExecCmdFields("/usr/sbin/ethtool", []string{"-i", intf.Name}, ":", []string{
+				"driver",
+				"version",
+				"firmware-version",
+				"bus-info",
+			})
 			if err != nil {
-				return Info{}, err
+				return Network{}, err
 			}
 
 			nintf.Driver = o["driver"]
@@ -112,7 +113,7 @@ func GetInfo() (Info, error) {
 				"VLAN",
 			})
 			if err != nil {
-				return Info{}, err
+				return Network{}, err
 			}
 
 			nintf.SwChassisID = o2["ChassisID"]
@@ -123,18 +124,20 @@ func GetInfo() (Info, error) {
 			nintf.SwVLAN = o2["VLAN"]
 		}
 
-		info.Interfaces = append(info.Interfaces, nintf)
+		network.Interfaces = append(network.Interfaces, nintf)
 	}
 
 	switch runtime.GOOS {
 	case "linux":
-		o, _ := common.ExecCmdFields("/usr/bin/onload", []string{"--version"}, ":", []string{"Kernel module"})
-		if err != nil {
-			//			return Info{}, err
+		_, err := exec.LookPath("onload")
+		if err == nil {
+			o, _ := common.ExecCmdFields("onload", []string{"--version"}, ":", []string{"Kernel module"})
+			if err != nil {
+				return Network{}, err
+			}
+			network.OnloadVersion = o["Kernel module"]
 		}
-
-		info.OnloadVersion = o["Kernel module"]
 	}
 
-	return info, nil
+	return network, nil
 }

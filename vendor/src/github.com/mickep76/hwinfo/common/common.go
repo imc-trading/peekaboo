@@ -50,6 +50,11 @@ func LoadFileFields(fn string, del string, fields []string) (map[string]string, 
 
 // ExecCmd returns output.
 func ExecCmd(cmd string, args []string) (string, error) {
+	_, err := exec.LookPath(cmd)
+	if err != nil {
+		return "", fmt.Errorf("command doesn't exist: %s", cmd)
+	}
+
 	o, err := exec.Command(cmd, args...).Output()
 	if err != nil {
 		return "", err
@@ -60,6 +65,11 @@ func ExecCmd(cmd string, args []string) (string, error) {
 
 // ExecCmdFields returns fields from output.
 func ExecCmdFields(cmd string, args []string, del string, fields []string) (map[string]string, error) {
+	_, err := exec.LookPath(cmd)
+	if err != nil {
+		return map[string]string{}, fmt.Errorf("command doesn't exist: %s", cmd)
+	}
+
 	o, err := exec.Command(cmd, args...).Output()
 	if err != nil {
 		return map[string]string{}, err

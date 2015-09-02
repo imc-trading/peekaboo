@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	d, err := hwinfo.GetInfo()
+	d, err := hwinfo.Get()
 	if err != nil {
 		fmt.Println(err.Error())
 	}
