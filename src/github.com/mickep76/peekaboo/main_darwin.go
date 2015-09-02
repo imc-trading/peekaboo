@@ -1,12 +1,17 @@
+// +build darwin
+
 package main
 
 import (
+	"fmt"
 	"github.com/Unknwon/macaron"
 	"github.com/mickep76/hwinfo"
 )
 
 func routes(m *macaron.Macaron, hw hwinfo.HWInfo) {
 	m.Get("/", func(ctx *macaron.Context) {
+		fmt.Println(hw.OpSys.Kernel)
+
 		ctx.Data["Title"] = "Peekaboo"
 		ctx.Data["Kernel"] = hw.OpSys.Kernel
 		ctx.Data["Version"] = Version
