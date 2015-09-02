@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 	"os"
+	"runtime"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/Unknwon/macaron"
 	flags "github.com/jessevdk/go-flags"
-
 	"github.com/mickep76/hwinfo"
 )
 
@@ -18,8 +18,10 @@ func main() {
 
 	// Options.
 	var opts struct {
-		Verbose bool `short:"v" long:"verbose" description:"Verbose"`
-		Version bool `long:"version" description:"Version"`
+		Verbose  bool   `short:"v" long:"verbose" description:"Verbose"`
+		Version  bool   `long:"version" description:"Version"`
+		BindAddr string `short:"b" long:"bind-addr" description:"Bind to address" default:"0.0.0.0"`
+		Port     int    `short:"p" long:"port" description:"Port" default:"5050"`
 	}
 
 	// Parse options.
@@ -43,6 +45,11 @@ func main() {
 		log.SetLevel(log.InfoLevel)
 	}
 
+	// Check root.
+	if runtime.GOOS != "darinw" && os.Getuid() != 0 {
+		log.Fatal("This application requires root privileges to run.")
+	}
+
 	info, err := hwinfo.Get()
 	if err != nil {
 		log.Fatal(err.Error())
@@ -52,5 +59,5 @@ func main() {
 	m.Use(macaron.Renderer())
 
 	routes(m, info)
-	m.Run("0.0.0.0", 8080)
+	m.Run(opts.BindAddr, opts.Port)
 }
