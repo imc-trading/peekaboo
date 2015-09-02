@@ -13,6 +13,7 @@ func routes(m *macaron.Macaron, hw hwinfo.HWInfo) {
 		ctx.Data["Kernel"] = hw.OpSys.Kernel
 		ctx.Data["Version"] = Version
 		ctx.Data["Hostname"] = hw.Hostname
+		ctx.Data["ShortHostname"] = hw.ShortHostname
 		ctx.Data["CPU"] = hw.CPU
 		ctx.Data["Memory"] = hw.Memory
 		ctx.Data["OpSys"] = hw.OpSys
@@ -24,24 +25,28 @@ func routes(m *macaron.Macaron, hw hwinfo.HWInfo) {
 	m.Get("/network", func(ctx *macaron.Context) {
 		ctx.Data["Title"] = "Network"
 		ctx.Data["Kernel"] = hw.OpSys.Kernel
+		ctx.Data["ShortHostname"] = hw.ShortHostname
 		ctx.HTML(200, "network")
 	})
 
 	m.Get("/storage", func(ctx *macaron.Context) {
 		ctx.Data["Title"] = "Storage"
 		ctx.Data["Kernel"] = hw.OpSys.Kernel
+		ctx.Data["ShortHostname"] = hw.ShortHostname
 		ctx.HTML(200, "storage")
 	})
 
 	m.Get("/pci", func(ctx *macaron.Context) {
 		ctx.Data["Title"] = "PCI"
 		ctx.Data["Kernel"] = hw.OpSys.Kernel
+		ctx.Data["ShortHostname"] = hw.ShortHostname
 		ctx.HTML(200, "pci")
 	})
 
 	m.Get("/sysctl", func(ctx *macaron.Context) {
 		ctx.Data["Title"] = "Sysctl"
 		ctx.Data["Kernel"] = hw.OpSys.Kernel
+		ctx.Data["ShortHostname"] = hw.ShortHostname
 		ctx.HTML(200, "sysctl")
 	})
 

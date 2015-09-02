@@ -10,12 +10,11 @@ import (
 
 func routes(m *macaron.Macaron, hw hwinfo.HWInfo) {
 	m.Get("/", func(ctx *macaron.Context) {
-		fmt.Println(hw.OpSys.Kernel)
-
 		ctx.Data["Title"] = "Peekaboo"
 		ctx.Data["Kernel"] = hw.OpSys.Kernel
 		ctx.Data["Version"] = Version
 		ctx.Data["Hostname"] = hw.Hostname
+		ctx.Data["ShortHostname"] = hw.ShortHostname
 		ctx.Data["CPU"] = hw.CPU
 		ctx.Data["Memory"] = hw.Memory
 		ctx.Data["OpSys"] = hw.OpSys
@@ -27,6 +26,7 @@ func routes(m *macaron.Macaron, hw hwinfo.HWInfo) {
 	m.Get("/network", func(ctx *macaron.Context) {
 		ctx.Data["Title"] = "Network"
 		ctx.Data["Kernel"] = hw.OpSys.Kernel
+		ctx.Data["ShortHostname"] = hw.ShortHostname
 		ctx.HTML(200, "network")
 	})
 

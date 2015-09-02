@@ -15,22 +15,24 @@ import (
 	"github.com/mickep76/hwinfo/sysctl"
 	"github.com/mickep76/hwinfo/system"
 	"os"
+	"strings"
 )
 
 // HWInfo information.
 type HWInfo struct {
-	Hostname string           `json:"hostname"`
-	CPU      *cpu.CPU         `json:"cpu"`
-	Memory   *memory.Memory   `json:"memory"`
-	OpSys    *opsys.OpSys     `json:"opsys"`
-	System   *system.System   `json:"system"`
-	Network  *network.Network `json:"network"`
-	PCI      *[]pci.PCI       `json:"pci"`
-	Disks    *[]disks.Disk    `json:"disks"`
-	Routes   *[]routes.Route  `json:"routes"`
-	Sysctl   *[]sysctl.Sysctl `json:"sysctl"`
-	LVM      *lvm.LVM         `json:"lvm"`
-	Mounts   *[]mounts.Mount  `json:"mounts"`
+	Hostname      string           `json:"hostname"`
+	ShortHostname string           `json:"short_hostname"`
+	CPU           *cpu.CPU         `json:"cpu"`
+	Memory        *memory.Memory   `json:"memory"`
+	OpSys         *opsys.OpSys     `json:"opsys"`
+	System        *system.System   `json:"system"`
+	Network       *network.Network `json:"network"`
+	PCI           *[]pci.PCI       `json:"pci"`
+	Disks         *[]disks.Disk    `json:"disks"`
+	Routes        *[]routes.Route  `json:"routes"`
+	Sysctl        *[]sysctl.Sysctl `json:"sysctl"`
+	LVM           *lvm.LVM         `json:"lvm"`
+	Mounts        *[]mounts.Mount  `json:"mounts"`
 }
 
 // Get information about a system.
@@ -42,6 +44,7 @@ func Get() (HWInfo, error) {
 		return HWInfo{}, err
 	}
 	i.Hostname = host
+	i.ShortHostname = strings.Split(host, ".")[0]
 
 	i2, err := cpu.Get()
 	if err != nil {
