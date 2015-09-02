@@ -16,12 +16,19 @@
     <dd>{{.System.ProductVersion}}</dd>
     <dt>Serial Number</dt>
     <dd>{{.System.SerialNumber}}</dd>
+{{if eq .Kernel "darwin"}}
+    <dt>Boot ROM Version</dt>
+    <dd>{{.System.BootROMVersion}}</dd>
+    <dt>SMCVersion</dt>
+    <dd>{{.System.SMCVersion}}</dd>
+{{else}}
     <dt>BIOS Vendor</dt>
     <dd>{{.System.BIOSVendor}}</dd>
     <dt>BIOS Date</dt>
     <dd>{{.System.BIOSDate}}</dd>
     <dt>BIOS Version</dt>
     <dd>{{.System.BIOSVersion}}</dd>
+{{end}}
   </dl>
 </fieldset>
 <fieldset>

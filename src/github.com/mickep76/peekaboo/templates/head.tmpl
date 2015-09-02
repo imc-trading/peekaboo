@@ -32,27 +32,13 @@
         <div>
           <ul class="nav navbar-nav">
             <li {{if eq .Title "Network"}}class="active"{{end}}><a href="/network">Network</a></li>
+{{if ne .Kernel "darwin"}}
             <li {{if eq .Title "Storage"}}class="active"{{end}}><a href="/storage">Storage</a></li>
             <li {{if eq .Title "PCI"}}class="active"{{end}}><a href="/pci">PCI</a></li>
             <li {{if eq .Title "Sysctl"}}class="active"{{end}}><a href="/sysctl">Sysctl</a></li>
+{{end}}
           </ul>
 	</div>
-<!--
-	<div class="container-fluid">
-          <ul class="nav navbar-nav navbar-right">
-            <li>
-              <div class="btn-group navbar-btn">
-                <button class="btn btn-default">Action</button>
-                <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                  <li><a href="/json">JSON</a></li>
-                </ul>
-              </div>
-            </li>
-          </ul>
-        </div>
--->
-
       </div>
     </nav>
 
