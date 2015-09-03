@@ -95,6 +95,14 @@ gb build
 bin/peekaboo -s src/github.com/mickep76/peekaboo/static -t src/github.com/mickep76/peekaboo/templates
 ```
 
+## Install using Brew
+
+```bash
+brew tap mickep76/funk-gnarge
+brew install mickep76/funk-gnarge/tf
+peekaboo -s /var/lib/peekaboo/static -t /var/lib/peekaboo/templates
+```
+
 # Change port or bind address on Linux
 
 ```bash
