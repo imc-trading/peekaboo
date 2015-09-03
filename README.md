@@ -99,7 +99,7 @@ bin/peekaboo -s src/github.com/mickep76/peekaboo/static -t src/github.com/mickep
 
 ```bash
 brew tap mickep76/funk-gnarge
-brew install mickep76/funk-gnarge/tf
+brew install peekaboo
 peekaboo -s /var/lib/peekaboo/static -t /var/lib/peekaboo/templates
 ```
 
