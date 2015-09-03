@@ -62,7 +62,8 @@ go get github.com/constabulary/gb/...
 ## Build
 
 ```bash
-gb build
+make
+sudo bin/peekaboo -s src/github.com/mickep76/peekaboo/static -t src/github.com/mickep76/peekaboo/templates
 ```
 
 ## Build RPM
@@ -70,14 +71,9 @@ gb build
 ```bash
 yum install rpm-build
 make rpm
-```
-
-# Install using RPM
-
-```bash
-rpm -i peekaboo-<version>-<release>.rpm
-systemctl enable peekaboo
-systemctl start peekaboo
+sudo rpm -i peekaboo-<version>-<release>.rpm
+sudo systemctl enable peekaboo
+sudo systemctl start peekaboo
 ```
 
 # Change port or bind address
