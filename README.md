@@ -65,7 +65,9 @@ go get github.com/constabulary/gb/...
 
 ```bash
 gb build
-sudo bin/peekaboo -s src/github.com/mickep76/peekaboo/static -t src/github.com/mickep76/peekaboo/templates
+sudo bin/peekaboo \
+  --static-dir src/github.com/mickep76/peekaboo/static \
+  --template-dir src/github.com/mickep76/peekaboo/templates
 ```
 
 ## Build RPM
@@ -116,7 +118,9 @@ go get github.com/constabulary/gb/...
 
 ```bash
 gb build
-bin/peekaboo -s src/github.com/mickep76/peekaboo/static -t src/github.com/mickep76/peekaboo/templates
+sudo bin/peekaboo \
+  --static-dir src/github.com/mickep76/peekaboo/static \
+  --template-dir src/github.com/mickep76/peekaboo/templates
 ```
 
 ## Install using Brew
