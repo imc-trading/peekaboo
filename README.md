@@ -100,7 +100,7 @@ bin/peekaboo -s src/github.com/mickep76/peekaboo/static -t src/github.com/mickep
 ```bash
 brew tap mickep76/funk-gnarge
 brew install peekaboo
-peekaboo -s /var/lib/peekaboo/static -t /var/lib/peekaboo/templates
+peekaboo -s /usr/local/var/peekaboo/static -t /usr/local/var/peekaboo/templates
 ```
 
 # Change port or bind address on Linux
