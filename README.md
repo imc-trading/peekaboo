@@ -82,9 +82,13 @@ sudo systemctl start peekaboo
 vi /etc/systemd/system/peekaboo.service
 ```
 
+Add -b bind address, defaults to "0.0.0.0". For port add -p, defaults to 5050.
+
 ```
 ExecStart=/usr/bin/peekaboo -s /var/lib/peekaboo/static -t /var/lib/peekaboo/templates -b <bind addr.> -p <port>
 ```
+
+Reload SystemD and then restart Peekaboo.
 
 ```bash
 systemctl daemon-reload
