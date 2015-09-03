@@ -8,6 +8,7 @@ import (
 )
 
 func routes(m *macaron.Macaron, hw hwinfo.HWInfo) {
+	// HTML endpoints
 	m.Get("/", func(ctx *macaron.Context) {
 		ctx.Data["Title"] = "Peekaboo"
 		ctx.Data["Kernel"] = hw.OpSys.Kernel
@@ -50,6 +51,15 @@ func routes(m *macaron.Macaron, hw hwinfo.HWInfo) {
 		ctx.HTML(200, "sysctl")
 	})
 
+	m.Get("/dock2box", func(ctx *macaron.Context) {
+		ctx.Data["Title"] = "Dock2Box"
+		ctx.Data["Kernel"] = hw.OpSys.Kernel
+		ctx.Data["ShortHostname"] = hw.ShortHostname
+		ctx.Data["Dock2Box"] = hw.Dock2Box
+		ctx.HTML(200, "dock2box")
+	})
+
+	// JSON endpoints
 	m.Get("/disks/json", func(ctx *macaron.Context) {
 		ctx.JSON(200, &hw.Disks)
 	})
@@ -112,5 +122,13 @@ func routes(m *macaron.Macaron, hw hwinfo.HWInfo) {
 
 	m.Get("/network/json", func(ctx *macaron.Context) {
 		ctx.JSON(200, &hw.Network)
+	})
+
+	m.Get("/dock2box/json", func(ctx *macaron.Context) {
+		ctx.JSON(200, &hw.Dock2Box)
+	})
+
+	m.Get("/dock2box/layers/json", func(ctx *macaron.Context) {
+		ctx.JSON(200, &hw.Dock2Box.Layers)
 	})
 }

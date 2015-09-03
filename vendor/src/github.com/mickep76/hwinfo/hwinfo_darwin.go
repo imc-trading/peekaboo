@@ -1,22 +1,25 @@
 package hwinfo
 
 import (
+	"os"
+	"strings"
+
 	"github.com/mickep76/hwinfo/cpu"
 	"github.com/mickep76/hwinfo/memory"
 	"github.com/mickep76/hwinfo/network"
 	"github.com/mickep76/hwinfo/opsys"
 	"github.com/mickep76/hwinfo/system"
-	"os"
 )
 
 // HWInfo information.
 type HWInfo struct {
-	Hostname string           `json:"hostname"`
-	CPU      *cpu.CPU         `json:"cpu"`
-	Memory   *memory.Memory   `json:"memory"`
-	OpSys    *opsys.OpSys     `json:"opsys"`
-	System   *system.System   `json:"system"`
-	Network  *network.Network `json:"network"`
+	Hostname      string           `json:"hostname"`
+	ShortHostname string           `json:"short_hostname"`
+	CPU           *cpu.CPU         `json:"cpu"`
+	Memory        *memory.Memory   `json:"memory"`
+	OpSys         *opsys.OpSys     `json:"opsys"`
+	System        *system.System   `json:"system"`
+	Network       *network.Network `json:"network"`
 }
 
 // Get information about a system.
@@ -28,6 +31,7 @@ func Get() (HWInfo, error) {
 		return HWInfo{}, err
 	}
 	i.Hostname = host
+	i.ShortHostname = strings.Split(host, ".")[0]
 
 	i2, err := cpu.Get()
 	if err != nil {

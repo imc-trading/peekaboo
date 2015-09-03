@@ -4,12 +4,11 @@
   -moz-border-radius: 0 !important;
 }
 
-/* .table-striped > tbody > .alert > th { */
-.table-hover > tbody > tr.alert > td {
-     background-color: #ebcccc !important;
-}
-
 .list-sm { 
   height: 200px; 
   overflow: auto;
+}
+
+.top-margin {
+  margin-top: 30px; 
 }
