@@ -51,10 +51,10 @@ Help Options:
   -h, --help          Show this help message
 ```
 
-# Setup Go build environment
+# Setup Go build env. on Linux
 
 ```bash
-yum install golang
+sudo yum install -y golang
 mkdir ~/go
 export GOPATH=~/go
 export PATH=$GOPATH/bin:$PATH
@@ -64,18 +64,35 @@ go get github.com/constabulary/gb/...
 ## Build
 
 ```bash
-make
+gb build
 sudo bin/peekaboo -s src/github.com/mickep76/peekaboo/static -t src/github.com/mickep76/peekaboo/templates
 ```
 
 ## Build RPM
 
 ```bash
-yum install rpm-build
+sudo yum install -y rpm-build
 make rpm
 sudo rpm -i peekaboo-<version>-<release>.rpm
 sudo systemctl enable peekaboo
 sudo systemctl start peekaboo
+```
+
+# Setup Go build env. on Linux
+
+```bash
+brew install go
+mkdir ~/go
+export GOPATH=~/go
+export PATH=$GOPATH/bin:$PATH
+go get github.com/constabulary/gb/...
+```
+
+## Build
+
+```bash
+gb build
+bin/peekaboo -s src/github.com/mickep76/peekaboo/static -t src/github.com/mickep76/peekaboo/templates
 ```
 
 # Change port or bind address
