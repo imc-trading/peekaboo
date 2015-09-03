@@ -95,7 +95,7 @@ gb build
 bin/peekaboo -s src/github.com/mickep76/peekaboo/static -t src/github.com/mickep76/peekaboo/templates
 ```
 
-# Change port or bind address
+# Change port or bind address on Linux
 
 ```bash
 vi /etc/systemd/system/peekaboo.service

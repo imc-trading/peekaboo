@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -eux
+
+SOURCES=src/github.com/mickep76/peekaboo
+PREFIX=/usr/bin
+RESOURCES=/var/lib/peekaboo
+
+cp bin/peekaboo ${PREFIX}
+mkdir -p ${RESOURCES}
+cp -r ${SOURCES}/static ${RESOURCES}
+cp -r ${SOURCES}/templates ${RESOURCES}
