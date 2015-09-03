@@ -51,7 +51,7 @@ Help Options:
   -h, --help          Show this help message
 ```
 
-# Setup Go build env. on Linux
+# Setup Go on Linux
 
 ```bash
 sudo yum install -y golang
@@ -80,14 +80,16 @@ sudo systemctl enable peekaboo
 sudo systemctl start peekaboo
 ```
 
-## Change port or bind address on Linux
+## Change configuration
 
 ```bash
 systemctl stop peekaboo
 vi /etc/systemd/system/peekaboo.service
 ```
 
-Add -b bind address, defaults to "0.0.0.0". For port add -p, defaults to 5050.
+Add "--bind-addr" bind address, defaults to "0.0.0.0". For port add "--port", defaults to 5050.
+
+**Example:**
 
 ```
 ExecStart=/usr/bin/peekaboo \
@@ -104,7 +106,7 @@ systemctl daemon-reload
 systemctl start peekaboo
 ```
 
-# Setup Go build env. on Mac OS X
+# Setup Go on Mac OS X
 
 ```bash
 brew install go
@@ -132,7 +134,7 @@ ln -sfv /usr/local/opt/peekaboo/*.plist ~/Library/LaunchAgents
 launchctl load ~/Library/LaunchAgents/homebrew.mxcl.peekaboo.plist
 ```
 
-## Change port or bind address on Mac OS X
+## Change configuration
 
 ```bash
 launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.peekaboo.plist
