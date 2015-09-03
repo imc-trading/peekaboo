@@ -78,6 +78,29 @@ sudo systemctl enable peekaboo
 sudo systemctl start peekaboo
 ```
 
+## Change port or bind address on Linux
+
+```bash
+systemctl stop peekaboo
+vi /etc/systemd/system/peekaboo.service
+```
+
+Add -b bind address, defaults to "0.0.0.0". For port add -p, defaults to 5050.
+
+```
+ExecStart=/usr/bin/peekaboo --static-dir /var/lib/peekaboo/static \
+    --template-dir /var/lib/peekaboo/templates \
+    --bind-addr 192.168.1.153 \
+    --port 8080
+```
+
+Reload SystemD and then restart Peekaboo.
+
+```bash
+systemctl daemon-reload
+systemctl start peekaboo
+```
+
 # Setup Go build env. on Mac OS X
 
 ```bash
@@ -104,21 +127,35 @@ ln -sfv /usr/local/opt/peekaboo/*.plist ~/Library/LaunchAgents
 launchctl load ~/Library/LaunchAgents/homebrew.mxcl.peekaboo.plist
 ```
 
-# Change port or bind address on Linux
+## Change port or bind address on Mac OS X
 
 ```bash
-vi /etc/systemd/system/peekaboo.service
+launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.peekaboo.plist
+vi ~/Library/LaunchAgents/homebrew.mxcl.peekaboo.plist
 ```
 
-Add -b bind address, defaults to "0.0.0.0". For port add -p, defaults to 5050.
+Add "--bind-addr" to change bind address, defaults to "0.0.0.0". To change port add "--port", defaults to 5050.
+
+**Example:**
 
 ```
-ExecStart=/usr/bin/peekaboo -s /var/lib/peekaboo/static -t /var/lib/peekaboo/templates -b <bind addr.> -p <port>
+...
+    <string>/usr/local/Cellar/peekaboo/0.2.1/bin/peekaboo</string>
+    <string>--static-dir</string>
+    <string>/usr/local/Cellar/peekaboo/0.2.1/peekaboo/static</string>
+    <string>--template-dir</string>
+    <string>/usr/local/Cellar/peekaboo/0.2.1/peekaboo/templates</string>
+    <string>--bind-addr</string>
+    <string>192.168.1.153</string>
+    <string>--port</string>
+    <string>8080</string>
+..
 ```
 
 Reload SystemD and then restart Peekaboo.
 
 ```bash
-systemctl daemon-reload
-systemctl restart peekaboo
+launchctl load ~/Library/LaunchAgents/homebrew.mxcl.peekaboo.plist
 ```
+
+launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.peekaboo.plist
