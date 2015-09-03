@@ -2,7 +2,7 @@ Expose hardware info using JSON/REST and HTML Front-End.
 
 **FrontEnd:**
 
-http://<myserver>:5050
+http://myserver.example.com:5050
 
 **JSON endpoints:**
 
@@ -49,23 +49,26 @@ Help Options:
   -h, --help          Show this help message
 ```
 
-# Build
+# Setup Go build environment
 
 ```bash
+yum install golang
 mkdir ~/go
 export GOPATH=~/go
 export PATH=$GOPATH/bin:$PATH
 go get github.com/constabulary/gb/...
+```
+
+## Build
+
+```bash
 gb build
 ```
 
-# Build RPM
+## Build RPM
 
 ```bash
-mkdir ~/go
-export GOPATH=~/go
-export PATH=$GOPATH/bin:$PATH
-make pre-reqs
+yum install rpm-build
 make rpm
 ```
 
@@ -81,11 +84,13 @@ systemctl start peekaboo
 
 ```bash
 vi /etc/systemd/system/peekaboo.service
+```
 
-...
+```
 ExecStart=/usr/bin/peekaboo -s /var/lib/peekaboo/static -t /var/lib/peekaboo/templates -b <bind addr.> -p <port>
-...
+```
 
+```bash
 systemctl daemon-reload
 systemctl restart peekaboo
 ```
