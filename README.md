@@ -88,7 +88,8 @@ vi /etc/systemd/system/peekaboo.service
 Add -b bind address, defaults to "0.0.0.0". For port add -p, defaults to 5050.
 
 ```
-ExecStart=/usr/bin/peekaboo --static-dir /var/lib/peekaboo/static \
+ExecStart=/usr/bin/peekaboo \
+    --static-dir /var/lib/peekaboo/static \
     --template-dir /var/lib/peekaboo/templates \
     --bind-addr 192.168.1.153 \
     --port 8080
@@ -157,5 +158,3 @@ Reload SystemD and then restart Peekaboo.
 ```bash
 launchctl load ~/Library/LaunchAgents/homebrew.mxcl.peekaboo.plist
 ```
-
-launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.peekaboo.plist
