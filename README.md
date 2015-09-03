@@ -78,7 +78,7 @@ sudo systemctl enable peekaboo
 sudo systemctl start peekaboo
 ```
 
-# Setup Go build env. on Linux
+# Setup Go build env. on Mac OS X
 
 ```bash
 brew install go
