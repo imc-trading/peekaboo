@@ -1,4 +1,6 @@
-Expose hardware info using JSON/REST and HTML Front-End.
+# Peekaboo
+
+Expose hardware info using JSON/REST and provide a system HTML Front-End.
 
 **FrontEnd:**
 
