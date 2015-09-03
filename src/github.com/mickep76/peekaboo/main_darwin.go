@@ -3,7 +3,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/Unknwon/macaron"
 	"github.com/mickep76/hwinfo"
 )

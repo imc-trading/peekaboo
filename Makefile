@@ -24,7 +24,7 @@ hwinfo:
 	gb vendor update github.com/mickep76/hwinfo
 
 pre-req:
-	yum install -y rpm-build
+	yum install -y rpm-build golang
 
 rpm:	build
 	mkdir -p ${TMPDIR}/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
