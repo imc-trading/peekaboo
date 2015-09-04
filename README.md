@@ -159,7 +159,7 @@ Add "--bind-addr" to change bind address, defaults to "0.0.0.0". To change port 
 ..
 ```
 
-Reload SystemD and then restart Peekaboo.
+Restart Peekaboo.
 
 ```bash
 launchctl load ~/Library/LaunchAgents/homebrew.mxcl.peekaboo.plist
