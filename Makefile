@@ -1,6 +1,7 @@
 NAME=peekaboo
-SRCDIR=src/github.com/mickep76/peekaboo
+SRCDIR=src/github.com/mickep76/${NAME}
 TMPDIR=.build
+RESDIR=/var/lib/peekaboo
 VERSION:=$(shell awk -F '"' '/Version/ {print $$2}' ${SRCDIR}/version.go)
 RELEASE:=$(shell date -u +%Y%m%d%H%M)
 ARCH:=$(shell uname -p)
@@ -20,11 +21,11 @@ build: test
 update:
 	gb vendor update --all
 
-hwinfo:
-	gb vendor update github.com/mickep76/hwinfo
-
-pre-req:
-	yum install -y rpm-build
+install:
+	cp bin/peekaboo /usr/bin
+	mkdir -p ${RESDIR}
+	cp -r ${SRCDIR}/static ${RESDIR}
+	cp -r ${SRCDIR}/templates ${RESDIR}
 
 rpm:	build
 	mkdir -p ${TMPDIR}/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
