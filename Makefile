@@ -1,7 +1,7 @@
 NAME=peekaboo
 SRCDIR=src/github.com/mickep76/${NAME}
 TMPDIR=.build
-RESDIR=/var/lib/peekaboo
+RESDIR=/var/lib/${NAME}
 VERSION:=$(shell awk -F '"' '/Version/ {print $$2}' ${SRCDIR}/version.go)
 RELEASE:=$(shell date -u +%Y%m%d%H%M)
 ARCH:=$(shell uname -p)
