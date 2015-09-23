@@ -29,7 +29,7 @@ PEEKABOOSRC="${PEEKABOODIR}/src/github.com/mickep76/peekaboo"
 
 src_compile() {
 	ebegin "Building peekaboo ${PV}"
-	export GOPATH=${WORKDIR}
+	export GOPATH=${PEEKABOODIR}
 	export PATH=${GOPATH}/bin:${PATH}
 	cd ${PEEKABOODIR}
 	./build
