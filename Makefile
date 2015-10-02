@@ -1,5 +1,5 @@
 NAME=peekaboo
-SRCDIR=src/github.com/mickep76/${NAME}
+SRCDIR=src/github.com/imc-trading/${NAME}
 TMPDIR=.build
 RESDIR=/var/lib/${NAME}
 VERSION:=$(shell awk -F '"' '/Version/ {print $$2}' ${SRCDIR}/version.go)
