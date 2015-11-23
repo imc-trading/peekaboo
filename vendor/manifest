@@ -2,6 +2,12 @@
 	"version": 0,
 	"dependencies": [
 		{
+			"importpath": "github.com/Shopify/sarama",
+			"repository": "https://github.com/Shopify/sarama",
+			"revision": "7cdfc5b3e054fe72ad79af2a2984bbffcfcf3c64",
+			"branch": "master"
+		},
+		{
 			"importpath": "github.com/Sirupsen/logrus",
 			"repository": "https://github.com/Sirupsen/logrus",
 			"revision": "44512f0d08f7f81a75f5b04a2cb6d81ed25431ca",
@@ -38,15 +44,40 @@
 			"branch": "master"
 		},
 		{
+			"importpath": "github.com/eapache/go-resiliency/breaker",
+			"repository": "https://github.com/eapache/go-resiliency",
+			"revision": "f341fb4dca45128e4aa86389fa6a675d55fe25e1",
+			"branch": "master",
+			"path": "/breaker"
+		},
+		{
+			"importpath": "github.com/eapache/queue",
+			"repository": "https://github.com/eapache/queue",
+			"revision": "ded5959c0d4e360646dc9e9908cff48666781367",
+			"branch": "master"
+		},
+		{
 			"importpath": "github.com/getsentry/raven-go",
 			"repository": "https://github.com/getsentry/raven-go",
 			"revision": "74c334d7b8aaa4fd1b4fc6aa428c36fed1699e28",
 			"branch": "master"
 		},
 		{
+			"importpath": "github.com/golang/snappy",
+			"repository": "https://github.com/golang/snappy",
+			"revision": "723cc1e459b8eea2dea4583200fd60757d40097a",
+			"branch": "master"
+		},
+		{
 			"importpath": "github.com/jessevdk/go-flags",
 			"repository": "https://github.com/jessevdk/go-flags",
 			"revision": "1acbbaff2f347c412a0c7884873bd72cc9c1f5b4",
+			"branch": "master"
+		},
+		{
+			"importpath": "github.com/klauspost/crc32",
+			"repository": "https://github.com/klauspost/crc32",
+			"revision": "3e5c38b8b170916b332a5ccb25f921314b98ba01",
 			"branch": "master"
 		},
 		{
