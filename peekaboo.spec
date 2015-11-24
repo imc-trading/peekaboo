@@ -36,4 +36,4 @@ systemctl daemon-reload
 /usr/bin/%{name}
 /var/lib/%{name}
 /etc/systemd/system/%{name}.service
-%config /etc/sysconfig/%{name}
+%config(noreplace) /etc/sysconfig/%{name}
