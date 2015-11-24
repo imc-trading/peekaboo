@@ -25,6 +25,8 @@ cp -r %{sources}/templates %{buildroot}/var/lib/%{name}
 cp -r %{sources}/static %{buildroot}/var/lib/%{name}
 mkdir -p %{buildroot}/etc/systemd/system
 cp %{sources}/files/%{name}.service %{buildroot}/etc/systemd/system/%{name}.service
+mkdir -p %{buildroot}/etc/sysconfig
+cp %{sources}/files/%{name} %{buildroot}/etc/sysconfig/%{name}
 
 %post
 systemctl daemon-reload
@@ -34,3 +36,4 @@ systemctl daemon-reload
 /usr/bin/%{name}
 /var/lib/%{name}
 /etc/systemd/system/%{name}.service
+%config /etc/sysconfig/%{name}
