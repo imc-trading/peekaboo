@@ -10,11 +10,11 @@ import (
 	"github.com/Shopify/sarama"
 )
 
-type EventID int
+type EventType int
 
 // Constants for events.
 const (
-	STARTED EventID = iota
+	STARTED EventType = iota
 	CHANGED
 	STOPPED
 	UNKNOWN
@@ -22,7 +22,7 @@ const (
 
 type Event struct {
 	Name      string      `json:"name"`
-	EventID   EventID     `json:"event_id"`
+	EventType EventType   `json:"event_type"`
 	Created   string      `json:"created"`
 	CreatedBy CreatedBy   `json:created_by"`
 	Descr     string      `json:"descr"`

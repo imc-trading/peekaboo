@@ -82,9 +82,9 @@ func main() {
 		}
 
 		event := &Event{
-			Name:    "Peekaboo startup",
-			EventID: STARTED,
-			Created: time.Now().Format("20060102T150405ZB"),
+			Name:      "Peekaboo startup",
+			EventType: STARTED,
+			Created:   time.Now().Format("20060102T150405ZB"),
 			CreatedBy: CreatedBy{
 				User:    user.Username,
 				Service: "peekaboo",
