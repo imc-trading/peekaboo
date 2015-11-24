@@ -4,7 +4,9 @@ Expose hardware info using JSON/REST and provide a system HTML Front-End.
 
 **FrontEnd:**
 
+```
 http://myserver.example.com:5050
+```
 
 **JSON endpoints:**
 
@@ -46,6 +48,13 @@ Application Options:
   -p, --port=         Port (5050)
   -s, --static-dir=   Static content (static)
   -t, --template-dir= Templates (templates)
+  -K, --kafka         Enable Kafka message bus
+      --kafka-topic=  Kafka topic (peekaboo)
+      --kafka-peers=  Comma-delimited list of Kafka brokers
+      --kafka-cert=   Certificate file for client authentication
+      --kafka-key=    Key file for client client authentication
+      --kafka-ca=     CA file for TLS client authentication
+      --kafka-verify  Verify SSL certificate
 
 Help Options:
   -h, --help          Show this help message
@@ -72,19 +81,17 @@ sudo bin/peekaboo \
 
 ## Build RPM
 
+Make sure you have Docker configured.
+
 ```bash
-sudo yum install -y rpm-build
 make rpm
-sudo rpm -i peekaboo-<version>-<release>.rpm
-sudo systemctl enable peekaboo
-sudo systemctl start peekaboo
 ```
 
 ## Change configuration
 
 ```bash
 systemctl stop peekaboo
-vi /etc/systemd/system/peekaboo.service
+vi /etc/sysconfig/peekaboo
 ```
 
 Add "--bind-addr" bind address, defaults to "0.0.0.0". For port add "--port", defaults to 5050.
@@ -92,17 +99,12 @@ Add "--bind-addr" bind address, defaults to "0.0.0.0". For port add "--port", de
 **Example:**
 
 ```
-ExecStart=/usr/bin/peekaboo \
-    --static-dir /var/lib/peekaboo/static \
-    --template-dir /var/lib/peekaboo/templates \
-    --bind-addr 192.168.1.153 \
-    --port 8080
+OPTIONS="--bind-addr 192.168.1.153 --port 8080"
 ```
 
 Reload SystemD and then restart Peekaboo.
 
 ```bash
-systemctl daemon-reload
 systemctl start peekaboo
 ```
 
