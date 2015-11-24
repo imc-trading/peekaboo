@@ -1,10 +1,10 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/Shopify/sarama"
 	"os"
+	"os/user"
 	"runtime"
 	"strings"
 	"time"
@@ -70,28 +70,38 @@ func main() {
 	}
 
 	// Produce message to Kafka bus.
-	log.Infof("Produce message to Kafka bus with topic: %s", opts.KafkaTopic)
+	log.Infof("Produce startup event to Kafka bus with topic: %s", opts.KafkaTopic)
 	if opts.KafkaEnabled {
 		if opts.KafkaPeers == nil {
 			log.Fatal("You need to specify Kafka Peers")
 		}
 
-		j, err := json.Marshal(info)
+		user, err := user.Current()
 		if err != nil {
-			log.Fatalf(err.Error())
+			log.Fatal(err.Error())
 		}
 
-		msg := &Msg{
-			Host:    info.Hostname,
+		event := &Event{
+			Name:    "Peekaboo startup",
+			EventID: 1,
 			Created: time.Now().Format("20060102T150405ZB"),
-			Data:    string(j),
+			CreatedBy: CreatedBy{
+				User:    user.Username,
+				Service: "peekaboo",
+				Host:    info.Hostname,
+			},
+			Descr: "Peekaboo startup event",
+			Data:  info,
 		}
 
 		producer := newProducer(strings.Split(*opts.KafkaPeers, ","), opts.KafkaCert, opts.KafkaKey, opts.KafkaCA, opts.KafkaVerify)
 		partition, offset, err := producer.SendMessage(&sarama.ProducerMessage{
 			Topic: opts.KafkaTopic,
-			Value: msg,
+			Value: event,
 		})
+		if err != nil {
+			log.Fatal(err.Error())
+		}
 
 		log.Infof("Kafka partition: %v, offset: %v", partition, offset)
 	}

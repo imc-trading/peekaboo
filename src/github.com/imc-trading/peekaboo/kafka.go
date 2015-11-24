@@ -10,27 +10,36 @@ import (
 	"github.com/Shopify/sarama"
 )
 
-type Msg struct {
-	Host    string `json:"name"`
-	Created string `json:"created"`
-	Data    string `json:"data"`
+type Event struct {
+	Name      string      `json:"name"`
+	EventID   int         `json:"event_id"`
+	Created   string      `json:"created"`
+	CreatedBy CreatedBy   `json:created_by"`
+	Descr     string      `json:"descr"`
+	Data      interface{} `json:"data"`
 
 	encoded []byte
 	err     error
 }
 
-func (e *Msg) ensureEncoded() {
+type CreatedBy struct {
+	User    string `json:"user"`
+	Service string `json:"service"`
+	Host    string `json:"host"`
+}
+
+func (e *Event) ensureEncoded() {
 	if e.encoded == nil && e.err == nil {
 		e.encoded, e.err = json.Marshal(e)
 	}
 }
 
-func (e *Msg) Length() int {
+func (e *Event) Length() int {
 	e.ensureEncoded()
 	return len(e.encoded)
 }
 
-func (e *Msg) Encode() ([]byte, error) {
+func (e *Event) Encode() ([]byte, error) {
 	e.ensureEncoded()
 	return e.encoded, e.err
 }
