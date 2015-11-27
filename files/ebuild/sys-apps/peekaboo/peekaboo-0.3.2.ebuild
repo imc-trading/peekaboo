@@ -8,7 +8,7 @@ EAPI=5
 inherit user git-r3 systemd
 
 DESCRIPTION="Expose hardware info using JSON/REST and provide a system HTML Front-End"
-HOMEPAGE="https://github.com/mickep76/peekaboo.git"
+HOMEPAGE="https://github.com/imc-trading/peekaboo.git"
 SRC_URI=""
 
 LICENSE="Apache-2.0"
@@ -21,11 +21,11 @@ RDEPEND="${DEPEND}
 	sys-apps/ethtool
 	sys-apps/hwdata-redhat"
 
-EGIT_REPO_URI="https://github.com/mickep76/peekaboo.git"
+EGIT_REPO_URI="https://github.com/imc-trading/peekaboo.git"
 EGIT_COMMIT="${PV}"
 
 PEEKABOODIR="${WORKDIR}/peekaboo-${PV}"
-PEEKABOOSRC="${PEEKABOODIR}/src/github.com/mickep76/peekaboo"
+PEEKABOOSRC="${PEEKABOODIR}/src/github.com/imc-trading/peekaboo"
 
 src_compile() {
 	ebegin "Building peekaboo ${PV}"
