@@ -7,7 +7,7 @@ import (
 	"github.com/mickep76/hwinfo"
 )
 
-func routes(m *macaron.Macaron, hw hwinfo.HWInfo) {
+func routes(m *macaron.Macaron, hw *hwinfo.HWInfo) {
 	m.Get("/", func(ctx *macaron.Context) {
 		ctx.Data["Title"] = "Peekaboo"
 		ctx.Data["Kernel"] = hw.OpSys.Kernel

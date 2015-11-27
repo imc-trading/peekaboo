@@ -1,3 +1,5 @@
+// +build go1.3
+
 // Copyright 2014 Unknwon
 //
 // Licensed under the Apache License, Version 2.0 (the "License"): you may
@@ -12,7 +14,7 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-// Package macaron is a high productive and modular design web framework in Go.
+// Package macaron is a high productive and modular web framework in Go.
 package macaron
 
 import (
@@ -29,7 +31,7 @@ import (
 	"github.com/Unknwon/macaron/inject"
 )
 
-const _VERSION = "0.6.6.0728"
+const _VERSION = "0.6.8.1010"
 
 func Version() string {
 	return _VERSION
@@ -64,7 +66,8 @@ type Macaron struct {
 	handlers []Handler
 	action   Handler
 
-	urlPrefix string // For suburl support.
+	hasURLPrefix bool
+	urlPrefix    string // For suburl support.
 	*Router
 
 	logger *log.Logger
@@ -161,7 +164,9 @@ func (m *Macaron) createContext(rw http.ResponseWriter, req *http.Request) *Cont
 // Useful if you want to control your own HTTP server.
 // Be aware that none of middleware will run without registering any router.
 func (m *Macaron) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
-	req.URL.Path = strings.TrimPrefix(req.URL.Path, m.urlPrefix)
+	if m.hasURLPrefix {
+		req.URL.Path = strings.TrimPrefix(req.URL.Path, m.urlPrefix)
+	}
 	for _, h := range m.befores {
 		if h(rw, req) {
 			return
@@ -210,6 +215,7 @@ func (m *Macaron) Run(args ...interface{}) {
 // SetURLPrefix sets URL prefix of router layer, so that it support suburl.
 func (m *Macaron) SetURLPrefix(prefix string) {
 	m.urlPrefix = prefix
+	m.hasURLPrefix = len(m.urlPrefix) > 0
 }
 
 // ____   ____            .__      ___.   .__

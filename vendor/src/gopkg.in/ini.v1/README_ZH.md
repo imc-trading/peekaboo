@@ -88,6 +88,12 @@ key, err := cfg.Section("").GetKey("key name")
 key := cfg.Section("").Key("key name")
 ```
 
+判断某个键是否存在：
+
+```go
+yes := cfg.Section("").HasKey("key name")
+```
+
 创建一个新的键：
 
 ```go
@@ -97,8 +103,8 @@ err := cfg.Section("").NewKey("name", "value")
 获取分区下的所有键或键名：
 
 ```go
-keys := cfg.Section().Keys()
-names := cfg.Section().KeyStrings()
+keys := cfg.Section("").Keys()
+names := cfg.Section("").KeyStrings()
 ```
 
 获取分区下的所有键值对的克隆：
@@ -115,6 +121,29 @@ hash := cfg.GetSection("").KeysHash()
 val := cfg.Section("").Key("key name").String()
 ```
 
+获取值的同时通过自定义函数进行处理验证：
+
+```go
+val := cfg.Section("").Key("key name").Validate(func(in string) string {
+	if len(in) == 0 {
+		return "default"
+	}
+	return in
+})
+```
+
+如果您不需要任何对值的自动转变功能（例如递归读取），可以直接获取原值（这种方式性能最佳）：
+
+```go
+val := cfg.Section("").Key("key name").Value()
+```
+
+判断某个原值是否存在：
+
+```go
+yes := cfg.Section("").HasValue("test value")
+```
+
 获取其它类型的值：
 
 ```go
@@ -125,6 +154,8 @@ v, err = cfg.Section("").Key("BOOL").Bool()
 v, err = cfg.Section("").Key("FLOAT64").Float64()
 v, err = cfg.Section("").Key("INT").Int()
 v, err = cfg.Section("").Key("INT64").Int64()
+v, err = cfg.Section("").Key("UINT").Uint()
+v, err = cfg.Section("").Key("UINT64").Uint64()
 v, err = cfg.Section("").Key("TIME").TimeFormat(time.RFC3339)
 v, err = cfg.Section("").Key("TIME").Time() // RFC3339
 
@@ -132,6 +163,8 @@ v = cfg.Section("").Key("BOOL").MustBool()
 v = cfg.Section("").Key("FLOAT64").MustFloat64()
 v = cfg.Section("").Key("INT").MustInt()
 v = cfg.Section("").Key("INT64").MustInt64()
+v = cfg.Section("").Key("UINT").MustUint()
+v = cfg.Section("").Key("UINT64").MustUint64()
 v = cfg.Section("").Key("TIME").MustTimeFormat(time.RFC3339)
 v = cfg.Section("").Key("TIME").MustTime() // RFC3339
 
@@ -144,6 +177,8 @@ v = cfg.Section("").Key("BOOL").MustBool(true)
 v = cfg.Section("").Key("FLOAT64").MustFloat64(1.25)
 v = cfg.Section("").Key("INT").MustInt(10)
 v = cfg.Section("").Key("INT64").MustInt64(99)
+v = cfg.Section("").Key("UINT").MustUint(3)
+v = cfg.Section("").Key("UINT64").MustUint64(6)
 v = cfg.Section("").Key("TIME").MustTimeFormat(time.RFC3339, time.Now())
 v = cfg.Section("").Key("TIME").MustTime(time.Now()) // RFC3339
 ```
@@ -185,7 +220,7 @@ lots_of_lines = 1 \
 
 ```go
 cfg.Section("advance").Key("two_lines").String() // how about continuation lines?
-cfg.Section("advance").Key("lots_of_lines").String() // 1 2 3 4 
+cfg.Section("advance").Key("lots_of_lines").String() // 1 2 3 4
 ```
 
 需要注意的是，值两侧的单引号会被自动剔除：
@@ -206,6 +241,8 @@ v = cfg.Section("").Key("STRING").In("default", []string{"str", "arr", "types"})
 v = cfg.Section("").Key("FLOAT64").InFloat64(1.1, []float64{1.25, 2.5, 3.75})
 v = cfg.Section("").Key("INT").InInt(5, []int{10, 20, 30})
 v = cfg.Section("").Key("INT64").InInt64(10, []int64{10, 20, 30})
+v = cfg.Section("").Key("UINT").InUint(4, []int{3, 6, 9})
+v = cfg.Section("").Key("UINT64").InUint64(8, []int64{3, 6, 9})
 v = cfg.Section("").Key("TIME").InTimeFormat(time.RFC3339, time.Now(), []time.Time{time1, time2, time3})
 v = cfg.Section("").Key("TIME").InTime(time.Now(), []time.Time{time1, time2, time3}) // RFC3339
 ```
@@ -218,6 +255,8 @@ v = cfg.Section("").Key("TIME").InTime(time.Now(), []time.Time{time1, time2, tim
 vals = cfg.Section("").Key("FLOAT64").RangeFloat64(0.0, 1.1, 2.2)
 vals = cfg.Section("").Key("INT").RangeInt(0, 10, 20)
 vals = cfg.Section("").Key("INT64").RangeInt64(0, 10, 20)
+vals = cfg.Section("").Key("UINT").RangeUint(0, 3, 9)
+vals = cfg.Section("").Key("UINT64").RangeUint64(0, 3, 9)
 vals = cfg.Section("").Key("TIME").RangeTimeFormat(time.RFC3339, time.Now(), minTime, maxTime)
 vals = cfg.Section("").Key("TIME").RangeTime(time.Now(), minTime, maxTime) // RFC3339
 ```
@@ -229,6 +268,8 @@ vals = cfg.Section("").Key("STRINGS").Strings(",")
 vals = cfg.Section("").Key("FLOAT64S").Float64s(",")
 vals = cfg.Section("").Key("INTS").Ints(",")
 vals = cfg.Section("").Key("INT64S").Int64s(",")
+vals = cfg.Section("").Key("UINTS").Uints(",")
+vals = cfg.Section("").Key("UINT64S").Uint64s(",")
 vals = cfg.Section("").Key("TIMES").Times(",")
 ```
 
@@ -412,7 +453,7 @@ GPA = 2.8
 [Embeded]
 Dates = 2015-08-07T22:14:22+08:00|2015-08-07T22:14:22+08:00
 Places = HangZhou,Boston
-None = 
+None =
 ```
 
 #### 名称映射器（Name Mapper）
@@ -432,7 +473,7 @@ type Info struct{
 }
 
 func main() {
-	err = ini.MapToWithMapper(&Info{}, ini.TitleUnderscore, []byte("packag_name=ini"))
+	err = ini.MapToWithMapper(&Info{}, ini.TitleUnderscore, []byte("package_name=ini"))
 	// ...
 
 	cfg, err := ini.Load([]byte("PACKAGE_NAME=ini"))

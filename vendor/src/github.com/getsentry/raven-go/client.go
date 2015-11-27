@@ -235,7 +235,9 @@ func (packet *Packet) JSON() []byte {
 
 	interfaces := make(map[string]Interface, len(packet.Interfaces))
 	for _, inter := range packet.Interfaces {
-		interfaces[inter.Class()] = inter
+		if inter != nil {
+			interfaces[inter.Class()] = inter
+		}
 	}
 
 	if len(interfaces) > 0 {
@@ -341,12 +343,13 @@ type Client struct {
 	// Context that will get appending to all packets
 	context *context
 
-	mu         sync.RWMutex
-	url        string
-	projectID  string
-	authHeader string
-	release    string
-	queue      chan *outgoingPacket
+	mu           sync.RWMutex
+	url          string
+	projectID    string
+	authHeader   string
+	release      string
+	includePaths []string
+	queue        chan *outgoingPacket
 
 	// A WaitGroup to keep track of all currently in-progress captures
 	// This is intended to be used with Client.Wait() to assure that
@@ -521,7 +524,7 @@ func (client *Client) CaptureError(err error, tags map[string]string, interfaces
 		return ""
 	}
 
-	packet := NewPacket(err.Error(), append(append(interfaces, client.context.interfaces()...), NewException(err, NewStacktrace(1, 3, nil)))...)
+	packet := NewPacket(err.Error(), append(append(interfaces, client.context.interfaces()...), NewException(err, NewStacktrace(1, 3, client.includePaths)))...)
 	eventID, _ := client.Capture(packet, tags)
 
 	return eventID
@@ -539,7 +542,7 @@ func (client *Client) CaptureErrorAndWait(err error, tags map[string]string, int
 		return ""
 	}
 
-	packet := NewPacket(err.Error(), append(append(interfaces, client.context.interfaces()...), NewException(err, NewStacktrace(1, 3, nil)))...)
+	packet := NewPacket(err.Error(), append(append(interfaces, client.context.interfaces()...), NewException(err, NewStacktrace(1, 3, client.includePaths)))...)
 	eventID, ch := client.Capture(packet, tags)
 	<-ch
 
@@ -552,32 +555,36 @@ func CaptureErrorAndWait(err error, tags map[string]string, interfaces ...Interf
 }
 
 // CapturePanic calls f and then recovers and reports a panic to the Sentry server if it occurs.
-func (client *Client) CapturePanic(f func(), tags map[string]string, interfaces ...Interface) {
+// If an error is captured, both the error and the reported Sentry error ID are returned.
+func (client *Client) CapturePanic(f func(), tags map[string]string, interfaces ...Interface) (err interface{}, errorID string) {
 	// Note: This doesn't need to check for client, because we still want to go through the defer/recover path
 	// Down the line, Capture will be noop'd, so while this does a _tiny_ bit of overhead constructing the
 	// *Packet just to be thrown away, this should not be the normal case. Could be refactored to
 	// be completely noop though if we cared.
 	defer func() {
 		var packet *Packet
-		switch rval := recover().(type) {
+		err = recover()
+		switch rval := err.(type) {
 		case nil:
 			return
 		case error:
-			packet = NewPacket(rval.Error(), append(append(interfaces, client.context.interfaces()...), NewException(rval, NewStacktrace(2, 3, nil)))...)
+			packet = NewPacket(rval.Error(), append(append(interfaces, client.context.interfaces()...), NewException(rval, NewStacktrace(2, 3, client.includePaths)))...)
 		default:
 			rvalStr := fmt.Sprint(rval)
-			packet = NewPacket(rvalStr, append(append(interfaces, client.context.interfaces()...), NewException(errors.New(rvalStr), NewStacktrace(2, 3, nil)))...)
+			packet = NewPacket(rvalStr, append(append(interfaces, client.context.interfaces()...), NewException(errors.New(rvalStr), NewStacktrace(2, 3, client.includePaths)))...)
 		}
 
-		client.Capture(packet, tags)
+		errorID, _ = client.Capture(packet, tags)
 	}()
 
 	f()
+	return
 }
 
 // CapturePanic calls f and then recovers and reports a panic to the Sentry server if it occurs.
-func CapturePanic(f func(), tags map[string]string, interfaces ...Interface) {
-	DefaultClient.CapturePanic(f, tags, interfaces...)
+// If an error is captured, both the error and the reported Sentry error ID are returned.
+func CapturePanic(f func(), tags map[string]string, interfaces ...Interface) (interface{}, string) {
+	return DefaultClient.CapturePanic(f, tags, interfaces...)
 }
 
 func (client *Client) Close() {
@@ -620,6 +627,24 @@ func (client *Client) Release() string {
 }
 
 func Release() string { return DefaultClient.Release() }
+
+func IncludePaths() []string { return DefaultClient.IncludePaths() }
+
+func (client *Client) IncludePaths() []string {
+	client.mu.RLock()
+	defer client.mu.RUnlock()
+
+	return client.includePaths
+}
+
+func SetIncludePaths(p []string) { DefaultClient.SetIncludePaths(p) }
+
+func (client *Client) SetIncludePaths(p []string) {
+	client.mu.Lock()
+	defer client.mu.Unlock()
+
+	client.includePaths = p
+}
 
 func (c *Client) SetUserContext(u *User)             { c.context.SetUser(u) }
 func (c *Client) SetHttpContext(h *Http)             { c.context.SetHttp(h) }

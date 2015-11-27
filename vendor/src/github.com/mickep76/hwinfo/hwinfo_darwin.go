@@ -3,6 +3,7 @@ package hwinfo
 import (
 	"os"
 	"strings"
+	"time"
 
 	"github.com/mickep76/hwinfo/cpu"
 	"github.com/mickep76/hwinfo/memory"
@@ -20,48 +21,134 @@ type HWInfo struct {
 	OpSys         *opsys.OpSys     `json:"opsys"`
 	System        *system.System   `json:"system"`
 	Network       *network.Network `json:"network"`
+
+	cpuTTL     int
+	memoryTTL  int
+	opSysTTL   int
+	systemTTL  int
+	networkTTL int
+	last       time.Time
 }
 
-// Get information about a system.
-func Get() (HWInfo, error) {
-	i := HWInfo{}
+func NewHWInfo() *HWInfo {
+	return &HWInfo{
+		cpuTTL:     24 * 60 * 60, // Every 24 hours
+		memoryTTL:  24 * 60 * 60, // Every 24 hours
+		opSysTTL:   60 * 60,      // Every hour
+		systemTTL:  60 * 60,      // Every hour
+		networkTTL: 60 * 60,      // Every hour
+	}
+}
 
+func (hwi *HWInfo) TTL(cpu int, memory int, opSys int, system int, network int) {
+	hwi.cpuTTL = cpu
+	hwi.memoryTTL = memory
+	hwi.opSysTTL = opSys
+	hwi.systemTTL = system
+	hwi.networkTTL = network
+}
+
+// Get information about a system with no TTL.
+func (hwi *HWInfo) Get() error {
 	host, err := os.Hostname()
 	if err != nil {
-		return HWInfo{}, err
+		return err
 	}
-	i.Hostname = host
-	i.ShortHostname = strings.Split(host, ".")[0]
+	hwi.Hostname = host
+	hwi.ShortHostname = strings.Split(host, ".")[0]
 
 	i2, err := cpu.Get()
 	if err != nil {
-		return HWInfo{}, err
+		return err
 	}
-	i.CPU = &i2
+	hwi.CPU = &i2
 
 	i3, err := memory.Get()
 	if err != nil {
-		return HWInfo{}, err
+		return err
 	}
-	i.Memory = &i3
+	hwi.Memory = &i3
 
 	i4, err := opsys.Get()
 	if err != nil {
-		return HWInfo{}, err
+		return err
 	}
-	i.OpSys = &i4
+	hwi.OpSys = &i4
 
 	i5, err := system.Get()
 	if err != nil {
-		return HWInfo{}, err
+		return err
 	}
-	i.System = &i5
+	hwi.System = &i5
 
 	i6, err := network.Get()
 	if err != nil {
-		return HWInfo{}, err
+		return err
 	}
-	i.Network = &i6
+	hwi.Network = &i6
 
-	return i, nil
+	return nil
+}
+
+// Get information about a system with TTL.
+func (hwi *HWInfo) GetTTL() error {
+	host, err := os.Hostname()
+	if err != nil {
+		return err
+	}
+	hwi.Hostname = host
+	hwi.ShortHostname = strings.Split(host, ".")[0]
+
+	now := time.Now()
+	ttl := now
+	ttl.Add(time.Duration(hwi.cpuTTL) * time.Second)
+	if hwi.CPU == nil || hwi.last.Before(ttl) {
+		i, err := cpu.Get()
+		if err != nil {
+			return err
+		}
+		hwi.CPU = &i
+	}
+
+	ttl = now
+	ttl.Add(time.Duration(hwi.memoryTTL) * time.Second)
+	if hwi.Memory == nil || hwi.last.Before(ttl) {
+		i, err := memory.Get()
+		if err != nil {
+			return err
+		}
+		hwi.Memory = &i
+	}
+
+	ttl = now
+	ttl.Add(time.Duration(hwi.opSysTTL) * time.Second)
+	if hwi.OpSys == nil || hwi.last.Before(ttl) {
+		i, err := opsys.Get()
+		if err != nil {
+			return err
+		}
+		hwi.OpSys = &i
+	}
+
+	ttl = now
+	ttl.Add(time.Duration(hwi.systemTTL) * time.Second)
+	if hwi.System == nil || hwi.last.Before(ttl) {
+		i, err := system.Get()
+		if err != nil {
+			return err
+		}
+		hwi.System = &i
+	}
+
+	ttl = now
+	ttl.Add(time.Duration(hwi.networkTTL) * time.Second)
+	if hwi.Network == nil || hwi.last.Before(ttl) {
+		i6, err := network.Get()
+		if err != nil {
+			return err
+		}
+		hwi.Network = &i6
+	}
+
+	return nil
 }

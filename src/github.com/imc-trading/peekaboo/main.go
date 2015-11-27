@@ -64,8 +64,8 @@ func main() {
 	}
 
 	// Get hardware info.
-	info, err := hwinfo.Get()
-	if err != nil {
+	info := hwinfo.NewHWInfo()
+	if err := info.GetTTL(); err != nil {
 		log.Fatal(err.Error())
 	}
 

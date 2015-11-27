@@ -11,16 +11,22 @@ import (
 )
 
 type Layer struct {
-	Layer   string `json:"layer"`
-	Image   string `json:"image"`
-	Commit  string `json:"commit"`
-	Created string `json:"created"`
-	Log     string `json:"logs"`
+	Layer             string `json:"layer"`
+	Image             string `json:"image"`
+	Repo              string `json:"repo"`
+	Commit            string `json:"commit"`
+	Created           string `json:"created"`
+	CPU               string `json:"cpu"`
+	CPUFlags          string `json:"cpuflags"`
+	KernelConfig      string `json:"kernelconfig"`
+	GCCVersion        string `json:"gcc_version"`
+	CFlags            string `json:"cflags"`
+	CFlagsMarchNative string `json:"cflags_march_native"`
 }
 
 type Dock2Box struct {
 	FirstBoot string  `json:"firstboot"`
-	CFlags    string  `json:"cflags_native"`
+	CFlags    string  `json:"cflags_march_native"`
 	Layers    []Layer `json:"layers"`
 }
 

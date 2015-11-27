@@ -35,7 +35,7 @@ const (
 	// Maximum allowed depth when recursively substituing variable names.
 	_DEPTH_VALUES = 99
 
-	_VERSION = "1.4.0"
+	_VERSION = "1.7.0"
 )
 
 func Version() string {
@@ -69,23 +69,35 @@ func inSlice(str string, s []string) bool {
 
 // dataSource is a interface that returns file content.
 type dataSource interface {
-	Reader() (io.Reader, error)
+	ReadCloser() (io.ReadCloser, error)
 }
 
 type sourceFile struct {
 	name string
 }
 
-func (s sourceFile) Reader() (io.Reader, error) {
+func (s sourceFile) ReadCloser() (_ io.ReadCloser, err error) {
 	return os.Open(s.name)
+}
+
+type bytesReadCloser struct {
+	reader io.Reader
+}
+
+func (rc *bytesReadCloser) Read(p []byte) (n int, err error) {
+	return rc.reader.Read(p)
+}
+
+func (rc *bytesReadCloser) Close() error {
+	return nil
 }
 
 type sourceData struct {
 	data []byte
 }
 
-func (s *sourceData) Reader() (io.Reader, error) {
-	return bytes.NewReader(s.data), nil
+func (s *sourceData) ReadCloser() (io.ReadCloser, error) {
+	return &bytesReadCloser{bytes.NewReader(s.data)}, nil
 }
 
 //  ____  __.
@@ -144,6 +156,12 @@ func (k *Key) String() string {
 	return val
 }
 
+// Validate accepts a validate function which can
+// return modifed result as key value.
+func (k *Key) Validate(fn func(string) string) string {
+	return fn(k.String())
+}
+
 // parseBool returns the boolean value represented by the string.
 //
 // It accepts 1, t, T, TRUE, true, True, YES, yes, Yes, ON, on, On,
@@ -177,6 +195,17 @@ func (k *Key) Int() (int, error) {
 // Int64 returns int64 type value.
 func (k *Key) Int64() (int64, error) {
 	return strconv.ParseInt(k.String(), 10, 64)
+}
+
+// Uint returns uint type valued.
+func (k *Key) Uint() (uint, error) {
+	u, e := strconv.ParseUint(k.String(), 10, 64)
+	return uint(u), e
+}
+
+// Uint64 returns uint64 type value.
+func (k *Key) Uint64() (uint64, error) {
+	return strconv.ParseUint(k.String(), 10, 64)
 }
 
 // Duration returns time.Duration type value.
@@ -237,6 +266,26 @@ func (k *Key) MustInt(defaultVal ...int) int {
 // it returns 0 if error occurs.
 func (k *Key) MustInt64(defaultVal ...int64) int64 {
 	val, err := k.Int64()
+	if len(defaultVal) > 0 && err != nil {
+		return defaultVal[0]
+	}
+	return val
+}
+
+// MustUint always returns value without error,
+// it returns 0 if error occurs.
+func (k *Key) MustUint(defaultVal ...uint) uint {
+	val, err := k.Uint()
+	if len(defaultVal) > 0 && err != nil {
+		return defaultVal[0]
+	}
+	return val
+}
+
+// MustUint64 always returns value without error,
+// it returns 0 if error occurs.
+func (k *Key) MustUint64(defaultVal ...uint64) uint64 {
+	val, err := k.Uint64()
 	if len(defaultVal) > 0 && err != nil {
 		return defaultVal[0]
 	}
@@ -309,6 +358,30 @@ func (k *Key) InInt(defaultVal int, candidates []int) int {
 // it returns default value if error occurs or doesn't fit into candidates.
 func (k *Key) InInt64(defaultVal int64, candidates []int64) int64 {
 	val := k.MustInt64()
+	for _, cand := range candidates {
+		if val == cand {
+			return val
+		}
+	}
+	return defaultVal
+}
+
+// InUint always returns value without error,
+// it returns default value if error occurs or doesn't fit into candidates.
+func (k *Key) InUint(defaultVal uint, candidates []uint) uint {
+	val := k.MustUint()
+	for _, cand := range candidates {
+		if val == cand {
+			return val
+		}
+	}
+	return defaultVal
+}
+
+// InUint64 always returns value without error,
+// it returns default value if error occurs or doesn't fit into candidates.
+func (k *Key) InUint64(defaultVal uint64, candidates []uint64) uint64 {
+	val := k.MustUint64()
 	for _, cand := range candidates {
 		if val == cand {
 			return val
@@ -425,6 +498,27 @@ func (k *Key) Int64s(delim string) []int64 {
 	return vals
 }
 
+// Uints returns list of uint devide by given delimiter.
+func (k *Key) Uints(delim string) []uint {
+	strs := k.Strings(delim)
+	vals := make([]uint, len(strs))
+	for i := range strs {
+		u, _ := strconv.ParseUint(strs[i], 10, 64)
+		vals[i] = uint(u)
+	}
+	return vals
+}
+
+// Uint64s returns list of uint64 devide by given delimiter.
+func (k *Key) Uint64s(delim string) []uint64 {
+	strs := k.Strings(delim)
+	vals := make([]uint64, len(strs))
+	for i := range strs {
+		vals[i], _ = strconv.ParseUint(strs[i], 10, 64)
+	}
+	return vals
+}
+
 // TimesFormat parses with given format and returns list of time.Time devide by given delimiter.
 func (k *Key) TimesFormat(format, delim string) []time.Time {
 	strs := k.Strings(delim)
@@ -506,12 +600,43 @@ func (s *Section) GetKey(name string) (*Key, error) {
 
 	if key == nil {
 		// Check if it is a child-section.
-		if i := strings.LastIndex(s.name, "."); i > -1 {
-			return s.f.Section(s.name[:i]).GetKey(name)
+		sname := s.name
+		for {
+			if i := strings.LastIndex(sname, "."); i > -1 {
+				sname = sname[:i]
+				sec, err := s.f.GetSection(sname)
+				if err != nil {
+					continue
+				}
+				return sec.GetKey(name)
+			} else {
+				break
+			}
 		}
 		return nil, fmt.Errorf("error when getting key of section '%s': key '%s' not exists", s.name, name)
 	}
 	return key, nil
+}
+
+// HasKey returns true if section contains a key with given name.
+func (s *Section) Haskey(name string) bool {
+	key, _ := s.GetKey(name)
+	return key != nil
+}
+
+// HasKey returns true if section contains given raw value.
+func (s *Section) HasValue(value string) bool {
+	if s.f.BlockMode {
+		s.f.lock.RLock()
+		defer s.f.lock.RUnlock()
+	}
+
+	for _, k := range s.keys {
+		if value == k.value {
+			return true
+		}
+	}
+	return false
 }
 
 // Key assumes named Key exists in section and returns a zero-value when not.
@@ -633,7 +758,10 @@ func Load(source interface{}, others ...interface{}) (_ *File, err error) {
 		}
 	}
 	f := newFile(sources)
-	return f, f.Reload()
+	if err = f.Reload(); err != nil {
+		return nil, err
+	}
+	return f, nil
 }
 
 // Empty returns an empty file object.
@@ -949,7 +1077,7 @@ func (f *File) parse(reader io.Reader) error {
 				val = lineRight[qLen : pos+qLen]
 			}
 		} else {
-			val = strings.TrimSpace(cutComment(lineRight[0:]))
+			val = strings.TrimSpace(cutComment(lineRight))
 			val, isEnd, err = checkContinuationLines(buf, val)
 			if err != nil {
 				return err
@@ -973,14 +1101,20 @@ func (f *File) parse(reader io.Reader) error {
 	return nil
 }
 
+func (f *File) reload(s dataSource) error {
+	r, err := s.ReadCloser()
+	if err != nil {
+		return err
+	}
+	defer r.Close()
+
+	return f.parse(r)
+}
+
 // Reload reloads and parses all data sources.
-func (f *File) Reload() error {
+func (f *File) Reload() (err error) {
 	for _, s := range f.dataSources {
-		r, err := s.Reader()
-		if err != nil {
-			return err
-		}
-		if err = f.parse(r); err != nil {
+		if err = f.reload(s); err != nil {
 			return err
 		}
 	}
@@ -1089,14 +1223,25 @@ func (f *File) WriteTo(w io.Writer) (int64, error) {
 
 // SaveToIndent writes content to file system with given value indention.
 func (f *File) SaveToIndent(filename, indent string) error {
-	fw, err := os.Create(filename)
+	// Note: Because we are truncating with os.Create,
+	// 	so it's safer to save to a temporary file location and rename afte done.
+	tmpPath := filename + "." + strconv.Itoa(time.Now().Nanosecond()) + ".tmp"
+	defer os.Remove(tmpPath)
+
+	fw, err := os.Create(tmpPath)
 	if err != nil {
 		return err
 	}
-	defer fw.Close()
 
-	_, err = f.WriteToIndent(fw, indent)
-	return err
+	if _, err = f.WriteToIndent(fw, indent); err != nil {
+		fw.Close()
+		return err
+	}
+	fw.Close()
+
+	// Remove old file and rename the new one.
+	os.Remove(filename)
+	return os.Rename(tmpPath, filename)
 }
 
 // SaveTo writes content to file system.

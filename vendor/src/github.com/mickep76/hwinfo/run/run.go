@@ -8,12 +8,12 @@ import (
 )
 
 func main() {
-	d, err := hwinfo.Get()
-	if err != nil {
-		fmt.Println(err.Error())
-	}
+	d := hwinfo.NewHWInfo()
+	d.GetTTL()
 
-	b, err := json.MarshalIndent(&d, "", "    ")
+	//	fmt.Println(d)
+
+	b, err := json.MarshalIndent(d, "", "    ")
 	if err != nil {
 		fmt.Println(err.Error())
 	}

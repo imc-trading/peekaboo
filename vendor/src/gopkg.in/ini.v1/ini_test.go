@@ -67,11 +67,13 @@ FLOAT64 = 1.25
 INT = 10
 TIME = 2015-01-01T20:17:05Z
 DURATION = 2h45m
+UINT = 3
 
 [array]
 STRINGS = en, zh, de
 FLOAT64S = 1.1, 2.2, 3.3
 INTS = 1, 2, 3
+UINTS = 1, 2, 3
 TIMES = 2015-01-01T20:17:05Z,2015-01-01T20:17:05Z,2015-01-01T20:17:05Z
 
 [note]
@@ -117,8 +119,9 @@ func Test_Load(t *testing.T) {
 			_, err := Load(_CONF_DATA)
 			So(err, ShouldNotBeNil)
 
-			_, err = Load("testdata/404.ini")
+			f, err := Load("testdata/404.ini")
 			So(err, ShouldNotBeNil)
+			So(f, ShouldBeNil)
 
 			_, err = Load(1)
 			So(err, ShouldNotBeNil)
@@ -170,6 +173,9 @@ func Test_Values(t *testing.T) {
 			So(sec, ShouldNotBeNil)
 			So(sec.Key("NAME").Value(), ShouldEqual, "ini")
 			So(sec.Key("NAME").String(), ShouldEqual, "ini")
+			So(sec.Key("NAME").Validate(func(in string) string {
+				return in
+			}), ShouldEqual, "ini")
 			So(sec.Key("NAME").Comment, ShouldEqual, "; Package name")
 			So(sec.Key("IMPORT_PATH").String(), ShouldEqual, "gopkg.in/ini.v1")
 		})
@@ -233,11 +239,19 @@ func Test_Values(t *testing.T) {
 			So(err, ShouldBeNil)
 			So(v4, ShouldEqual, 10)
 
+			v5, err := sec.Key("UINT").Uint()
+			So(err, ShouldBeNil)
+			So(v5, ShouldEqual, 3)
+
+			v6, err := sec.Key("UINT").Uint64()
+			So(err, ShouldBeNil)
+			So(v6, ShouldEqual, 3)
+
 			t, err := time.Parse(time.RFC3339, "2015-01-01T20:17:05Z")
 			So(err, ShouldBeNil)
-			v5, err := sec.Key("TIME").Time()
+			v7, err := sec.Key("TIME").Time()
 			So(err, ShouldBeNil)
-			So(v5.String(), ShouldEqual, t.String())
+			So(v7.String(), ShouldEqual, t.String())
 
 			Convey("Must get values with type", func() {
 				So(sec.Key("STRING").MustString("404"), ShouldEqual, "str")
@@ -245,6 +259,8 @@ func Test_Values(t *testing.T) {
 				So(sec.Key("FLOAT64").MustFloat64(), ShouldEqual, 1.25)
 				So(sec.Key("INT").MustInt(), ShouldEqual, 10)
 				So(sec.Key("INT").MustInt64(), ShouldEqual, 10)
+				So(sec.Key("UINT").MustUint(), ShouldEqual, 3)
+				So(sec.Key("UINT").MustUint64(), ShouldEqual, 3)
 				So(sec.Key("TIME").MustTime().String(), ShouldEqual, t.String())
 
 				dur, err := time.ParseDuration("2h45m")
@@ -257,6 +273,8 @@ func Test_Values(t *testing.T) {
 					So(sec.Key("FLOAT64_404").MustFloat64(2.5), ShouldEqual, 2.5)
 					So(sec.Key("INT_404").MustInt(15), ShouldEqual, 15)
 					So(sec.Key("INT_404").MustInt64(15), ShouldEqual, 15)
+					So(sec.Key("UINT_404").MustUint(6), ShouldEqual, 6)
+					So(sec.Key("UINT_404").MustUint64(6), ShouldEqual, 6)
 
 					t, err := time.Parse(time.RFC3339, "2014-01-01T20:17:05Z")
 					So(err, ShouldBeNil)
@@ -273,6 +291,8 @@ func Test_Values(t *testing.T) {
 			So(sec.Key("FLOAT64").InFloat64(0, []float64{1.25, 2.5, 3.75}), ShouldEqual, 1.25)
 			So(sec.Key("INT").InInt(0, []int{10, 20, 30}), ShouldEqual, 10)
 			So(sec.Key("INT").InInt64(0, []int64{10, 20, 30}), ShouldEqual, 10)
+			So(sec.Key("UINT").InUint(0, []uint{3, 6, 9}), ShouldEqual, 3)
+			So(sec.Key("UINT").InUint64(0, []uint64{3, 6, 9}), ShouldEqual, 3)
 
 			zt, err := time.Parse(time.RFC3339, "0001-01-01T01:00:00Z")
 			So(err, ShouldBeNil)
@@ -285,6 +305,8 @@ func Test_Values(t *testing.T) {
 				So(sec.Key("FLOAT64_404").InFloat64(1.25, []float64{1.25, 2.5, 3.75}), ShouldEqual, 1.25)
 				So(sec.Key("INT_404").InInt(10, []int{10, 20, 30}), ShouldEqual, 10)
 				So(sec.Key("INT64_404").InInt64(10, []int64{10, 20, 30}), ShouldEqual, 10)
+				So(sec.Key("UINT_404").InUint(3, []uint{3, 6, 9}), ShouldEqual, 3)
+				So(sec.Key("UINT_404").InUint64(3, []uint64{3, 6, 9}), ShouldEqual, 3)
 				So(sec.Key("TIME_404").InTime(t, []time.Time{time.Now(), time.Now(), time.Now().Add(1 * time.Second)}).String(), ShouldEqual, t.String())
 			})
 		})
@@ -333,11 +355,21 @@ func Test_Values(t *testing.T) {
 				So(vals3[i], ShouldEqual, v)
 			}
 
+			vals4 := sec.Key("UINTS").Uints(",")
+			for i, v := range []uint{1, 2, 3} {
+				So(vals4[i], ShouldEqual, v)
+			}
+
+			vals5 := sec.Key("UINTS").Uint64s(",")
+			for i, v := range []uint64{1, 2, 3} {
+				So(vals5[i], ShouldEqual, v)
+			}
+
 			t, err := time.Parse(time.RFC3339, "2015-01-01T20:17:05Z")
 			So(err, ShouldBeNil)
-			vals4 := sec.Key("TIMES").Times(",")
+			vals6 := sec.Key("TIMES").Times(",")
 			for i, v := range []time.Time{t, t, t} {
-				So(vals4[i].String(), ShouldEqual, v.String())
+				So(vals6[i].String(), ShouldEqual, v.String())
 			}
 		})
 
@@ -352,13 +384,31 @@ func Test_Values(t *testing.T) {
 		})
 
 		Convey("Get key strings", func() {
-			So(strings.Join(cfg.Section("types").KeyStrings(), ","), ShouldEqual, "STRING,BOOL,BOOL_FALSE,FLOAT64,INT,TIME,DURATION")
+			So(strings.Join(cfg.Section("types").KeyStrings(), ","), ShouldEqual, "STRING,BOOL,BOOL_FALSE,FLOAT64,INT,TIME,DURATION,UINT")
 		})
 
 		Convey("Delete a key", func() {
 			cfg.Section("package.sub").DeleteKey("UNUSED_KEY")
 			_, err := cfg.Section("package.sub").GetKey("UNUSED_KEY")
 			So(err, ShouldNotBeNil)
+		})
+
+		Convey("Has Key", func() {
+			sec := cfg.Section("package.sub")
+			haskey1 := sec.Haskey("UNUSED_KEY")
+			haskey2 := sec.Haskey("CLONE_URL")
+			haskey3 := sec.Haskey("CLONE_URL_NO")
+			So(haskey1, ShouldBeTrue)
+			So(haskey2, ShouldBeTrue)
+			So(haskey3, ShouldBeFalse)
+		})
+
+		Convey("Has Value", func() {
+			sec := cfg.Section("author")
+			hasvalue1 := sec.HasValue("Unknwon")
+			hasvalue2 := sec.HasValue("doc")
+			So(hasvalue1, ShouldBeTrue)
+			So(hasvalue2, ShouldBeFalse)
 		})
 
 		Convey("Get section strings", func() {

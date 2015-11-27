@@ -7,7 +7,7 @@ import (
 	"github.com/mickep76/hwinfo"
 )
 
-func routes(m *macaron.Macaron, hw hwinfo.HWInfo) {
+func routes(m *macaron.Macaron, hw *hwinfo.HWInfo) {
 	// HTML endpoints
 	m.Get("/", func(ctx *macaron.Context) {
 		ctx.Data["Title"] = "Peekaboo"
