@@ -12,3 +12,13 @@
 .top-margin {
   margin-top: 30px; 
 }
+
+.navbar-brand {
+  padding: 0px;
+}
+
+.navbar-brand>img {
+  height: 100%;
+  padding: 3px 10px 3px 10px;
+  width: auto;
+}

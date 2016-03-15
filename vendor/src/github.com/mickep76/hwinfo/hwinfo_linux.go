@@ -56,7 +56,7 @@ type HWInfo struct {
 func NewHWInfo() *HWInfo {
 	return &HWInfo{
 		cpuTTL:      24 * 60 * 60, // Every 24 hours
-		memoryTTL:   24 * 60 * 60, // Every 24 hours
+		memoryTTL:   5,            // Every 5 minutes
 		opSysTTL:    60 * 60,      // Every hour
 		systemTTL:   60 * 60,      // Every hour
 		networkTTL:  60 * 60,      // Every hour
