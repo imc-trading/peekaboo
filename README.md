@@ -1,4 +1,4 @@
-![Logo](img/peekaboo.png?raw=true)
+![Logo](img/logo.png?raw=true)
 
 Expose hardware info using JSON/REST and provide a system HTML Front-End.
 
