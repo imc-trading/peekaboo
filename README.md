@@ -1,4 +1,4 @@
-![Logo](img/logo.png?raw=true)
+<img src="img/logo.png" width="50">
 
 Expose hardware info using JSON/REST and provide a system HTML Front-End.
 
