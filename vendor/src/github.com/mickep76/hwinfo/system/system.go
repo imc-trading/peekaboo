@@ -1,14 +1,64 @@
 package system
 
-// System information.
-type System struct {
-	Manufacturer   string `json:"manufacturer"`
-	Product        string `json:"product"`
-	ProductVersion string `json:"product_version"`
-	SerialNumber   string `json:"serial_number"`
-	BIOSVendor     string `json:"bios_vendor,omitempty"`
-	BIOSDate       string `json:"bios_date,omitempty"`
-	BIOSVersion    string `json:"bios_version,omitempty"`
-	BootROMVersion string `json:"boot_rom_version,omitempty"`
-	SMCVersion     string `json:"smc_version,omitempty"`
+import (
+	"time"
+)
+
+type System interface {
+	GetData() Data
+	GetCache() Cache
+	SetTimeout(int)
+	Update() error
+	ForceUpdate() error
+}
+
+type system struct {
+	data  *Data  `json:"data"`
+	cache *Cache `json:"cache"`
+}
+
+type Cache struct {
+	LastUpdated time.Time `json:"last_updated"`
+	Timeout     int       `json:"timeout_sec"`
+	FromCache   bool      `json:"from_cache"`
+}
+
+func New() System {
+	return &system{
+		data: &Data{},
+		cache: &Cache{
+			Timeout: 5 * 60, // 5 minutes
+		},
+	}
+}
+
+func (s *system) GetData() Data {
+	return *s.data
+}
+
+func (s *system) GetCache() Cache {
+	return *s.cache
+}
+
+func (s *system) SetTimeout(timeout int) {
+	s.cache.Timeout = timeout
+}
+
+func (s *system) Update() error {
+	if s.cache.LastUpdated.IsZero() {
+		if err := s.ForceUpdate(); err != nil {
+			return err
+		}
+	} else {
+		expire := s.cache.LastUpdated.Add(time.Duration(s.cache.Timeout) * time.Second)
+		if expire.Before(time.Now()) {
+			if err := s.ForceUpdate(); err != nil {
+				return err
+			}
+		} else {
+			s.cache.FromCache = true
+		}
+	}
+
+	return nil
 }

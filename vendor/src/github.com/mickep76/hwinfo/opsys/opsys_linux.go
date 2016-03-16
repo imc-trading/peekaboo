@@ -3,30 +3,32 @@
 package opsys
 
 import (
-	"github.com/mickep76/hwinfo/common"
 	"runtime"
+	"time"
+
+	"github.com/mickep76/hwinfo/common"
 )
 
-// Get information about the operating system.
-func Get() (OpSys, error) {
-	opsys := OpSys{}
+func (op *opSys) ForceUpdate() error {
+	op.cache.LastUpdated = time.Now()
+	op.cache.FromCache = false
 
 	o, err := common.ExecCmdFields("lsb_release", []string{"-a"}, ":", []string{
 		"Distributor ID",
 		"Release",
 	})
 	if err != nil {
-		return OpSys{}, err
+		return err
 	}
 
-	opsys.Kernel = runtime.GOOS
-	opsys.Product = o["Distributor ID"]
-	opsys.ProductVersion = o["Release"]
+	op.data.Kernel = runtime.GOOS
+	op.data.Product = o["Distributor ID"]
+	op.data.ProductVersion = o["Release"]
 
-	opsys.KernelVersion, err = common.ExecCmd("uname", []string{"-r"})
+	op.data.KernelVersion, err = common.ExecCmd("uname", []string{"-r"})
 	if err != nil {
-		return OpSys{}, err
+		return err
 	}
 
-	return opsys, nil
+	return nil
 }

@@ -3,152 +3,122 @@ package hwinfo
 import (
 	"os"
 	"strings"
-	"time"
 
 	"github.com/mickep76/hwinfo/cpu"
+	"github.com/mickep76/hwinfo/interfaces"
 	"github.com/mickep76/hwinfo/memory"
-	"github.com/mickep76/hwinfo/network"
 	"github.com/mickep76/hwinfo/opsys"
 	"github.com/mickep76/hwinfo/system"
 )
 
-// HWInfo information.
-type HWInfo struct {
-	Hostname      string           `json:"hostname"`
-	ShortHostname string           `json:"short_hostname"`
-	CPU           *cpu.CPU         `json:"cpu"`
-	Memory        *memory.Memory   `json:"memory"`
-	OpSys         *opsys.OpSys     `json:"opsys"`
-	System        *system.System   `json:"system"`
-	Network       *network.Network `json:"network"`
-
-	cpuTTL     int
-	memoryTTL  int
-	opSysTTL   int
-	systemTTL  int
-	networkTTL int
-	last       time.Time
+type HWInfo interface {
+	Update() error
+	GetData() data
+	GetCache() cache
+	GetCPU() cpu.CPU
+	GetSystem() system.System
+	GetMemory() memory.Memory
+	GetOpSys() opsys.OpSys
+	GetInterfaces() interfaces.Interfaces
 }
 
-func NewHWInfo() *HWInfo {
-	return &HWInfo{
-		cpuTTL:     24 * 60 * 60, // Every 24 hours
-		memoryTTL:  24 * 60 * 60, // Every 24 hours
-		opSysTTL:   60 * 60,      // Every hour
-		systemTTL:  60 * 60,      // Every hour
-		networkTTL: 60 * 60,      // Every hour
+type hwInfo struct {
+	CPU        cpu.CPU
+	System     system.System
+	Memory     memory.Memory
+	OpSys      opsys.OpSys
+	Interfaces interfaces.Interfaces
+	data       *data
+	cache      *cache
+}
+
+type data struct {
+	Hostname      string          `json:"hostname"`
+	ShortHostname string          `json:"short_hostname"`
+	CPU           cpu.Data        `json:"cpu"`
+	System        system.Data     `json:"system"`
+	Memory        memory.Data     `json:"memory"`
+	OpSys         opsys.Data      `json:"opsys"`
+	Interfaces    interfaces.Data `json:"interfaces"`
+}
+
+type cache struct {
+	CPU        cpu.Cache        `json:"cpu"`
+	System     system.Cache     `json:"system"`
+	Memory     memory.Cache     `json:"memory"`
+	OpSys      opsys.Cache      `json:"opsys"`
+	Interfaces interfaces.Cache `json:"interfaces"`
+}
+
+func New() HWInfo {
+	return &hwInfo{
+		CPU:        cpu.New(),
+		System:     system.New(),
+		Memory:     memory.New(),
+		OpSys:      opsys.New(),
+		Interfaces: interfaces.New(),
+		data:       &data{},
+		cache:      &cache{},
 	}
 }
 
-func (hwi *HWInfo) TTL(cpu int, memory int, opSys int, system int, network int) {
-	hwi.cpuTTL = cpu
-	hwi.memoryTTL = memory
-	hwi.opSysTTL = opSys
-	hwi.systemTTL = system
-	hwi.networkTTL = network
+func (h *hwInfo) GetCPU() cpu.CPU {
+	return h.CPU
 }
 
-// Get information about a system with no TTL.
-func (hwi *HWInfo) Get() error {
+func (h *hwInfo) GetSystem() system.System {
+	return h.System
+}
+
+func (h *hwInfo) GetMemory() memory.Memory {
+	return h.Memory
+}
+
+func (h *hwInfo) GetOpSys() opsys.OpSys {
+	return h.OpSys
+}
+
+func (h *hwInfo) GetInterfaces() interfaces.Interfaces {
+	return h.Interfaces
+}
+
+func (h *hwInfo) Update() error {
 	host, err := os.Hostname()
 	if err != nil {
 		return err
 	}
-	hwi.Hostname = host
-	hwi.ShortHostname = strings.Split(host, ".")[0]
+	h.data.Hostname = host
+	h.data.ShortHostname = strings.Split(host, ".")[0]
 
-	i2, err := cpu.Get()
-	if err != nil {
+	if err := h.CPU.Update(); err != nil {
 		return err
 	}
-	hwi.CPU = &i2
+	h.data.CPU = h.CPU.GetData()
+	h.cache.CPU = h.CPU.GetCache()
 
-	i3, err := memory.Get()
-	if err != nil {
+	if err := h.System.Update(); err != nil {
 		return err
 	}
-	hwi.Memory = &i3
+	h.data.System = h.System.GetData()
+	h.cache.System = h.System.GetCache()
 
-	i4, err := opsys.Get()
-	if err != nil {
+	if err := h.Memory.Update(); err != nil {
 		return err
 	}
-	hwi.OpSys = &i4
+	h.data.Memory = h.Memory.GetData()
+	h.cache.Memory = h.Memory.GetCache()
 
-	i5, err := system.Get()
-	if err != nil {
+	if err := h.Interfaces.Update(); err != nil {
 		return err
 	}
-	hwi.System = &i5
+	h.data.Interfaces = h.Interfaces.GetData()
+	h.cache.Interfaces = h.Interfaces.GetCache()
 
-	i6, err := network.Get()
-	if err != nil {
+	if err := h.OpSys.Update(); err != nil {
 		return err
 	}
-	hwi.Network = &i6
-
-	return nil
-}
-
-// Get information about a system with TTL.
-func (hwi *HWInfo) GetTTL() error {
-	host, err := os.Hostname()
-	if err != nil {
-		return err
-	}
-	hwi.Hostname = host
-	hwi.ShortHostname = strings.Split(host, ".")[0]
-
-	now := time.Now()
-	ttl := now
-	ttl.Add(time.Duration(hwi.cpuTTL) * time.Second)
-	if hwi.CPU == nil || hwi.last.Before(ttl) {
-		i, err := cpu.Get()
-		if err != nil {
-			return err
-		}
-		hwi.CPU = &i
-	}
-
-	ttl = now
-	ttl.Add(time.Duration(hwi.memoryTTL) * time.Second)
-	if hwi.Memory == nil || hwi.last.Before(ttl) {
-		i, err := memory.Get()
-		if err != nil {
-			return err
-		}
-		hwi.Memory = &i
-	}
-
-	ttl = now
-	ttl.Add(time.Duration(hwi.opSysTTL) * time.Second)
-	if hwi.OpSys == nil || hwi.last.Before(ttl) {
-		i, err := opsys.Get()
-		if err != nil {
-			return err
-		}
-		hwi.OpSys = &i
-	}
-
-	ttl = now
-	ttl.Add(time.Duration(hwi.systemTTL) * time.Second)
-	if hwi.System == nil || hwi.last.Before(ttl) {
-		i, err := system.Get()
-		if err != nil {
-			return err
-		}
-		hwi.System = &i
-	}
-
-	ttl = now
-	ttl.Add(time.Duration(hwi.networkTTL) * time.Second)
-	if hwi.Network == nil || hwi.last.Before(ttl) {
-		i6, err := network.Get()
-		if err != nil {
-			return err
-		}
-		hwi.Network = &i6
-	}
+	h.data.OpSys = h.OpSys.GetData()
+	h.cache.OpSys = h.OpSys.GetCache()
 
 	return nil
 }

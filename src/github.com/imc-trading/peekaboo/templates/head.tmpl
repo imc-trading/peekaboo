@@ -33,7 +33,7 @@
         <div>
           <ul class="nav navbar-nav">
             <li {{if eq .Title "Network"}}class="active"{{end}}><a href="/network">Network</a></li>
-{{if ne .Kernel "darwin"}}
+{{if ne .OpSys.Kernel "darwin"}}
             <li {{if eq .Title "Storage"}}class="active"{{end}}><a href="/storage">Storage</a></li>
             <li {{if eq .Title "PCI"}}class="active"{{end}}><a href="/pci">PCI</a></li>
             <li {{if eq .Title "Sysctl"}}class="active"{{end}}><a href="/sysctl">Sysctl</a></li>

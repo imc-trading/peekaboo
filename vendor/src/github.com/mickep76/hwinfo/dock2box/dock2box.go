@@ -1,3 +1,5 @@
+// +build linux
+
 package dock2box
 
 import (
@@ -8,9 +10,25 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
-type Layer struct {
+type Dock2Box interface {
+	GetData() Data
+	GetCache() Cache
+	SetTimeout(int)
+	Update() error
+	ForceUpdate() error
+}
+
+type dock2box struct {
+	data  *data  `json:"data"`
+	cache *cache `json:"cache"`
+}
+
+type layers []layer
+
+type layer struct {
 	Layer             string `json:"layer"`
 	Image             string `json:"image"`
 	Repo              string `json:"repo"`
@@ -24,54 +42,101 @@ type Layer struct {
 	CFlagsMarchNative string `json:"cflags_march_native"`
 }
 
-type Dock2Box struct {
-	FirstBoot string  `json:"firstboot"`
-	CFlags    string  `json:"cflags_march_native"`
-	Layers    []Layer `json:"layers"`
+type Data struct {
+	FirstBoot string `json:"firstboot"`
+	CFlags    string `json:"cflags_march_native"`
+	Layers    layers `json:"layers"`
 }
 
-// Get information about Dock2Box image layers.
-func Get() (Dock2Box, error) {
+type Cache struct {
+	LastUpdated time.Time `json:"last_updated"`
+	Timeout     int       `json:"timeout_sec"`
+	FromCache   bool      `json:"from_cache"`
+}
+
+func New() Dock2Box {
+	return &dock2box{
+		data: &data{},
+		cache: &cache{
+			Timeout: 5 * 60, // 5 minutes
+		},
+	}
+}
+
+func (d *dock2box) GetData() data {
+	return *d.data
+}
+
+func (d *dock2box) GetCache() cache {
+	return *d.cache
+}
+
+func (d *dock2box) SetTimeout(timeout int) {
+	d.cache.Timeout = timeout
+}
+
+func (d *dock2box) Update() error {
+	if d.cache.LastUpdated.IsZero() {
+		if err := d.ForceUpdate(); err != nil {
+			return err
+		}
+	} else {
+		expire := d.cache.LastUpdated.Add(time.Duration(d.cache.Timeout) * time.Second)
+		if expire.Before(time.Now()) {
+			if err := d.ForceUpdate(); err != nil {
+				return err
+			}
+		} else {
+			d.cache.FromCache = true
+		}
+	}
+
+	return nil
+}
+
+func (d *dock2box) ForceUpdate() error {
+	d.cache.LastUpdated = time.Now()
+	d.cache.FromCache = false
+
 	file := "/etc/dock2box/firstboot.json"
 	if _, err := os.Stat(file); os.IsNotExist(err) {
-		return Dock2Box{}, fmt.Errorf("file doesn't exist: %s", file)
+		return fmt.Errorf("file doesn't exist: %s", file)
 	}
 
 	o, err := ioutil.ReadFile(file)
 	if err != nil {
-		return Dock2Box{}, err
+		return err
 	}
 
-	d2b := Dock2Box{}
-	if err := json.Unmarshal(o, &d2b); err != nil {
-		return Dock2Box{}, err
+	if err := json.Unmarshal(o, d.data); err != nil {
+		return err
 	}
 
 	files, err := filepath.Glob("/etc/dock2box/layers/*.json")
 	if err != nil {
-		return Dock2Box{}, err
+		return err
 	}
 
 	for _, file := range files {
 		if _, err := os.Stat(file); os.IsNotExist(err) {
-			return Dock2Box{}, fmt.Errorf("file doesn't exist: %s", file)
+			return fmt.Errorf("file doesn't exist: %s", file)
 		}
 
 		o, err := ioutil.ReadFile(file)
 		if err != nil {
-			return Dock2Box{}, err
+			return err
 		}
 
-		layer := Layer{}
-		if err := json.Unmarshal(o, &layer); err != nil {
-			return Dock2Box{}, err
+		l := layer{}
+		if err := json.Unmarshal(o, &l); err != nil {
+			return err
 		}
 
 		fn := path.Base(file)
-		layer.Layer = strings.TrimSuffix(fn, filepath.Ext(fn))
+		l.Layer = strings.TrimSuffix(fn, filepath.Ext(fn))
 
-		d2b.Layers = append(d2b.Layers, layer)
+		d.data.Layers = append(d.data.Layers, l)
 	}
 
-	return d2b, nil
+	return nil
 }

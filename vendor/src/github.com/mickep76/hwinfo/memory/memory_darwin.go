@@ -3,26 +3,34 @@
 package memory
 
 import (
-	"github.com/mickep76/hwinfo/common"
 	"strconv"
+	"time"
+
+	"github.com/mickep76/hwinfo/common"
 )
 
-// Get information about system memory.
-func Get() (Memory, error) {
-	m := Memory{}
+type Data struct {
+	TotalKB int `json:"total_kb"`
+	TotalGB int `json:"total_gb"`
+}
+
+func (m *memory) ForceUpdate() error {
+	m.cache.LastUpdated = time.Now()
+	m.cache.FromCache = false
 
 	o, err := common.ExecCmdFields("/usr/sbin/sysctl", []string{"-a"}, ":", []string{
 		"hw.memsize",
 	})
 	if err != nil {
-		return Memory{}, err
+		return err
 	}
 
-	m.TotalGB, err = strconv.Atoi(o["hw.memsize"])
+	m.data.TotalKB, err = strconv.Atoi(o["hw.memsize"])
 	if err != nil {
-		return Memory{}, err
+		return err
 	}
-	m.TotalGB = m.TotalGB / 1024 / 1024 / 1024
+	m.data.TotalKB = m.data.TotalKB / 1024
+	m.data.TotalGB = m.data.TotalKB / 1024 / 1024
 
-	return m, nil
+	return nil
 }

@@ -3,12 +3,24 @@
 package system
 
 import (
+	"time"
+
 	"github.com/mickep76/hwinfo/common"
 )
 
-// Get information about a system.
-func Get() (System, error) {
-	s := System{}
+type data struct {
+	Manufacturer   string `json:"manufacturer"`
+	Product        string `json:"product"`
+	ProductVersion string `json:"product_version"`
+	SerialNumber   string `json:"serial_number"`
+	BIOSVendor     string `json:"bios_vendor"`
+	BIOSDate       string `json:"bios_date"`
+	BIOSVersion    string `json:"bios_version"`
+}
+
+func (s *system) ForceUpdate() error {
+	s.cache.LastUpdated = time.Now()
+	s.cache.FromCache = false
 
 	o, err := common.LoadFiles([]string{
 		"/sys/devices/virtual/dmi/id/chassis_vendor",
@@ -20,16 +32,16 @@ func Get() (System, error) {
 		"/sys/devices/virtual/dmi/id/bios_version",
 	})
 	if err != nil {
-		return System{}, err
+		return err
 	}
 
-	s.Manufacturer = o["chassis_vendor"]
-	s.Product = o["product_name"]
-	s.ProductVersion = o["product_version"]
-	s.SerialNumber = o["product_serial"]
-	s.BIOSVendor = o["bios_vendor"]
-	s.BIOSDate = o["bios_date"]
-	s.BIOSVersion = o["bios_version"]
+	s.data.Manufacturer = o["chassis_vendor"]
+	s.data.Product = o["product_name"]
+	s.data.ProductVersion = o["product_version"]
+	s.data.SerialNumber = o["product_serial"]
+	s.data.BIOSVendor = o["bios_vendor"]
+	s.data.BIOSDate = o["bios_date"]
+	s.data.BIOSVersion = o["bios_version"]
 
-	return s, nil
+	return nil
 }

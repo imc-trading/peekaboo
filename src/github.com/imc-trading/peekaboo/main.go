@@ -2,12 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/Shopify/sarama"
 	"os"
-	"os/user"
 	"runtime"
-	"strings"
-	"time"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/Unknwon/macaron"
@@ -64,47 +60,49 @@ func main() {
 	}
 
 	// Get hardware info.
-	info := hwinfo.NewHWInfo()
-	if err := info.GetTTL(); err != nil {
+	hwi := hwinfo.New()
+	if err := hwi.Update(); err != nil {
 		log.Fatal(err.Error())
 	}
 
 	// Produce message to Kafka bus.
-	log.Infof("Produce startup event to Kafka bus with topic: %s", opts.KafkaTopic)
-	if opts.KafkaEnabled {
-		if opts.KafkaPeers == nil {
-			log.Fatal("You need to specify Kafka Peers")
-		}
+	/*
+		log.Infof("Produce startup event to Kafka bus with topic: %s", opts.KafkaTopic)
+		if opts.KafkaEnabled {
+			if opts.KafkaPeers == nil {
+				log.Fatal("You need to specify Kafka Peers")
+			}
 
-		user, err := user.Current()
-		if err != nil {
-			log.Fatal(err.Error())
-		}
+			user, err := user.Current()
+			if err != nil {
+				log.Fatal(err.Error())
+			}
 
-		event := &Event{
-			Name:      "Peekaboo startup",
-			EventType: STARTED,
-			Created:   time.Now().Format("20060102T150405ZB"),
-			CreatedBy: CreatedBy{
-				User:    user.Username,
-				Service: "peekaboo",
-				Host:    info.Hostname,
-			},
-			Descr: "Peekaboo startup event",
-			Data:  info,
-		}
+			event := &Event{
+				Name:      "Peekaboo startup",
+				EventType: STARTED,
+				Created:   time.Now().Format("20060102T150405ZB"),
+				CreatedBy: CreatedBy{
+					User:    user.Username,
+					Service: "peekaboo",
+					Host:    info.Hostname,
+				},
+				Descr: "Peekaboo startup event",
+				Data:  info,
+			}
 
-		producer := newProducer(strings.Split(*opts.KafkaPeers, ","), opts.KafkaCert, opts.KafkaKey, opts.KafkaCA, opts.KafkaVerify)
-		partition, offset, err := producer.SendMessage(&sarama.ProducerMessage{
-			Topic: opts.KafkaTopic,
-			Value: event,
-		})
-		if err != nil {
-			log.Fatal(err.Error())
-		}
+			producer := newProducer(strings.Split(*opts.KafkaPeers, ","), opts.KafkaCert, opts.KafkaKey, opts.KafkaCA, opts.KafkaVerify)
+			partition, offset, err := producer.SendMessage(&sarama.ProducerMessage{
+				Topic: opts.KafkaTopic,
+				Value: event,
+			})
+			if err != nil {
+				log.Fatal(err.Error())
+			}
 
-		log.Infof("Kafka partition: %v, offset: %v", partition, offset)
-	}
+			log.Infof("Kafka partition: %v, offset: %v", partition, offset)
+		}
+	*/
 
 	log.Infof("Using static dir: %s", opts.StaticDir)
 	log.Infof("Using template dir: %s", opts.TemplateDir)
@@ -116,6 +114,6 @@ func main() {
 		IndentJSON: true,
 	}))
 
-	routes(m, info)
+	routes(m, hwi)
 	m.Run(opts.BindAddr, opts.Port)
 }

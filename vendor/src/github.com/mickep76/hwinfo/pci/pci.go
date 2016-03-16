@@ -1,15 +1,34 @@
+// +build linux
+
 package pci
 
 import (
 	"fmt"
-	"github.com/mickep76/hwinfo/common"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
+
+	"github.com/mickep76/hwinfo/common"
 )
 
-type PCI struct {
+type PCI interface {
+	GetData() data
+	GetCache() cache
+	SetTimeout(int)
+	Update() error
+	ForceUpdate() error
+}
+
+type pci struct {
+	data  *data  `json:"data"`
+	cache *cache `json:"cache"`
+}
+
+type data []dataItem
+
+type dataItem struct {
 	Slot      string `json:"slot"`
 	ClassID   string `json:"class_id"`
 	Class     string `json:"class"`
@@ -19,7 +38,53 @@ type PCI struct {
 	Device    string `json:"device"`
 	SVendorID string `json:"svendor_id"`
 	SDeviceID string `json:"sdevice_id"`
-	SName     string `json:"sname,omiempty"`
+	SName     string `json:"sname"`
+}
+
+type cache struct {
+	LastUpdated time.Time `json:"last_updated"`
+	Timeout     int       `json:"timeout_sec"`
+	FromCache   bool      `json:"from_cache"`
+}
+
+func New() PCI {
+	return &pci{
+		data: &data{},
+		cache: &cache{
+			Timeout: 5 * 60, // 5 minutes
+		},
+	}
+}
+
+func (p *pci) GetData() data {
+	return *p.data
+}
+
+func (p *pci) GetCache() cache {
+	return *p.cache
+}
+
+func (p *pci) SetTimeout(timeout int) {
+	p.cache.Timeout = timeout
+}
+
+func (p *pci) Update() error {
+	if p.cache.LastUpdated.IsZero() {
+		if err := p.ForceUpdate(); err != nil {
+			return err
+		}
+	} else {
+		expire := p.cache.LastUpdated.Add(time.Duration(p.cache.Timeout) * time.Second)
+		if expire.Before(time.Now()) {
+			if err := p.ForceUpdate(); err != nil {
+				return err
+			}
+		} else {
+			p.cache.FromCache = true
+		}
+	}
+
+	return nil
 }
 
 // TODO: Cache PCI database as a map[string]string
@@ -135,13 +200,13 @@ func getPCIClass(classID string) (string, string, string, error) {
 	return class, subClass, progIntf, nil
 }
 
-// Get information about system PCI slots.
-func Get() ([]PCI, error) {
-	p := []PCI{}
+func (p *pci) ForceUpdate() error {
+	p.cache.LastUpdated = time.Now()
+	p.cache.FromCache = false
 
 	files, err := filepath.Glob("/sys/bus/pci/devices/*")
 	if err != nil {
-		return []PCI{}, err
+		return err
 	}
 
 	for _, path := range files {
@@ -155,13 +220,13 @@ func Get() ([]PCI, error) {
 			filepath.Join(path, "subsystem_device"),
 		})
 		if err != nil {
-			return []PCI{}, err
+			return err
 		}
 
 		classID := o["class"][2:]
 		class, subClass, _, err := getPCIClass(classID)
 		if err != nil {
-			return []PCI{}, err
+			return err
 		}
 		if subClass != "" {
 			class = subClass
@@ -171,12 +236,12 @@ func Get() ([]PCI, error) {
 		deviceID := o["device"][2:]
 		sVendorID := o["subsystem_vendor"][2:]
 		sDeviceID := o["subsystem_device"][2:]
-		vendor, device, sName, err := getPCIVendor(vendorID, deviceID, sVendorID, sDeviceID)
+		vendor, dev, sName, err := getPCIVendor(vendorID, deviceID, sVendorID, sDeviceID)
 		if err != nil {
-			return []PCI{}, err
+			return err
 		}
 
-		p = append(p, PCI{
+		*p.data = append(*p.data, dataItem{
 			Slot:      slot[1],
 			ClassID:   classID,
 			Class:     class,
@@ -185,10 +250,10 @@ func Get() ([]PCI, error) {
 			SDeviceID: sDeviceID,
 			SVendorID: sVendorID,
 			Vendor:    vendor,
-			Device:    device,
+			Device:    dev,
 			SName:     sName,
 		})
 	}
 
-	return p, nil
+	return nil
 }

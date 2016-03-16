@@ -16,7 +16,7 @@
     <dd>{{.System.ProductVersion}}</dd>
     <dt>Serial Number</dt>
     <dd>{{.System.SerialNumber}}</dd>
-{{if eq .Kernel "darwin"}}
+{{if eq .OpSys.Kernel "darwin"}}
     <dt>Boot ROM Version</dt>
     <dd>{{.System.BootROMVersion}}</dd>
     <dt>SMCVersion</dt>

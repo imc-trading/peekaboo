@@ -89,22 +89,8 @@
 		{
 			"importpath": "github.com/mickep76/hwinfo",
 			"repository": "https://github.com/mickep76/hwinfo",
-			"revision": "57fbbab65d72d1beff64cabc5260bfff4545cfb4",
+			"revision": "51e6adad2f8bfd767f19599d1cd11300ca1fbe37",
 			"branch": "master"
-		},
-		{
-			"importpath": "github.com/mickep76/hwinfo/common",
-			"repository": "https://github.com/mickep76/hwinfo",
-			"revision": "801db2577e88a5ec7eee2a0fb11185411a32e79e",
-			"branch": "master",
-			"path": "/common"
-		},
-		{
-			"importpath": "github.com/mickep76/hwinfo/cpu",
-			"repository": "https://github.com/mickep76/hwinfo",
-			"revision": "801db2577e88a5ec7eee2a0fb11185411a32e79e",
-			"branch": "master",
-			"path": "/cpu"
 		},
 		{
 			"importpath": "github.com/tobi/airbrake-go",
