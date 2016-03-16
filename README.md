@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="img/logo.png" width="250">
+  <img src="img/logo.png" width="35%">
 </p>
 
 Expose hardware info using JSON/REST and provide a system HTML Front-End.
