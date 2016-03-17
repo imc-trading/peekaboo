@@ -14,6 +14,10 @@ import (
 	"github.com/imc-trading/peekaboo/log"
 )
 
+type timeout struct {
+	Timeout int `json:"timeout_sec"`
+}
+
 func writeJSON(w http.ResponseWriter, r *http.Request, data interface{}, cache interface{}) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
@@ -148,6 +152,21 @@ func apiUpdateCPU(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request
 	}
 }
 
+func apiSetTimeoutCPU(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		// Decode JSON into struct
+		t := timeout{}
+		err := json.NewDecoder(r.Body).Decode(&t)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+
+		log.Infof("CPU timeout changed to: %d", t.Timeout)
+		hwi.GetCPU().SetTimeout(t.Timeout)
+	}
+}
+
 func apiGetMemory(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 
@@ -173,6 +192,21 @@ func apiUpdateMemory(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Requ
 		if err := hwi.GetMemory().ForceUpdate(); err != nil {
 			log.Fatal(err.Error())
 		}
+	}
+}
+
+func apiSetTimeoutMemory(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		// Decode JSON into struct
+		t := timeout{}
+		err := json.NewDecoder(r.Body).Decode(&t)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+
+		log.Infof("Memory timeout changed to: %d", t.Timeout)
+		hwi.GetMemory().SetTimeout(t.Timeout)
 	}
 }
 
@@ -204,6 +238,21 @@ func apiUpdateInterfaces(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.
 	}
 }
 
+func apiSetTimeoutInterfaces(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		// Decode JSON into struct
+		t := timeout{}
+		err := json.NewDecoder(r.Body).Decode(&t)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+
+		log.Infof("Interfaces timeout changed to: %d", t.Timeout)
+		hwi.GetInterfaces().SetTimeout(t.Timeout)
+	}
+}
+
 func apiGetOpSys(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 
@@ -229,6 +278,21 @@ func apiUpdateOpSys(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Reque
 		if err := hwi.GetOpSys().ForceUpdate(); err != nil {
 			log.Fatal(err.Error())
 		}
+	}
+}
+
+func apiSetTimeoutOpSys(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		// Decode JSON into struct
+		t := timeout{}
+		err := json.NewDecoder(r.Body).Decode(&t)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+
+		log.Infof("OpSys timeout changed to: %d", t.Timeout)
+		hwi.GetOpSys().SetTimeout(t.Timeout)
 	}
 }
 
@@ -259,6 +323,10 @@ func routes(r *mux.Router, hwi hwinfo.HWInfo) {
 	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/cpu/update", "PUT")
 	r.HandleFunc(apiURL+"/cpu/update", apiUpdateCPU(hwi)).Methods("PUT")
 
+	// CPU set timeout
+	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/cpu", "PUT")
+	r.HandleFunc(apiURL+"/cpu", apiSetTimeoutCPU(hwi)).Methods("PUT")
+
 	// Memory
 	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/memory", "GET")
 	r.HandleFunc(apiURL+"/memory", apiGetMemory(hwi)).Methods("GET")
@@ -266,6 +334,10 @@ func routes(r *mux.Router, hwi hwinfo.HWInfo) {
 	// Memory update
 	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/memory/update", "PUT")
 	r.HandleFunc(apiURL+"/memory/update", apiUpdateMemory(hwi)).Methods("PUT")
+
+	// Memory set timeout
+	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/memory", "PUT")
+	r.HandleFunc(apiURL+"/memory", apiSetTimeoutMemory(hwi)).Methods("PUT")
 
 	// Interfaces
 	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/interfaces", "GET")
@@ -275,6 +347,10 @@ func routes(r *mux.Router, hwi hwinfo.HWInfo) {
 	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/interfaces/update", "PUT")
 	r.HandleFunc(apiURL+"/interfaces/update", apiUpdateInterfaces(hwi)).Methods("PUT")
 
+	// Interfaces set timeout
+	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/interfaces", "PUT")
+	r.HandleFunc(apiURL+"/interfaces", apiSetTimeoutInterfaces(hwi)).Methods("PUT")
+
 	// OpSys
 	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/opsys", "GET")
 	r.HandleFunc(apiURL+"/opsys", apiGetOpSys(hwi)).Methods("GET")
@@ -282,4 +358,8 @@ func routes(r *mux.Router, hwi hwinfo.HWInfo) {
 	// OpSys update
 	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/opsys/update", "PUT")
 	r.HandleFunc(apiURL+"/opsys/update", apiUpdateOpSys(hwi)).Methods("PUT")
+
+	// OpSys set timeout
+	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/opsys", "PUT")
+	r.HandleFunc(apiURL+"/opsys", apiSetTimeoutOpSys(hwi)).Methods("PUT")
 }
