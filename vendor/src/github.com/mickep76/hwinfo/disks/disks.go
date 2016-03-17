@@ -11,16 +11,16 @@ import (
 )
 
 type Disks interface {
-	GetData() data
-	GetCache() cache
+	GetData() Data
+	GetCache() Cache
 	SetTimeout(int)
 	Update() error
 	ForceUpdate() error
 }
 
 type disks struct {
-	data  *data  `json:"data"`
-	cache *cache `json:"cache"`
+	data  *Data  `json:"data"`
+	cache *Cache `json:"cache"`
 }
 
 type Data []dataItem
@@ -40,18 +40,18 @@ type Cache struct {
 
 func New() Disks {
 	return &disks{
-		data: &data{},
-		cache: &cache{
+		data: &Data{},
+		cache: &Cache{
 			Timeout: 5 * 60, // 5 minutes
 		},
 	}
 }
 
-func (d *disks) GetData() data {
+func (d *disks) GetData() Data {
 	return *d.data
 }
 
-func (d *disks) GetCache() cache {
+func (d *disks) GetCache() Cache {
 	return *d.cache
 }
 
@@ -79,6 +79,9 @@ func (d *disks) Update() error {
 }
 
 func (disks *disks) ForceUpdate() error {
+	disks.cache.LastUpdated = time.Now()
+	disks.cache.FromCache = false
+
 	files, err := filepath.Glob("/sys/class/block/*")
 	if err != nil {
 		return err

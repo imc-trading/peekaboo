@@ -14,21 +14,21 @@ import (
 )
 
 type PCI interface {
-	GetData() data
-	GetCache() cache
+	GetData() Data
+	GetCache() Cache
 	SetTimeout(int)
 	Update() error
 	ForceUpdate() error
 }
 
 type pci struct {
-	data  *data  `json:"data"`
-	cache *cache `json:"cache"`
+	data  *Data  `json:"data"`
+	cache *Cache `json:"cache"`
 }
 
-type data []dataItem
+type Data []DataItem
 
-type dataItem struct {
+type DataItem struct {
 	Slot      string `json:"slot"`
 	ClassID   string `json:"class_id"`
 	Class     string `json:"class"`
@@ -41,7 +41,7 @@ type dataItem struct {
 	SName     string `json:"sname"`
 }
 
-type cache struct {
+type Cache struct {
 	LastUpdated time.Time `json:"last_updated"`
 	Timeout     int       `json:"timeout_sec"`
 	FromCache   bool      `json:"from_cache"`
@@ -49,18 +49,18 @@ type cache struct {
 
 func New() PCI {
 	return &pci{
-		data: &data{},
-		cache: &cache{
+		data: &Data{},
+		cache: &Cache{
 			Timeout: 5 * 60, // 5 minutes
 		},
 	}
 }
 
-func (p *pci) GetData() data {
+func (p *pci) GetData() Data {
 	return *p.data
 }
 
-func (p *pci) GetCache() cache {
+func (p *pci) GetCache() Cache {
 	return *p.cache
 }
 
@@ -241,7 +241,7 @@ func (p *pci) ForceUpdate() error {
 			return err
 		}
 
-		*p.data = append(*p.data, dataItem{
+		*p.data = append(*p.data, DataItem{
 			Slot:      slot[1],
 			ClassID:   classID,
 			Class:     class,

@@ -2,15 +2,9 @@
 	"version": 0,
 	"dependencies": [
 		{
-			"importpath": "github.com/Shopify/sarama",
-			"repository": "https://github.com/Shopify/sarama",
-			"revision": "c36adfa07b2d88dce4a02ca821367cb03a12068a",
-			"branch": "master"
-		},
-		{
 			"importpath": "github.com/Sirupsen/logrus",
 			"repository": "https://github.com/Sirupsen/logrus",
-			"revision": "cdaedc68f2894175ac2b3221869685602c759e71",
+			"revision": "4b6ea7319e214d98c938f12692336f7ca9348d6b",
 			"branch": "master"
 		},
 		{
@@ -26,89 +20,34 @@
 			"branch": "master"
 		},
 		{
-			"importpath": "github.com/bugsnag/bugsnag-go",
-			"repository": "https://github.com/bugsnag/bugsnag-go",
-			"revision": "02e952891c52fbcb15f113d90633897355783b6e",
-			"branch": "master"
-		},
-		{
-			"importpath": "github.com/bugsnag/osext",
-			"repository": "https://github.com/bugsnag/osext",
-			"revision": "0dd3f918b21bec95ace9dc86c7e70266cfc5c702",
-			"branch": "master"
-		},
-		{
-			"importpath": "github.com/bugsnag/panicwrap",
-			"repository": "https://github.com/bugsnag/panicwrap",
-			"revision": "e5f9854865b9778a45169fc249e99e338d4d6f27",
-			"branch": "master"
-		},
-		{
-			"importpath": "github.com/eapache/go-resiliency/breaker",
-			"repository": "https://github.com/eapache/go-resiliency",
-			"revision": "f341fb4dca45128e4aa86389fa6a675d55fe25e1",
-			"branch": "master",
-			"path": "/breaker"
-		},
-		{
-			"importpath": "github.com/eapache/queue",
-			"repository": "https://github.com/eapache/queue",
-			"revision": "ded5959c0d4e360646dc9e9908cff48666781367",
-			"branch": "master"
-		},
-		{
-			"importpath": "github.com/getsentry/raven-go",
-			"repository": "https://github.com/getsentry/raven-go",
-			"revision": "3966f3ab8333308d76b6cc83a29776a266bbdd92",
-			"branch": "master"
-		},
-		{
-			"importpath": "github.com/golang/snappy",
-			"repository": "https://github.com/golang/snappy",
-			"revision": "723cc1e459b8eea2dea4583200fd60757d40097a",
-			"branch": "master"
-		},
-		{
 			"importpath": "github.com/jessevdk/go-flags",
 			"repository": "https://github.com/jessevdk/go-flags",
-			"revision": "0a28dbe50f23d8fce6b016975b964cfe7b97a20a",
-			"branch": "master"
-		},
-		{
-			"importpath": "github.com/klauspost/crc32",
-			"repository": "https://github.com/klauspost/crc32",
-			"revision": "3e5c38b8b170916b332a5ccb25f921314b98ba01",
-			"branch": "master"
-		},
-		{
-			"importpath": "github.com/macaron-contrib/pongo2",
-			"repository": "https://github.com/macaron-contrib/pongo2",
-			"revision": "cd6601358a1ede736a1a6c349f5b5551595230ab",
+			"revision": "6b9493b3cb60367edd942144879646604089e3f7",
 			"branch": "master"
 		},
 		{
 			"importpath": "github.com/mickep76/hwinfo",
 			"repository": "https://github.com/mickep76/hwinfo",
-			"revision": "51e6adad2f8bfd767f19599d1cd11300ca1fbe37",
+			"revision": "86358f852fc8aa10df0e6a8678ad20bc9fc62025",
 			"branch": "master"
 		},
 		{
-			"importpath": "github.com/tobi/airbrake-go",
-			"repository": "https://github.com/tobi/airbrake-go",
-			"revision": "a3cdd910a3ffef88a20fbecc10363a520ad61a0a",
+			"importpath": "gopkg.in/airbrake/gobrake.v2",
+			"repository": "https://gopkg.in/airbrake/gobrake.v2",
+			"revision": "c9d51adc624b5cc4c1bf8de730a09af4878ffe2d",
 			"branch": "master"
 		},
 		{
-			"importpath": "gopkg.in/flosch/pongo2.v3",
-			"repository": "https://gopkg.in/flosch/pongo2.v3",
-			"revision": "5e81b817a0c48c1c57cdf1a9056cf76bdee02ca9",
+			"importpath": "gopkg.in/gemnasium/logrus-airbrake-hook.v2",
+			"repository": "https://gopkg.in/gemnasium/logrus-airbrake-hook.v2",
+			"revision": "31e6fd4bd5a98d8ee7673d24bc54ec73c31810dd",
 			"branch": "master"
 		},
 		{
 			"importpath": "gopkg.in/ini.v1",
 			"repository": "https://gopkg.in/ini.v1",
-			"revision": "03e0e7d51a13a91c765d8d0161246bc14a38001a",
-			"branch": "v1"
+			"revision": "776aa739ce9373377cd16f526cdf06cb4c89b40f",
+			"branch": "master"
 		}
 	]
 }

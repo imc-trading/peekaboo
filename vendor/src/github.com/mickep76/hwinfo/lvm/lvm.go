@@ -11,21 +11,21 @@ import (
 )
 
 type LVM interface {
-	GetData() data
-	GetCache() cache
+	GetData() Data
+	GetCache() Cache
 	SetTimeout(int)
 	Update() error
 	ForceUpdate() error
 }
 
 type lvm struct {
-	data  *data  `json:"data"`
-	cache *cache `json:"cache"`
+	data  *Data  `json:"data"`
+	cache *Cache `json:"cache"`
 }
 
-type physVols []physVol
+type PhysVols []PhysVol
 
-type physVol struct {
+type PhysVol struct {
 	Name   string `json:"name"`
 	VolGrp string `json:"vol_group"`
 	Format string `json:"format"`
@@ -36,9 +36,9 @@ type physVol struct {
 	FreeGB int    `json:"free_gb"`
 }
 
-type logVols []logVol
+type LogVols []LogVol
 
-type logVol struct {
+type LogVol struct {
 	Name   string `json:"name"`
 	VolGrp string `json:"vol_grp"`
 	Attr   string `json:"attr"`
@@ -46,9 +46,9 @@ type logVol struct {
 	SizeGB int    `json:"size_gb"`
 }
 
-type volGrps []volGrp
+type VolGrps []VolGrp
 
-type volGrp struct {
+type VolGrp struct {
 	Name   string `json:"name"`
 	Attr   string `json:"attr"`
 	SizeKB int    `json:"size_kb"`
@@ -57,13 +57,13 @@ type volGrp struct {
 	FreeGB int    `json:"free_gb"`
 }
 
-type data struct {
-	PhysVols physVols `json:"phys_vols"`
-	LogVols  logVols  `json:"log_vols"`
-	VolGrps  volGrps  `json:"vol_grps"`
+type Data struct {
+	PhysVols PhysVols `json:"phys_vols"`
+	LogVols  LogVols  `json:"log_vols"`
+	VolGrps  VolGrps  `json:"vol_grps"`
 }
 
-type cache struct {
+type Cache struct {
 	LastUpdated time.Time `json:"last_updated"`
 	Timeout     int       `json:"timeout_sec"`
 	FromCache   bool      `json:"from_cache"`
@@ -71,22 +71,22 @@ type cache struct {
 
 func New() LVM {
 	return &lvm{
-		data: &data{
-			PhysVols: physVols{},
-			LogVols:  logVols{},
-			VolGrps:  volGrps{},
+		data: &Data{
+			PhysVols: PhysVols{},
+			LogVols:  LogVols{},
+			VolGrps:  VolGrps{},
 		},
-		cache: &cache{
+		cache: &Cache{
 			Timeout: 5 * 60, // 5 minutes
 		},
 	}
 }
 
-func (l *lvm) GetData() data {
+func (l *lvm) GetData() Data {
 	return *l.data
 }
 
-func (l *lvm) GetCache() cache {
+func (l *lvm) GetCache() Cache {
 	return *l.cache
 }
 
@@ -114,6 +114,9 @@ func (l *lvm) Update() error {
 }
 
 func (l *lvm) ForceUpdate() error {
+	l.cache.LastUpdated = time.Now()
+	l.cache.FromCache = false
+
 	if err := l.getPhysVols(); err != nil {
 		return err
 	}
@@ -146,7 +149,7 @@ func (l *lvm) getPhysVols() error {
 			continue
 		}
 
-		pv := physVol{}
+		pv := PhysVol{}
 
 		pv.Name = v[0]
 		pv.VolGrp = v[1]
@@ -190,7 +193,7 @@ func (l *lvm) getLogVols() error {
 			continue
 		}
 
-		lv := logVol{}
+		lv := LogVol{}
 
 		lv.Name = v[0]
 		lv.VolGrp = v[1]
@@ -226,7 +229,7 @@ func (l *lvm) getVolGrps() error {
 			continue
 		}
 
-		vg := volGrp{}
+		vg := VolGrp{}
 
 		vg.Name = v[0]
 		vg.Attr = v[4]

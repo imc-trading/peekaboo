@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"reflect"
+	"runtime"
 	"strconv"
 	"strings"
 	"testing"
@@ -17,7 +18,7 @@ type defaultOptions struct {
 	Float64        float64 `long:"f"`
 	Float64Default float64 `long:"fd" default:"-3.14"`
 
-	NumericFlag bool `short:"3" default:"false"`
+	NumericFlag bool `short:"3"`
 
 	String            string `long:"str"`
 	StringDefault     string `long:"strd" default:"abc"`
@@ -129,6 +130,18 @@ func TestDefaults(t *testing.T) {
 		if !reflect.DeepEqual(opts, test.expected) {
 			t.Errorf("%s:\nUnexpected options with arguments %+v\nexpected\n%+v\nbut got\n%+v\n", test.msg, test.args, test.expected, opts)
 		}
+	}
+}
+
+func TestNoDefaultsForBools(t *testing.T) {
+	var opts struct {
+		DefaultBool bool `short:"d" default:"true"`
+	}
+
+	if runtime.GOOS == "windows" {
+		assertParseFail(t, ErrInvalidTag, "boolean flag `/d' may not have default values, they always default to `false' and can only be turned on", &opts)
+	} else {
+		assertParseFail(t, ErrInvalidTag, "boolean flag `-d' may not have default values, they always default to `false' and can only be turned on", &opts)
 	}
 }
 
@@ -470,4 +483,18 @@ func TestChoices(t *testing.T) {
 	assertParseFail(t, ErrInvalidChoice, "Invalid value `invalid' for option `"+defaultLongOptDelimiter+"choose'. Allowed values are: v1 or v2", &opts, "--choose", "invalid")
 	assertParseSuccess(t, &opts, "--choose", "v2")
 	assertString(t, opts.Choice, "v2")
+}
+
+func TestEmbedded(t *testing.T) {
+	type embedded struct {
+		V bool `short:"v"`
+	}
+	var opts struct {
+		embedded
+	}
+
+	assertParseSuccess(t, &opts, "-v")
+	if !opts.V {
+		t.Errorf("Expected V to be true")
+	}
 }

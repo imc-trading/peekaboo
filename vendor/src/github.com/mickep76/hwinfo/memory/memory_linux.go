@@ -11,7 +11,7 @@ import (
 	"github.com/mickep76/hwinfo/common"
 )
 
-type data struct {
+type Data struct {
 	TotalKB             int `json:"total_kb"`
 	TotalGB             int `json:"total_gb"`
 	FreeKB              int `json:"free_kb"`

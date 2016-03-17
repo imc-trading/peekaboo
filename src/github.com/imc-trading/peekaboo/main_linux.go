@@ -3,11 +3,35 @@
 package main
 
 import (
+	"log"
+
 	"github.com/Unknwon/macaron"
 	"github.com/mickep76/hwinfo"
 )
 
-func routes(m *macaron.Macaron, hw *hwinfo.HWInfo) {
+func routes(m *macaron.Macaron, hwi hwinfo.HWInfo) {
+        m.Get("/", func(ctx *macaron.Context) {
+                ctx.Data["Title"] = "Peekaboo"
+
+                // Update cache
+                if err := hwi.Update(); err != nil {
+                        log.Fatal(err.Error())
+                }
+
+                d := hwi.GetData()
+
+                ctx.Data["Hostname"] = d.Hostname
+                ctx.Data["ShortHostname"] = d.ShortHostname
+                ctx.Data["Version"] = Version
+
+                ctx.Data["CPU"] = d.CPU
+                ctx.Data["OpSys"] = d.OpSys
+                ctx.Data["Memory"] = d.Memory
+                ctx.Data["System"] = d.System
+
+                ctx.HTML(200, "peekaboo")
+        })
+/*
 	// HTML endpoints
 	m.Get("/", func(ctx *macaron.Context) {
 		ctx.Data["Title"] = "Peekaboo"
@@ -15,6 +39,7 @@ func routes(m *macaron.Macaron, hw *hwinfo.HWInfo) {
 		ctx.Data["Version"] = Version
 		ctx.Data["Hostname"] = hw.Hostname
 		ctx.Data["ShortHostname"] = hw.ShortHostname
+
 		ctx.Data["CPU"] = hw.CPU
 		ctx.Data["Memory"] = hw.Memory
 		ctx.Data["OpSys"] = hw.OpSys
@@ -131,4 +156,5 @@ func routes(m *macaron.Macaron, hw *hwinfo.HWInfo) {
 	m.Get("/dock2box/layers/json", func(ctx *macaron.Context) {
 		ctx.JSON(200, &hw.Dock2Box.Layers)
 	})
+*/
 }

@@ -11,28 +11,28 @@ import (
 )
 
 type Mounts interface {
-	GetData() data
-	GetCache() cache
+	GetData() Data
+	GetCache() Cache
 	SetTimeout(int)
 	Update() error
 	ForceUpdate() error
 }
 
 type mounts struct {
-	data  *data  `json:"data"`
-	cache *cache `json:"cache"`
+	data  *Data  `json:"data"`
+	cache *Cache `json:"cache"`
 }
 
-type data []dataItem
+type Data []DataItem
 
-type dataItem struct {
+type DataItem struct {
 	Source  string `json:"source"`
 	Target  string `json:"target"`
 	FSType  string `json:"fs_type"`
 	Options string `json:"options"`
 }
 
-type cache struct {
+type Cache struct {
 	LastUpdated time.Time `json:"last_updated"`
 	Timeout     int       `json:"timeout_sec"`
 	FromCache   bool      `json:"from_cache"`
@@ -40,18 +40,18 @@ type cache struct {
 
 func New() Mounts {
 	return &mounts{
-		data: &data{},
-		cache: &cache{
+		data: &Data{},
+		cache: &Cache{
 			Timeout: 5 * 60, // 5 minutes
 		},
 	}
 }
 
-func (m *mounts) GetData() data {
+func (m *mounts) GetData() Data {
 	return *m.data
 }
 
-func (m *mounts) GetCache() cache {
+func (m *mounts) GetCache() Cache {
 	return *m.cache
 }
 
@@ -98,7 +98,7 @@ func (mounts *mounts) ForceUpdate() error {
 			continue
 		}
 
-		m := dataItem{}
+		m := DataItem{}
 
 		m.Source = v[0]
 		m.Target = v[1]

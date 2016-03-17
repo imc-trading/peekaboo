@@ -22,8 +22,8 @@ type Dock2Box interface {
 }
 
 type dock2box struct {
-	data  *data  `json:"data"`
-	cache *cache `json:"cache"`
+	data  *Data  `json:"data"`
+	cache *Cache `json:"cache"`
 }
 
 type layers []layer
@@ -56,18 +56,18 @@ type Cache struct {
 
 func New() Dock2Box {
 	return &dock2box{
-		data: &data{},
-		cache: &cache{
+		data: &Data{},
+		cache: &Cache{
 			Timeout: 5 * 60, // 5 minutes
 		},
 	}
 }
 
-func (d *dock2box) GetData() data {
+func (d *dock2box) GetData() Data {
 	return *d.data
 }
 
-func (d *dock2box) GetCache() cache {
+func (d *dock2box) GetCache() Cache {
 	return *d.cache
 }
 

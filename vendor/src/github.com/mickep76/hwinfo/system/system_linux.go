@@ -8,7 +8,7 @@ import (
 	"github.com/mickep76/hwinfo/common"
 )
 
-type data struct {
+type Data struct {
 	Manufacturer   string `json:"manufacturer"`
 	Product        string `json:"product"`
 	ProductVersion string `json:"product_version"`

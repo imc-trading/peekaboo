@@ -9,26 +9,26 @@ import (
 )
 
 type Sysctl interface {
-	GetData() data
-	GetCache() cache
+	GetData() Data
+	GetCache() Cache
 	SetTimeout(int)
 	Update() error
 	ForceUpdate() error
 }
 
 type sysctl struct {
-	data  *data  `json:"data"`
-	cache *cache `json:"cache"`
+	data  *Data  `json:"data"`
+	cache *Cache `json:"cache"`
 }
 
-type data []dataItem
+type Data []dataItem
 
 type dataItem struct {
 	Key   string `json:"key"`
 	Value string `json:"value"`
 }
 
-type cache struct {
+type Cache struct {
 	LastUpdated time.Time `json:"last_updated"`
 	Timeout     int       `json:"timeout_sec"`
 	FromCache   bool      `json:"from_cache"`
@@ -36,18 +36,18 @@ type cache struct {
 
 func New() Sysctl {
 	return &sysctl{
-		data: &data{},
-		cache: &cache{
+		data: &Data{},
+		cache: &Cache{
 			Timeout: 5 * 60, // 5 minutes
 		},
 	}
 }
 
-func (s *sysctl) GetData() data {
+func (s *sysctl) GetData() Data {
 	return *s.data
 }
 
-func (s *sysctl) GetCache() cache {
+func (s *sysctl) GetCache() Cache {
 	return *s.cache
 }
 

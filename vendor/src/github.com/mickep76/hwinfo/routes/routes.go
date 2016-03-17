@@ -10,21 +10,21 @@ import (
 )
 
 type Routes interface {
-	GetData() data
-	GetCache() cache
+	GetData() Data
+	GetCache() Cache
 	SetTimeout(int)
 	Update() error
 	ForceUpdate() error
 }
 
 type routes struct {
-	data  *data  `json:"data"`
-	cache *cache `json:"cache"`
+	data  *Data  `json:"data"`
+	cache *Cache `json:"cache"`
 }
 
-type data []dataItem
+type Data []DataItem
 
-type dataItem struct {
+type DataItem struct {
 	Destination string `json:"destination"`
 	Gateway     string `json:"gateway"`
 	Genmask     string `json:"genmask"`
@@ -35,7 +35,7 @@ type dataItem struct {
 	Interface   string `json:"interface"`
 }
 
-type cache struct {
+type Cache struct {
 	LastUpdated time.Time `json:"last_updated"`
 	Timeout     int       `json:"timeout_sec"`
 	FromCache   bool      `json:"from_cache"`
@@ -43,18 +43,18 @@ type cache struct {
 
 func New() Routes {
 	return &routes{
-		data: &data{},
-		cache: &cache{
+		data: &Data{},
+		cache: &Cache{
 			Timeout: 5 * 60, // 5 minutes
 		},
 	}
 }
 
-func (r *routes) GetData() data {
+func (r *routes) GetData() Data {
 	return *r.data
 }
 
-func (r *routes) GetCache() cache {
+func (r *routes) GetCache() Cache {
 	return *r.cache
 }
 
@@ -96,7 +96,7 @@ func (routes *routes) ForceUpdate() error {
 			continue
 		}
 
-		r := dataItem{}
+		r := DataItem{}
 
 		r.Destination = v[0]
 		r.Gateway = v[1]
