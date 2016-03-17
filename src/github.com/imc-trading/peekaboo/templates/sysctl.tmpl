@@ -1,6 +1,7 @@
+{{define "sysctl"}}
 {{template "head" .}}
 <table data-toggle="table"
-       data-url="/sysctl/json"
+       data-url="/api/v1/sysctl"
        data-pagination="true"
        data-sort-name="key"
        data-sort-order="asc"
@@ -17,3 +18,4 @@
   </thead>
 </table>
 {{template "footer" .}}
+{{end}}

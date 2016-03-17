@@ -13,6 +13,8 @@ import (
 type LVM interface {
 	GetData() Data
 	GetCache() Cache
+	GetDataIntf() interface{}
+	GetCacheIntf() interface{}
 	SetTimeout(int)
 	Update() error
 	ForceUpdate() error
@@ -87,6 +89,14 @@ func (l *lvm) GetData() Data {
 }
 
 func (l *lvm) GetCache() Cache {
+	return *l.cache
+}
+
+func (l *lvm) GetDataIntf() interface{} {
+	return *l.data
+}
+
+func (l *lvm) GetCacheIntf() interface{} {
 	return *l.cache
 }
 

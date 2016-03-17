@@ -1,3 +1,4 @@
+{{define "storage"}}
 {{template "head" .}}
 <ul class="nav nav-tabs" data-tabs="tabs">
   <li class="active"><a href="#disks" data-toggle="tab">Disks</a></li>
@@ -15,7 +16,7 @@
 
 <div class="tab-pane active" id="disks">
 <table data-toggle="table"
-       data-url="/disks/json"
+       data-url="/api/v1/disks"
        data-pagination="true"
        data-sort-name="name"
        data-sort-order="asc"
@@ -36,7 +37,7 @@
 
 <div class="tab-pane" id="phys_vols">
 <table data-toggle="table"
-       data-url="/lvm/phys_vols/json"
+       data-url="/api/v1/lvm/phys-vols"
        data-sort-name="name"
        data-sort-order="asc"
        data-show-toggle="true"
@@ -58,7 +59,7 @@
 
 <div class="tab-pane" id="log_vols">
 <table data-toggle="table"
-       data-url="/lvm/log_vols/json"
+       data-url="/api/v1/lvm/log-vols"
        data-sort-name="name"
        data-sort-order="asc"
        data-show-toggle="true"
@@ -78,7 +79,7 @@
 
 <div class="tab-pane" id="vol_grps">
 <table data-toggle="table"
-       data-url="/lvm/vol_grps/json"
+       data-url="/api/v1/lvm/vol-grps"
        data-sort-name="name"
        data-sort-order="asc"
        data-show-toggle="true"
@@ -98,7 +99,7 @@
 
 <div class="tab-pane" id="mounts">
 <table data-toggle="table"
-       data-url="/mounts/json"
+       data-url="/api/v1/mounts"
        data-pagination="true"
        data-sort-name="name"
        data-sort-order="asc"
@@ -120,3 +121,4 @@
 
 </div>
 {{template "footer" .}}
+{{end}}

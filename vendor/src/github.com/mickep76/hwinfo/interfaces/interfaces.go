@@ -13,6 +13,8 @@ import (
 type Interfaces interface {
 	GetData() Data
 	GetCache() Cache
+	GetDataIntf() interface{}
+	GetCacheIntf() interface{}
 	SetTimeout(int)
 	Update() error
 	ForceUpdate() error
@@ -64,6 +66,14 @@ func (i *interfaces) GetData() Data {
 }
 
 func (i *interfaces) GetCache() Cache {
+	return *i.cache
+}
+
+func (i *interfaces) GetDataIntf() interface{} {
+	return *i.data
+}
+
+func (i *interfaces) GetCacheIntf() interface{} {
 	return *i.cache
 }
 

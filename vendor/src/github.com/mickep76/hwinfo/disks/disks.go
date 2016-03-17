@@ -13,6 +13,8 @@ import (
 type Disks interface {
 	GetData() Data
 	GetCache() Cache
+	GetDataIntf() interface{}
+	GetCacheIntf() interface{}
 	SetTimeout(int)
 	Update() error
 	ForceUpdate() error
@@ -52,6 +54,14 @@ func (d *disks) GetData() Data {
 }
 
 func (d *disks) GetCache() Cache {
+	return *d.cache
+}
+
+func (d *disks) GetDataIntf() interface{} {
+	return *d.data
+}
+
+func (d *disks) GetCacheIntf() interface{} {
 	return *d.cache
 }
 

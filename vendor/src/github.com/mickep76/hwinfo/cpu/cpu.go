@@ -7,6 +7,8 @@ import (
 type CPU interface {
 	GetData() Data
 	GetCache() Cache
+	GetDataIntf() interface{}
+	GetCacheIntf() interface{}
 	SetTimeout(int)
 	Update() error
 	ForceUpdate() error
@@ -70,5 +72,13 @@ func (c *cpu) GetData() Data {
 }
 
 func (c *cpu) GetCache() Cache {
+	return *c.cache
+}
+
+func (c *cpu) GetDataIntf() interface{} {
+	return *c.data
+}
+
+func (c *cpu) GetCacheIntf() interface{} {
 	return *c.cache
 }

@@ -45,7 +45,7 @@ func writeMIME(w http.ResponseWriter, r *http.Request, data interface{}) {
 	w.Write(b)
 }
 
-func htmlDashboard(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+func htmlTemplate(title, templ string, hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		// Update cache
@@ -55,14 +55,14 @@ func htmlDashboard(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Reques
 
 		// Input
 		input := map[string]interface{}{
-			"Title":   "Dashboard",
+			"Title":   title,
 			"Version": Version,
 			"HWInfo":  hwi.GetData(),
 		}
 
 		// Write template.
 		b := new(bytes.Buffer)
-		if err := templates.ExecuteTemplate(b, "dashboard", input); err != nil {
+		if err := templates.ExecuteTemplate(b, templ, input); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -71,88 +71,38 @@ func htmlDashboard(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Reques
 	}
 }
 
-func htmlNetwork(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-
-		// Update cache
-		if err := hwi.Update(); err != nil {
-			log.Fatal(err.Error())
-		}
-
-		// Input
-		input := map[string]interface{}{
-			"Title":  "Network",
-			"HWInfo": hwi.GetData(),
-		}
-
-		// Write template.
-		b := new(bytes.Buffer)
-		if err := templates.ExecuteTemplate(b, "network", input); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		w.Write(b.Bytes())
-	}
-}
-
-func apiGetAll(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+// Get
+func apiGet(forceUpdate func() error, update func() error, getData func() interface{}, getCache func() interface{}) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		// Update cache
 		if strings.ToLower(r.URL.Query().Get("update")) == "true" {
-			//			if err := hwi.ForceUpdate(); err != nil {
-			//				log.Fatal(err.Error())
-			//			}
+			if err := forceUpdate(); err != nil {
+				log.Fatal(err.Error())
+			}
 		} else {
-			if err := hwi.Update(); err != nil {
+			if err := update(); err != nil {
 				log.Fatal(err.Error())
 			}
 		}
 
-		writeJSON(w, r, hwi.GetData(), hwi.GetCache())
+		writeJSON(w, r, getData(), getCache())
 	}
 }
 
-func apiUpdateAll(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+// Update
+func apiUpdate(forceUpdate func() error) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		// Update cache
-		//        if err := hwi.ForceUpdate(); err != nil {
-		//            log.Fatal(err.Error())
-		//        }
-	}
-}
-
-func apiGetCPU(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-
-		// Update cache
-		if strings.ToLower(r.URL.Query().Get("update")) == "true" {
-			if err := hwi.GetCPU().ForceUpdate(); err != nil {
-				log.Fatal(err.Error())
-			}
-		} else {
-			if err := hwi.GetCPU().Update(); err != nil {
-				log.Fatal(err.Error())
-			}
-		}
-
-		writeJSON(w, r, hwi.GetCPU().GetData(), hwi.GetCPU().GetCache())
-	}
-}
-
-func apiUpdateCPU(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-
-		// Update cache
-		if err := hwi.GetCPU().ForceUpdate(); err != nil {
+		if err := forceUpdate(); err != nil {
 			log.Fatal(err.Error())
 		}
 	}
 }
 
-func apiSetTimeoutCPU(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+// Set Tineout
+func apiSetTimeout(setTimeout func(int)) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		// Decode JSON into struct
@@ -162,204 +112,88 @@ func apiSetTimeoutCPU(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Req
 			log.Fatal(err.Error())
 		}
 
-		log.Infof("CPU timeout changed to: %d", t.Timeout)
-		hwi.GetCPU().SetTimeout(t.Timeout)
+		log.Infof("Routes timeout changed to: %d", t.Timeout)
+		setTimeout(t.Timeout)
 	}
 }
 
-func apiGetMemory(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
+// Add API route
+func apiAddRoute(r *mux.Router, endpoint string, forceUpdate func() error, update func() error, setTimeout func(int), getData func() interface{}, getCache func() interface{}) {
+	log.Infof("Add API endpoint: %s method: %s", endpoint, "GET")
+	r.HandleFunc(endpoint, apiGet(forceUpdate, update, getData, getCache)).Methods("GET")
 
-		// Update cache
-		if strings.ToLower(r.URL.Query().Get("update")) == "true" {
-			if err := hwi.GetMemory().ForceUpdate(); err != nil {
-				log.Fatal(err.Error())
-			}
-		} else {
-			if err := hwi.GetMemory().Update(); err != nil {
-				log.Fatal(err.Error())
-			}
-		}
+	log.Infof("Add API endpoint: %s method: %s", endpoint+"/update", "PUT")
+	r.HandleFunc(endpoint+"/update", apiUpdate(forceUpdate)).Methods("PUT")
 
-		writeJSON(w, r, hwi.GetMemory().GetData(), hwi.GetMemory().GetCache())
-	}
+	log.Infof("Add static endpoint: %s path: %s", endpoint, "PUT")
+	r.HandleFunc(endpoint, apiSetTimeout(setTimeout)).Methods("PUT")
 }
 
-func apiUpdateMemory(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-
-		// Update cache
-		if err := hwi.GetMemory().ForceUpdate(); err != nil {
-			log.Fatal(err.Error())
-		}
-	}
-}
-
-func apiSetTimeoutMemory(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-
-		// Decode JSON into struct
-		t := timeout{}
-		err := json.NewDecoder(r.Body).Decode(&t)
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-
-		log.Infof("Memory timeout changed to: %d", t.Timeout)
-		hwi.GetMemory().SetTimeout(t.Timeout)
-	}
-}
-
-func apiGetInterfaces(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-
-		// Update cache
-		if strings.ToLower(r.URL.Query().Get("update")) == "true" {
-			if err := hwi.GetInterfaces().ForceUpdate(); err != nil {
-				log.Fatal(err.Error())
-			}
-		} else {
-			if err := hwi.GetInterfaces().Update(); err != nil {
-				log.Fatal(err.Error())
-			}
-		}
-
-		writeJSON(w, r, hwi.GetInterfaces().GetData(), hwi.GetInterfaces().GetCache())
-	}
-}
-
-func apiUpdateInterfaces(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-
-		// Update cache
-		if err := hwi.GetInterfaces().ForceUpdate(); err != nil {
-			log.Fatal(err.Error())
-		}
-	}
-}
-
-func apiSetTimeoutInterfaces(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-
-		// Decode JSON into struct
-		t := timeout{}
-		err := json.NewDecoder(r.Body).Decode(&t)
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-
-		log.Infof("Interfaces timeout changed to: %d", t.Timeout)
-		hwi.GetInterfaces().SetTimeout(t.Timeout)
-	}
-}
-
-func apiGetOpSys(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-
-		// Update cache
-		if strings.ToLower(r.URL.Query().Get("update")) == "true" {
-			if err := hwi.GetOpSys().ForceUpdate(); err != nil {
-				log.Fatal(err.Error())
-			}
-		} else {
-			if err := hwi.GetOpSys().Update(); err != nil {
-				log.Fatal(err.Error())
-			}
-		}
-
-		writeJSON(w, r, hwi.GetOpSys().GetData(), hwi.GetOpSys().GetCache())
-	}
-}
-
-func apiUpdateOpSys(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-
-		// Update cache
-		if err := hwi.GetOpSys().ForceUpdate(); err != nil {
-			log.Fatal(err.Error())
-		}
-	}
-}
-
-func apiSetTimeoutOpSys(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-
-		// Decode JSON into struct
-		t := timeout{}
-		err := json.NewDecoder(r.Body).Decode(&t)
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-
-		log.Infof("OpSys timeout changed to: %d", t.Timeout)
-		hwi.GetOpSys().SetTimeout(t.Timeout)
-	}
+// Add HTML route
+func htmlAddRoute(r *mux.Router, endpoint, title, templ string, hwi hwinfo.HWInfo) {
+	log.Infof("Add HTML endpoint: %s template: %s", endpoint, templ)
+	r.HandleFunc(endpoint, htmlTemplate(title, templ, hwi)).Methods("GET")
 }
 
 func routes(r *mux.Router, hwi hwinfo.HWInfo) {
 	// Dashboard
-	log.Infof("Add HTML endpoint: %s template: %s", "/", "dashboard")
-	r.HandleFunc("/", htmlDashboard(hwi)).Methods("GET")
-
-	// Network
-	log.Infof("Add HTML endpoint: %s template: %s", "/network", "network")
-	r.HandleFunc("/network", htmlNetwork(hwi)).Methods("GET")
+	htmlAddRoute(r, "/", "Dashboard", "dashboard", hwi)
+	htmlAddRoute(r, "/network", "Network", "network", hwi)
+	htmlAddRoute(r, "/storage", "Storage", "storage", hwi)
+	htmlAddRoute(r, "/pci", "PCI", "pci", hwi)
+	htmlAddRoute(r, "/sysctl", "Sysctl", "sysctl", hwi)
+	htmlAddRoute(r, "/dock2box", "Dock2Box", "dock2box", hwi)
 
 	apiURL := "/api/v1"
 
 	// All
-	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/", "GET")
-	r.HandleFunc(apiURL+"/", apiGetAll(hwi)).Methods("GET")
-
-	// All update
-	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/update", "PUT")
-	r.HandleFunc(apiURL+"/update", apiUpdateAll(hwi)).Methods("PUT")
+	//	r.HandleFunc(apiURL+"/", apiGet(hwi.Update, hwi.Update, hwi.SetTimeout, hwi.GetDataIntf, hwi.GetCacheIntf)).Methods("GET")
 
 	// CPU
-	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/cpu", "GET")
-	r.HandleFunc(apiURL+"/cpu", apiGetCPU(hwi)).Methods("GET")
-
-	// CPU update
-	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/cpu/update", "PUT")
-	r.HandleFunc(apiURL+"/cpu/update", apiUpdateCPU(hwi)).Methods("PUT")
-
-	// CPU set timeout
-	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/cpu", "PUT")
-	r.HandleFunc(apiURL+"/cpu", apiSetTimeoutCPU(hwi)).Methods("PUT")
+	cpu := hwi.GetCPU()
+	apiAddRoute(r, apiURL+"/cpu", cpu.ForceUpdate, cpu.Update, cpu.SetTimeout, cpu.GetDataIntf, cpu.GetCacheIntf)
 
 	// Memory
-	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/memory", "GET")
-	r.HandleFunc(apiURL+"/memory", apiGetMemory(hwi)).Methods("GET")
-
-	// Memory update
-	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/memory/update", "PUT")
-	r.HandleFunc(apiURL+"/memory/update", apiUpdateMemory(hwi)).Methods("PUT")
-
-	// Memory set timeout
-	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/memory", "PUT")
-	r.HandleFunc(apiURL+"/memory", apiSetTimeoutMemory(hwi)).Methods("PUT")
+	mem := hwi.GetMemory()
+	apiAddRoute(r, apiURL+"/memory", mem.ForceUpdate, mem.Update, mem.SetTimeout, mem.GetDataIntf, mem.GetCacheIntf)
 
 	// Interfaces
-	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/interfaces", "GET")
-	r.HandleFunc(apiURL+"/interfaces", apiGetInterfaces(hwi)).Methods("GET")
-
-	// Interfaces update
-	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/interfaces/update", "PUT")
-	r.HandleFunc(apiURL+"/interfaces/update", apiUpdateInterfaces(hwi)).Methods("PUT")
-
-	// Interfaces set timeout
-	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/interfaces", "PUT")
-	r.HandleFunc(apiURL+"/interfaces", apiSetTimeoutInterfaces(hwi)).Methods("PUT")
+	ifs := hwi.GetInterfaces()
+	apiAddRoute(r, apiURL+"/interfaces", ifs.ForceUpdate, ifs.Update, ifs.SetTimeout, ifs.GetDataIntf, ifs.GetCacheIntf)
 
 	// OpSys
-	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/opsys", "GET")
-	r.HandleFunc(apiURL+"/opsys", apiGetOpSys(hwi)).Methods("GET")
+	os := hwi.GetInterfaces()
+	apiAddRoute(r, apiURL+"/os", os.ForceUpdate, os.Update, os.SetTimeout, os.GetDataIntf, os.GetCacheIntf)
 
-	// OpSys update
-	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/opsys/update", "PUT")
-	r.HandleFunc(apiURL+"/opsys/update", apiUpdateOpSys(hwi)).Methods("PUT")
+	// Disks
+	disks := hwi.GetDisks()
+	apiAddRoute(r, apiURL+"/disks", disks.ForceUpdate, disks.Update, disks.SetTimeout, disks.GetDataIntf, disks.GetCacheIntf)
 
-	// OpSys set timeout
-	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/opsys", "PUT")
-	r.HandleFunc(apiURL+"/opsys", apiSetTimeoutOpSys(hwi)).Methods("PUT")
+	// PCI
+	pci := hwi.GetPCI()
+	apiAddRoute(r, apiURL+"/pci", pci.ForceUpdate, pci.Update, pci.SetTimeout, pci.GetDataIntf, pci.GetCacheIntf)
+
+	// Routes
+	routes := hwi.GetRoutes()
+	apiAddRoute(r, apiURL+"/routes", routes.ForceUpdate, routes.Update, routes.SetTimeout, routes.GetDataIntf, routes.GetCacheIntf)
+
+	// LVM
+	lvm := hwi.GetLVM()
+	apiAddRoute(r, apiURL+"/lvm", lvm.ForceUpdate, lvm.Update, lvm.SetTimeout, lvm.GetDataIntf, lvm.GetCacheIntf)
+
+	// System
+	sys := hwi.GetSystem()
+	apiAddRoute(r, apiURL+"/system", sys.ForceUpdate, sys.Update, sys.SetTimeout, sys.GetDataIntf, sys.GetCacheIntf)
+
+	// Sysctl
+	sysctl := hwi.GetSysctl()
+	apiAddRoute(r, apiURL+"/sysctl", sysctl.ForceUpdate, sysctl.Update, sysctl.SetTimeout, sysctl.GetDataIntf, sysctl.GetCacheIntf)
+
+	// Dock2Box
+	d2b := hwi.GetDock2Box()
+	apiAddRoute(r, apiURL+"/dock2box", d2b.ForceUpdate, d2b.Update, d2b.SetTimeout, d2b.GetDataIntf, d2b.GetCacheIntf)
+
+	// Mounts
+	mnts := hwi.GetMounts()
+	apiAddRoute(r, apiURL+"/mounts", mnts.ForceUpdate, mnts.Update, mnts.SetTimeout, mnts.GetDataIntf, mnts.GetCacheIntf)
 }

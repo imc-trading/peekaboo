@@ -7,6 +7,8 @@ import (
 type Memory interface {
 	GetData() Data
 	GetCache() Cache
+	GetDataIntf() interface{}
+	GetCacheIntf() interface{}
 	SetTimeout(int)
 	Update() error
 	ForceUpdate() error
@@ -37,6 +39,14 @@ func (m *memory) GetData() Data {
 }
 
 func (m *memory) GetCache() Cache {
+	return *m.cache
+}
+
+func (m *memory) GetDataIntf() interface{} {
+	return *m.data
+}
+
+func (m *memory) GetCacheIntf() interface{} {
 	return *m.cache
 }
 

@@ -12,6 +12,8 @@ import (
 type Routes interface {
 	GetData() Data
 	GetCache() Cache
+	GetDataIntf() interface{}
+	GetCacheIntf() interface{}
 	SetTimeout(int)
 	Update() error
 	ForceUpdate() error
@@ -55,6 +57,14 @@ func (r *routes) GetData() Data {
 }
 
 func (r *routes) GetCache() Cache {
+	return *r.cache
+}
+
+func (r *routes) GetDataIntf() interface{} {
+	return *r.data
+}
+
+func (r *routes) GetCacheIntf() interface{} {
 	return *r.cache
 }
 

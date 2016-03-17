@@ -11,6 +11,8 @@ import (
 type Sysctl interface {
 	GetData() Data
 	GetCache() Cache
+	GetDataIntf() interface{}
+	GetCacheIntf() interface{}
 	SetTimeout(int)
 	Update() error
 	ForceUpdate() error
@@ -48,6 +50,14 @@ func (s *sysctl) GetData() Data {
 }
 
 func (s *sysctl) GetCache() Cache {
+	return *s.cache
+}
+
+func (s *sysctl) GetDataIntf() interface{} {
+	return *s.data
+}
+
+func (s *sysctl) GetCacheIntf() interface{} {
 	return *s.cache
 }
 

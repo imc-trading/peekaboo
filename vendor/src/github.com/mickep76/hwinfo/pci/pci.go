@@ -16,6 +16,8 @@ import (
 type PCI interface {
 	GetData() Data
 	GetCache() Cache
+	GetDataIntf() interface{}
+	GetCacheIntf() interface{}
 	SetTimeout(int)
 	Update() error
 	ForceUpdate() error
@@ -61,6 +63,14 @@ func (p *pci) GetData() Data {
 }
 
 func (p *pci) GetCache() Cache {
+	return *p.cache
+}
+
+func (p *pci) GetDataIntf() interface{} {
+	return *p.data
+}
+
+func (p *pci) GetCacheIntf() interface{} {
 	return *p.cache
 }
 

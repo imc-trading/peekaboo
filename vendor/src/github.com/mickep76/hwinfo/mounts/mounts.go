@@ -13,6 +13,8 @@ import (
 type Mounts interface {
 	GetData() Data
 	GetCache() Cache
+	GetDataIntf() interface{}
+	GetCacheIntf() interface{}
 	SetTimeout(int)
 	Update() error
 	ForceUpdate() error
@@ -52,6 +54,14 @@ func (m *mounts) GetData() Data {
 }
 
 func (m *mounts) GetCache() Cache {
+	return *m.cache
+}
+
+func (m *mounts) GetDataIntf() interface{} {
+	return *m.data
+}
+
+func (m *mounts) GetCacheIntf() interface{} {
 	return *m.cache
 }
 

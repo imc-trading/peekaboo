@@ -7,6 +7,8 @@ import (
 type OpSys interface {
 	GetData() Data
 	GetCache() Cache
+	GetDataIntf() interface{}
+	GetCacheIntf() interface{}
 	SetTimeout(int)
 	Update() error
 	ForceUpdate() error
@@ -44,6 +46,14 @@ func (o *opSys) GetData() Data {
 }
 
 func (o *opSys) GetCache() Cache {
+	return *o.cache
+}
+
+func (o *opSys) GetDataIntf() interface{} {
+	return *o.data
+}
+
+func (o *opSys) GetCacheIntf() interface{} {
 	return *o.cache
 }
 

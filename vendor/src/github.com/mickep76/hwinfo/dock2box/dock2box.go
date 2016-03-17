@@ -16,6 +16,8 @@ import (
 type Dock2Box interface {
 	GetData() Data
 	GetCache() Cache
+	GetDataIntf() interface{}
+	GetCacheIntf() interface{}
 	SetTimeout(int)
 	Update() error
 	ForceUpdate() error
@@ -68,6 +70,14 @@ func (d *dock2box) GetData() Data {
 }
 
 func (d *dock2box) GetCache() Cache {
+	return *d.cache
+}
+
+func (d *dock2box) GetDataIntf() interface{} {
+	return *d.data
+}
+
+func (d *dock2box) GetCacheIntf() interface{} {
 	return *d.cache
 }
 

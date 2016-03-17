@@ -1,6 +1,7 @@
+{{define "pci"}}
 {{template "head" .}}
 <table data-toggle="table"
-       data-url="/pci/json"
+       data-url="/api/v1/pci"
        data-query-params="queryParams"
        data-pagination="true"
        data-sort-name="slot"
@@ -27,3 +28,4 @@
   </thead>
 </table>
 {{template "footer" .}}
+{{end}}
