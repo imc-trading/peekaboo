@@ -13,8 +13,8 @@ import (
 
 type HWInfo interface {
 	Update() error
-	GetData() data
-	GetCache() cache
+	GetData() Data
+	GetCache() Cache
 	GetCPU() cpu.CPU
 	GetSystem() system.System
 	GetMemory() memory.Memory
@@ -28,11 +28,11 @@ type hwInfo struct {
 	Memory     memory.Memory
 	OpSys      opsys.OpSys
 	Interfaces interfaces.Interfaces
-	data       *data
-	cache      *cache
+	data       *Data
+	cache      *Cache
 }
 
-type data struct {
+type Data struct {
 	Hostname      string          `json:"hostname"`
 	ShortHostname string          `json:"short_hostname"`
 	CPU           cpu.Data        `json:"cpu"`
@@ -42,7 +42,7 @@ type data struct {
 	Interfaces    interfaces.Data `json:"interfaces"`
 }
 
-type cache struct {
+type Cache struct {
 	CPU        cpu.Cache        `json:"cpu"`
 	System     system.Cache     `json:"system"`
 	Memory     memory.Cache     `json:"memory"`
@@ -57,8 +57,8 @@ func New() HWInfo {
 		Memory:     memory.New(),
 		OpSys:      opsys.New(),
 		Interfaces: interfaces.New(),
-		data:       &data{},
-		cache:      &cache{},
+		data:       &Data{},
+		cache:      &Cache{},
 	}
 }
 

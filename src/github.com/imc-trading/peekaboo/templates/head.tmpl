@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Peekaboo - {{.ShortHostname}}</title>
+    <title>Peekaboo - {{.HWInfo.ShortHostname}}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -34,7 +34,7 @@
         <div>
           <ul class="nav navbar-nav">
             <li {{if eq .Title "Network"}}class="active"{{end}}><a href="/network">Network</a></li>
-{{if ne .OpSys.Kernel "darwin"}}
+{{if ne .HWInfo.OpSys.Kernel "darwin"}}
             <li {{if eq .Title "Storage"}}class="active"{{end}}><a href="/storage">Storage</a></li>
             <li {{if eq .Title "PCI"}}class="active"{{end}}><a href="/pci">PCI</a></li>
             <li {{if eq .Title "Sysctl"}}class="active"{{end}}><a href="/sysctl">Sysctl</a></li>

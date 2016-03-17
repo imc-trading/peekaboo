@@ -4,7 +4,9 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/gorilla/mux"
 	"github.com/mickep76/hwinfo"
@@ -12,9 +14,31 @@ import (
 	"github.com/imc-trading/peekaboo/log"
 )
 
-type envelope struct {
-	Data  interface{} `json:"data"`
-	Cache interface{} `json:"cache"`
+func writeJSON(w http.ResponseWriter, r *http.Request, data interface{}, cache interface{}) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+
+	if strings.ToLower(r.URL.Query().Get("envelope")) == "true" {
+		e := map[string]interface{}{
+			"status": http.StatusOK,
+			"data":   data,
+			"cache":  cache,
+		}
+
+		writeMIME(w, r, e)
+	} else {
+		writeMIME(w, r, data)
+	}
+}
+
+func writeMIME(w http.ResponseWriter, r *http.Request, data interface{}) {
+	var b []byte
+	if strings.ToLower(r.URL.Query().Get("indent")) == "false" {
+		b, _ = json.Marshal(data)
+	} else {
+		b, _ = json.MarshalIndent(data, "", "  ")
+	}
+	w.Write(b)
 }
 
 func dashboard(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
@@ -26,16 +50,10 @@ func dashboard(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Input
-		d := hwi.GetData()
 		input := map[string]interface{}{
-			"Title":         "Dashboard",
-			"Hostname":      d.Hostname,
-			"ShortHostname": d.ShortHostname,
-			"Version":       Version,
-			"CPU":           d.CPU,
-			"OpSys":         d.OpSys,
-			"Memory":        d.Memory,
-			"System":        d.System,
+			"Title":   "Dashboard",
+			"Version": Version,
+			"HWInfo":  hwi.GetData(),
 		}
 
 		// Write template.
@@ -58,11 +76,9 @@ func network(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Input
-		d := hwi.GetData()
 		input := map[string]interface{}{
-			"Title":         "Network",
-			"ShortHostname": d.ShortHostname,
-			"OpSys":         d.OpSys,
+			"Title":  "Network",
+			"HWInfo": hwi.GetData(),
 		}
 
 		// Write template.
@@ -76,6 +92,18 @@ func network(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func allJSON(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		// Update cache
+		if err := hwi.Update(); err != nil {
+			log.Fatal(err.Error())
+		}
+
+		writeJSON(w, r, hwi.GetData(), hwi.GetCache())
+	}
+}
+
 func routes(r *mux.Router, hwi hwinfo.HWInfo) {
 
 	log.Infof("Add endpoint: %s template: %s", "/", "dashboard")
@@ -84,23 +112,10 @@ func routes(r *mux.Router, hwi hwinfo.HWInfo) {
 	log.Infof("Add endpoint: %s template: %s", "/network", "network")
 	r.HandleFunc("/network", network(hwi)).Methods("GET")
 
+	log.Infof("Add API endpoint: %s", "/json")
+	r.HandleFunc("/json", allJSON(hwi)).Methods("GET")
+
 	/*
-
-		m.Get("/network", func(ctx *macaron.Context) {
-			ctx.Data["Title"] = "Network"
-
-			// Update cache
-			//		if err := hwi.Update(); err != nil {
-			//			log.Fatal(err.Error())
-			//		}
-
-			d := hwi.GetData()
-
-			ctx.Data["ShortHostname"] = d.ShortHostname
-			ctx.Data["OpSys"] = d.OpSys
-			ctx.HTML(200, "network")
-		})
-
 		m.Get("/json", func(ctx *macaron.Context) {
 			// Update cache
 			if err := hwi.Update(); err != nil {
