@@ -1,27 +1,62 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"html/template"
+	"net/http"
 	"os"
 	"runtime"
 
-	log "github.com/Sirupsen/logrus"
-	"github.com/Unknwon/macaron"
+	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
 	flags "github.com/jessevdk/go-flags"
 	"github.com/mickep76/hwinfo"
+
+	"github.com/imc-trading/peekaboo/log"
 )
 
-func main() {
-	// Set log options.
-	log.SetOutput(os.Stderr)
-	log.SetLevel(log.WarnLevel)
+var templates *template.Template
 
+var funcs = template.FuncMap{}
+
+func addStaticRoute(r *mux.Router, endpoint, path string) {
+	log.Infof("Add endpoint: %s path: %s", endpoint, path)
+
+	r.PathPrefix(endpoint + "/").Handler(http.StripPrefix(endpoint+"/", http.FileServer(http.Dir(path))))
+	http.Handle(endpoint+"/", r)
+}
+
+func addTemplateRoute(r *mux.Router, endpoint, templ string) {
+	log.Infof("Add endpoint: %s template: %s", endpoint, templ)
+
+	r.HandleFunc(endpoint, execTemplate(templ)).Methods("GET")
+}
+
+func execTemplate(templ string) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		input := map[string]interface{}{
+			"vars":   mux.Vars(r),
+			"params": r.URL.Query(),
+		}
+
+		// Write template.
+		b := new(bytes.Buffer)
+		if err := templates.ExecuteTemplate(b, templ, input); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Write(b.Bytes())
+	}
+}
+
+func main() {
 	// Options.
 	var opts struct {
 		Verbose      bool    `short:"v" long:"verbose" description:"Verbose"`
 		Version      bool    `long:"version" description:"Version"`
-		BindAddr     string  `short:"b" long:"bind-addr" description:"Bind to address" default:"0.0.0.0"`
-		Port         int     `short:"p" long:"port" description:"Port" default:"5050"`
+		Bind         string  `short:"b" long:"bind" description:"Bind to address and port" default:"0.0.0.0:5050"`
 		StaticDir    string  `short:"s" long:"static-dir" description:"Static content" default:"static"`
 		TemplateDir  string  `short:"t" long:"template-dir" description:"Templates" default:"templates"`
 		KafkaEnabled bool    `short:"K" long:"kafka" description:"Enable Kafka message bus"`
@@ -51,7 +86,7 @@ func main() {
 
 	// Set verbose.
 	if opts.Verbose {
-		log.SetLevel(log.InfoLevel)
+		log.SetDebug()
 	}
 
 	// Check root.
@@ -59,61 +94,31 @@ func main() {
 		log.Fatal("This application requires root privileges to run.")
 	}
 
+	// Compile templates
+	templates = template.Must(template.New("main").Funcs(funcs).ParseGlob(opts.TemplateDir + "/*.tmpl"))
+
 	// Get hardware info.
 	hwi := hwinfo.New()
 	if err := hwi.Update(); err != nil {
 		log.Fatal(err.Error())
 	}
 
-	// Produce message to Kafka bus.
-	/*
-		log.Infof("Produce startup event to Kafka bus with topic: %s", opts.KafkaTopic)
-		if opts.KafkaEnabled {
-			if opts.KafkaPeers == nil {
-				log.Fatal("You need to specify Kafka Peers")
-			}
-
-			user, err := user.Current()
-			if err != nil {
-				log.Fatal(err.Error())
-			}
-
-			event := &Event{
-				Name:      "Peekaboo startup",
-				EventType: STARTED,
-				Created:   time.Now().Format("20060102T150405ZB"),
-				CreatedBy: CreatedBy{
-					User:    user.Username,
-					Service: "peekaboo",
-					Host:    info.Hostname,
-				},
-				Descr: "Peekaboo startup event",
-				Data:  info,
-			}
-
-			producer := newProducer(strings.Split(*opts.KafkaPeers, ","), opts.KafkaCert, opts.KafkaKey, opts.KafkaCA, opts.KafkaVerify)
-			partition, offset, err := producer.SendMessage(&sarama.ProducerMessage{
-				Topic: opts.KafkaTopic,
-				Value: event,
-			})
-			if err != nil {
-				log.Fatal(err.Error())
-			}
-
-			log.Infof("Kafka partition: %v, offset: %v", partition, offset)
-		}
-	*/
-
 	log.Infof("Using static dir: %s", opts.StaticDir)
 	log.Infof("Using template dir: %s", opts.TemplateDir)
 
-	m := macaron.Classic()
-	m.Use(macaron.Static(opts.StaticDir))
-	m.Use(macaron.Renderer(macaron.RenderOptions{
-		Directory:  opts.TemplateDir,
-		IndentJSON: true,
-	}))
+	r := mux.NewRouter()
+	addStaticRoute(r, "/img", opts.StaticDir+"/img")
+	addStaticRoute(r, "/js", opts.StaticDir+"/js")
+	addStaticRoute(r, "/bootstrap", opts.StaticDir+"/bootstrap")
+	addStaticRoute(r, "/css", opts.StaticDir+"/css")
 
-	routes(m, hwi)
-	m.Run(opts.BindAddr, opts.Port)
+	routes(r, hwi)
+
+	logr := handlers.LoggingHandler(os.Stderr, r)
+
+	log.Infof("Bind to address and port: %s", opts.Bind)
+	err := http.ListenAndServe(opts.Bind, logr)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 }

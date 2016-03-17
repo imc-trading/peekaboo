@@ -2,21 +2,21 @@
 	"version": 0,
 	"dependencies": [
 		{
-			"importpath": "github.com/Sirupsen/logrus",
-			"repository": "https://github.com/Sirupsen/logrus",
-			"revision": "4b6ea7319e214d98c938f12692336f7ca9348d6b",
+			"importpath": "github.com/gorilla/context",
+			"repository": "https://github.com/gorilla/context",
+			"revision": "1ea25387ff6f684839d82767c1733ff4d4d15d0a",
 			"branch": "master"
 		},
 		{
-			"importpath": "github.com/Unknwon/com",
-			"repository": "https://github.com/Unknwon/com",
-			"revision": "28b053d5a2923b87ce8c5a08f3af779894a72758",
+			"importpath": "github.com/gorilla/handlers",
+			"repository": "https://github.com/gorilla/handlers",
+			"revision": "ee54c7b44cab12289237fb8631314790076e728b",
 			"branch": "master"
 		},
 		{
-			"importpath": "github.com/Unknwon/macaron",
-			"repository": "https://github.com/Unknwon/macaron",
-			"revision": "9b82b0372a4edf52f66fbc8feaa6aafe0123001d",
+			"importpath": "github.com/gorilla/mux",
+			"repository": "https://github.com/gorilla/mux",
+			"revision": "acf3be1b335c8ce30b2c8d51300984666f0ceefa",
 			"branch": "master"
 		},
 		{
@@ -29,24 +29,6 @@
 			"importpath": "github.com/mickep76/hwinfo",
 			"repository": "https://github.com/mickep76/hwinfo",
 			"revision": "86358f852fc8aa10df0e6a8678ad20bc9fc62025",
-			"branch": "master"
-		},
-		{
-			"importpath": "gopkg.in/airbrake/gobrake.v2",
-			"repository": "https://gopkg.in/airbrake/gobrake.v2",
-			"revision": "c9d51adc624b5cc4c1bf8de730a09af4878ffe2d",
-			"branch": "master"
-		},
-		{
-			"importpath": "gopkg.in/gemnasium/logrus-airbrake-hook.v2",
-			"repository": "https://gopkg.in/gemnasium/logrus-airbrake-hook.v2",
-			"revision": "31e6fd4bd5a98d8ee7673d24bc54ec73c31810dd",
-			"branch": "master"
-		},
-		{
-			"importpath": "gopkg.in/ini.v1",
-			"repository": "https://gopkg.in/ini.v1",
-			"revision": "776aa739ce9373377cd16f526cdf06cb4c89b40f",
 			"branch": "master"
 		}
 	]
