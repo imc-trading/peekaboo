@@ -20,8 +20,8 @@ import (
 
 type HWInfo interface {
 	Update() error
-	GetData() data
-	GetCache() cache
+	GetData() Data
+	GetCache() Cache
 	GetCPU() cpu.CPU
 	GetDisks() disks.Disks
 	GetDock2Box() dock2box.Dock2Box
@@ -49,11 +49,11 @@ type hwInfo struct {
 	Routes     routes.Routes
 	Sysctl     sysctl.Sysctl
 	System     system.System
-	data       *data
-	cache      *cache
+	data       *Data
+	cache      *Cache
 }
 
-type data struct {
+type Data struct {
 	Hostname      string          `json:"hostname"`
 	ShortHostname string          `json:"short_hostname"`
 	CPU           cpu.Data        `json:"cpu"`
@@ -70,7 +70,7 @@ type data struct {
 	System        system.Data     `json:"system"`
 }
 
-type cache struct {
+type Cache struct {
 	CPU        cpu.Cache        `json:"cpu"`
 	Disks      disks.Cache      `json:"disks"`
 	Dock2Box   dock2box.Cache   `json:"dock2box"`
@@ -99,8 +99,8 @@ func New() HWInfo {
 		Routes:     routes.New(),
 		Sysctl:     sysctl.New(),
 		System:     system.New(),
-		data:       &data{},
-		cache:      &cache{},
+		data:       &Data{},
+		cache:      &Cache{},
 	}
 }
 

@@ -3,158 +3,363 @@
 package main
 
 import (
-	"log"
+	"bytes"
+	"encoding/json"
+	"net/http"
+	"strings"
 
-	"github.com/Unknwon/macaron"
+	"github.com/gorilla/mux"
 	"github.com/mickep76/hwinfo"
+
+	"github.com/imc-trading/peekaboo/log"
 )
 
-func routes(m *macaron.Macaron, hwi hwinfo.HWInfo) {
-        m.Get("/", func(ctx *macaron.Context) {
-                ctx.Data["Title"] = "Peekaboo"
+type timeout struct {
+	Timeout int `json:"timeout_sec"`
+}
 
-                // Update cache
-                if err := hwi.Update(); err != nil {
-                        log.Fatal(err.Error())
-                }
+func writeJSON(w http.ResponseWriter, r *http.Request, data interface{}, cache interface{}) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
 
-                d := hwi.GetData()
+	if strings.ToLower(r.URL.Query().Get("envelope")) == "true" {
+		e := map[string]interface{}{
+			"status": http.StatusOK,
+			"data":   data,
+			"cache":  cache,
+		}
 
-                ctx.Data["Hostname"] = d.Hostname
-                ctx.Data["ShortHostname"] = d.ShortHostname
-                ctx.Data["Version"] = Version
+		writeMIME(w, r, e)
+	} else {
+		writeMIME(w, r, data)
+	}
+}
 
-                ctx.Data["CPU"] = d.CPU
-                ctx.Data["OpSys"] = d.OpSys
-                ctx.Data["Memory"] = d.Memory
-                ctx.Data["System"] = d.System
+func writeMIME(w http.ResponseWriter, r *http.Request, data interface{}) {
+	var b []byte
+	if strings.ToLower(r.URL.Query().Get("indent")) == "false" {
+		b, _ = json.Marshal(data)
+	} else {
+		b, _ = json.MarshalIndent(data, "", "  ")
+	}
+	w.Write(b)
+}
 
-                ctx.HTML(200, "peekaboo")
-        })
-/*
-	// HTML endpoints
-	m.Get("/", func(ctx *macaron.Context) {
-		ctx.Data["Title"] = "Peekaboo"
-		ctx.Data["Kernel"] = hw.OpSys.Kernel
-		ctx.Data["Version"] = Version
-		ctx.Data["Hostname"] = hw.Hostname
-		ctx.Data["ShortHostname"] = hw.ShortHostname
+func htmlDashboard(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
 
-		ctx.Data["CPU"] = hw.CPU
-		ctx.Data["Memory"] = hw.Memory
-		ctx.Data["OpSys"] = hw.OpSys
-		ctx.Data["System"] = hw.System
+		// Update cache
+		if err := hwi.Update(); err != nil {
+			log.Fatal(err.Error())
+		}
 
-		ctx.HTML(200, "peekaboo")
-	})
+		// Input
+		input := map[string]interface{}{
+			"Title":   "Dashboard",
+			"Version": Version,
+			"HWInfo":  hwi.GetData(),
+		}
 
-	m.Get("/network", func(ctx *macaron.Context) {
-		ctx.Data["Title"] = "Network"
-		ctx.Data["Kernel"] = hw.OpSys.Kernel
-		ctx.Data["ShortHostname"] = hw.ShortHostname
-		ctx.HTML(200, "network")
-	})
+		// Write template.
+		b := new(bytes.Buffer)
+		if err := templates.ExecuteTemplate(b, "dashboard", input); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 
-	m.Get("/storage", func(ctx *macaron.Context) {
-		ctx.Data["Title"] = "Storage"
-		ctx.Data["Kernel"] = hw.OpSys.Kernel
-		ctx.Data["ShortHostname"] = hw.ShortHostname
-		ctx.HTML(200, "storage")
-	})
+		w.Write(b.Bytes())
+	}
+}
 
-	m.Get("/pci", func(ctx *macaron.Context) {
-		ctx.Data["Title"] = "PCI"
-		ctx.Data["Kernel"] = hw.OpSys.Kernel
-		ctx.Data["ShortHostname"] = hw.ShortHostname
-		ctx.HTML(200, "pci")
-	})
+func htmlNetwork(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
 
-	m.Get("/sysctl", func(ctx *macaron.Context) {
-		ctx.Data["Title"] = "Sysctl"
-		ctx.Data["Kernel"] = hw.OpSys.Kernel
-		ctx.Data["ShortHostname"] = hw.ShortHostname
-		ctx.HTML(200, "sysctl")
-	})
+		// Update cache
+		if err := hwi.Update(); err != nil {
+			log.Fatal(err.Error())
+		}
 
-	m.Get("/dock2box", func(ctx *macaron.Context) {
-		ctx.Data["Title"] = "Dock2Box"
-		ctx.Data["Kernel"] = hw.OpSys.Kernel
-		ctx.Data["ShortHostname"] = hw.ShortHostname
-		ctx.Data["Dock2Box"] = hw.Dock2Box
-		ctx.HTML(200, "dock2box")
-	})
+		// Input
+		input := map[string]interface{}{
+			"Title":  "Network",
+			"HWInfo": hwi.GetData(),
+		}
 
-	// JSON endpoints
-	m.Get("/disks/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &hw.Disks)
-	})
+		// Write template.
+		b := new(bytes.Buffer)
+		if err := templates.ExecuteTemplate(b, "network", input); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 
-	m.Get("/mounts/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &hw.Mounts)
-	})
+		w.Write(b.Bytes())
+	}
+}
 
-	m.Get("/network/routes/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &hw.Routes)
-	})
+func apiGetAll(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
 
-	m.Get("/sysctl/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &hw.Sysctl)
-	})
+		// Update cache
+		if strings.ToLower(r.URL.Query().Get("update")) == "true" {
+			//			if err := hwi.ForceUpdate(); err != nil {
+			//				log.Fatal(err.Error())
+			//			}
+		} else {
+			if err := hwi.Update(); err != nil {
+				log.Fatal(err.Error())
+			}
+		}
 
-	m.Get("/lvm/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &hw.LVM)
-	})
+		writeJSON(w, r, hwi.GetData(), hwi.GetCache())
+	}
+}
 
-	m.Get("/lvm/phys_vols/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &hw.LVM.PhysVols)
-	})
+func apiUpdateAll(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
 
-	m.Get("/lvm/log_vols/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &hw.LVM.LogVols)
-	})
+		// Update cache
+		//        if err := hwi.ForceUpdate(); err != nil {
+		//            log.Fatal(err.Error())
+		//        }
+	}
+}
 
-	m.Get("/lvm/vol_grps/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &hw.LVM.VolGrps)
-	})
+func apiGetCPU(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
 
-	m.Get("/pci/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &hw.PCI)
-	})
+		// Update cache
+		if strings.ToLower(r.URL.Query().Get("update")) == "true" {
+			if err := hwi.GetCPU().ForceUpdate(); err != nil {
+				log.Fatal(err.Error())
+			}
+		} else {
+			if err := hwi.GetCPU().Update(); err != nil {
+				log.Fatal(err.Error())
+			}
+		}
 
-	m.Get("/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &hw)
-	})
+		writeJSON(w, r, hwi.GetCPU().GetData(), hwi.GetCPU().GetCache())
+	}
+}
 
-	m.Get("/cpu/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &hw.CPU)
-	})
+func apiUpdateCPU(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
 
-	m.Get("/memory/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &hw.Memory)
-	})
+		// Update cache
+		if err := hwi.GetCPU().ForceUpdate(); err != nil {
+			log.Fatal(err.Error())
+		}
+	}
+}
 
-	m.Get("/network/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &hw.Network)
-	})
+func apiSetTimeoutCPU(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
 
-	m.Get("/network/interfaces/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &hw.Network.Interfaces)
-	})
+		// Decode JSON into struct
+		t := timeout{}
+		err := json.NewDecoder(r.Body).Decode(&t)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
 
-	m.Get("/opsys/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &hw.OpSys)
-	})
+		log.Infof("CPU timeout changed to: %d", t.Timeout)
+		hwi.GetCPU().SetTimeout(t.Timeout)
+	}
+}
 
-	m.Get("/network/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &hw.Network)
-	})
+func apiGetMemory(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
 
-	m.Get("/dock2box/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &hw.Dock2Box)
-	})
+		// Update cache
+		if strings.ToLower(r.URL.Query().Get("update")) == "true" {
+			if err := hwi.GetMemory().ForceUpdate(); err != nil {
+				log.Fatal(err.Error())
+			}
+		} else {
+			if err := hwi.GetMemory().Update(); err != nil {
+				log.Fatal(err.Error())
+			}
+		}
 
-	m.Get("/dock2box/layers/json", func(ctx *macaron.Context) {
-		ctx.JSON(200, &hw.Dock2Box.Layers)
-	})
-*/
+		writeJSON(w, r, hwi.GetMemory().GetData(), hwi.GetMemory().GetCache())
+	}
+}
+
+func apiUpdateMemory(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		// Update cache
+		if err := hwi.GetMemory().ForceUpdate(); err != nil {
+			log.Fatal(err.Error())
+		}
+	}
+}
+
+func apiSetTimeoutMemory(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		// Decode JSON into struct
+		t := timeout{}
+		err := json.NewDecoder(r.Body).Decode(&t)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+
+		log.Infof("Memory timeout changed to: %d", t.Timeout)
+		hwi.GetMemory().SetTimeout(t.Timeout)
+	}
+}
+
+func apiGetInterfaces(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		// Update cache
+		if strings.ToLower(r.URL.Query().Get("update")) == "true" {
+			if err := hwi.GetInterfaces().ForceUpdate(); err != nil {
+				log.Fatal(err.Error())
+			}
+		} else {
+			if err := hwi.GetInterfaces().Update(); err != nil {
+				log.Fatal(err.Error())
+			}
+		}
+
+		writeJSON(w, r, hwi.GetInterfaces().GetData(), hwi.GetInterfaces().GetCache())
+	}
+}
+
+func apiUpdateInterfaces(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		// Update cache
+		if err := hwi.GetInterfaces().ForceUpdate(); err != nil {
+			log.Fatal(err.Error())
+		}
+	}
+}
+
+func apiSetTimeoutInterfaces(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		// Decode JSON into struct
+		t := timeout{}
+		err := json.NewDecoder(r.Body).Decode(&t)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+
+		log.Infof("Interfaces timeout changed to: %d", t.Timeout)
+		hwi.GetInterfaces().SetTimeout(t.Timeout)
+	}
+}
+
+func apiGetOpSys(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		// Update cache
+		if strings.ToLower(r.URL.Query().Get("update")) == "true" {
+			if err := hwi.GetOpSys().ForceUpdate(); err != nil {
+				log.Fatal(err.Error())
+			}
+		} else {
+			if err := hwi.GetOpSys().Update(); err != nil {
+				log.Fatal(err.Error())
+			}
+		}
+
+		writeJSON(w, r, hwi.GetOpSys().GetData(), hwi.GetOpSys().GetCache())
+	}
+}
+
+func apiUpdateOpSys(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		// Update cache
+		if err := hwi.GetOpSys().ForceUpdate(); err != nil {
+			log.Fatal(err.Error())
+		}
+	}
+}
+
+func apiSetTimeoutOpSys(hwi hwinfo.HWInfo) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		// Decode JSON into struct
+		t := timeout{}
+		err := json.NewDecoder(r.Body).Decode(&t)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+
+		log.Infof("OpSys timeout changed to: %d", t.Timeout)
+		hwi.GetOpSys().SetTimeout(t.Timeout)
+	}
+}
+
+func routes(r *mux.Router, hwi hwinfo.HWInfo) {
+	// Dashboard
+	log.Infof("Add HTML endpoint: %s template: %s", "/", "dashboard")
+	r.HandleFunc("/", htmlDashboard(hwi)).Methods("GET")
+
+	// Network
+	log.Infof("Add HTML endpoint: %s template: %s", "/network", "network")
+	r.HandleFunc("/network", htmlNetwork(hwi)).Methods("GET")
+
+	apiURL := "/api/v1"
+
+	// All
+	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/", "GET")
+	r.HandleFunc(apiURL+"/", apiGetAll(hwi)).Methods("GET")
+
+	// All update
+	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/update", "PUT")
+	r.HandleFunc(apiURL+"/update", apiUpdateAll(hwi)).Methods("PUT")
+
+	// CPU
+	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/cpu", "GET")
+	r.HandleFunc(apiURL+"/cpu", apiGetCPU(hwi)).Methods("GET")
+
+	// CPU update
+	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/cpu/update", "PUT")
+	r.HandleFunc(apiURL+"/cpu/update", apiUpdateCPU(hwi)).Methods("PUT")
+
+	// CPU set timeout
+	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/cpu", "PUT")
+	r.HandleFunc(apiURL+"/cpu", apiSetTimeoutCPU(hwi)).Methods("PUT")
+
+	// Memory
+	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/memory", "GET")
+	r.HandleFunc(apiURL+"/memory", apiGetMemory(hwi)).Methods("GET")
+
+	// Memory update
+	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/memory/update", "PUT")
+	r.HandleFunc(apiURL+"/memory/update", apiUpdateMemory(hwi)).Methods("PUT")
+
+	// Memory set timeout
+	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/memory", "PUT")
+	r.HandleFunc(apiURL+"/memory", apiSetTimeoutMemory(hwi)).Methods("PUT")
+
+	// Interfaces
+	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/interfaces", "GET")
+	r.HandleFunc(apiURL+"/interfaces", apiGetInterfaces(hwi)).Methods("GET")
+
+	// Interfaces update
+	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/interfaces/update", "PUT")
+	r.HandleFunc(apiURL+"/interfaces/update", apiUpdateInterfaces(hwi)).Methods("PUT")
+
+	// Interfaces set timeout
+	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/interfaces", "PUT")
+	r.HandleFunc(apiURL+"/interfaces", apiSetTimeoutInterfaces(hwi)).Methods("PUT")
+
+	// OpSys
+	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/opsys", "GET")
+	r.HandleFunc(apiURL+"/opsys", apiGetOpSys(hwi)).Methods("GET")
+
+	// OpSys update
+	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/opsys/update", "PUT")
+	r.HandleFunc(apiURL+"/opsys/update", apiUpdateOpSys(hwi)).Methods("PUT")
+
+	// OpSys set timeout
+	log.Infof("Add API endpoint: %s%s method: %s", apiURL, "/opsys", "PUT")
+	r.HandleFunc(apiURL+"/opsys", apiSetTimeoutOpSys(hwi)).Methods("PUT")
 }
