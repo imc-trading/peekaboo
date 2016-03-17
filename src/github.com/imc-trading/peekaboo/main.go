@@ -21,7 +21,7 @@ var templates *template.Template
 var funcs = template.FuncMap{}
 
 func addStaticRoute(r *mux.Router, endpoint, path string) {
-	log.Infof("Add endpoint: %s path: %s", endpoint, path)
+	log.Infof("Add static endpoint: %s path: %s", endpoint, path)
 
 	r.PathPrefix(endpoint + "/").Handler(http.StripPrefix(endpoint+"/", http.FileServer(http.Dir(path))))
 	http.Handle(endpoint+"/", r)
