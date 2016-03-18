@@ -177,9 +177,17 @@ func routes(r *mux.Router, hwi hwinfo.HWInfo) {
 	routes := hwi.GetRoutes()
 	apiAddRoute(r, apiURL+"/routes", routes.ForceUpdate, routes.Update, routes.SetTimeout, routes.GetDataIntf, routes.GetCacheIntf)
 
-	// LVM
-	lvm := hwi.GetLVM()
-	apiAddRoute(r, apiURL+"/lvm", lvm.ForceUpdate, lvm.Update, lvm.SetTimeout, lvm.GetDataIntf, lvm.GetCacheIntf)
+	// PhysVols
+	pvs := hwi.GetPhysVols()
+	apiAddRoute(r, apiURL+"/lvm/physvols", pvs.ForceUpdate, pvs.Update, pvs.SetTimeout, pvs.GetDataIntf, pvs.GetCacheIntf)
+
+	// LogVols
+	lvs := hwi.GetLogVols()
+	apiAddRoute(r, apiURL+"/lvm/logvols", lvs.ForceUpdate, lvs.Update, lvs.SetTimeout, lvs.GetDataIntf, lvs.GetCacheIntf)
+
+	// VolGrps
+	vgs := hwi.GetVolGrps()
+	apiAddRoute(r, apiURL+"/lvm/volgrps", vgs.ForceUpdate, vgs.Update, vgs.SetTimeout, vgs.GetDataIntf, vgs.GetCacheIntf)
 
 	// System
 	sys := hwi.GetSystem()

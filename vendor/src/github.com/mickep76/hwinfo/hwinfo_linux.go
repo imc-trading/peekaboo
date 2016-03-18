@@ -8,7 +8,9 @@ import (
 	"github.com/mickep76/hwinfo/disks"
 	"github.com/mickep76/hwinfo/dock2box"
 	"github.com/mickep76/hwinfo/interfaces"
-	"github.com/mickep76/hwinfo/lvm"
+	"github.com/mickep76/hwinfo/lvm/logvols"
+	"github.com/mickep76/hwinfo/lvm/physvols"
+	"github.com/mickep76/hwinfo/lvm/volgrps"
 	"github.com/mickep76/hwinfo/memory"
 	"github.com/mickep76/hwinfo/mounts"
 	"github.com/mickep76/hwinfo/opsys"
@@ -41,7 +43,9 @@ type hwInfo struct {
 	Disks      disks.Disks
 	Dock2Box   dock2box.Dock2Box
 	Interfaces interfaces.Interfaces
-	LVM        lvm.LVM
+	PhysVols   physVols.PhysVols
+	LogVols    logVols.LogVols
+	VolGrps    volGrps.VolGrps
 	Memory     memory.Memory
 	Mounts     mounts.Mounts
 	OpSys      opsys.OpSys
@@ -60,7 +64,9 @@ type Data struct {
 	Disks         disks.Data      `json:"disks"`
 	Dock2Box      dock2box.Data   `json:"dock2box"`
 	Interfaces    interfaces.Data `json:"interfaces"`
-	LVM           lvm.Data        `json:"lvm"`
+	PhysVols      physVols.Data   `json:"phys_vols"`
+	LogVols       logVols.Data    `json:"log_vols"`
+	VolGrps       volGrps.Data    `json:"vol_grps"`
 	Memory        memory.Data     `json:"memory"`
 	Mounts        mounts.Data     `json:"mounts"`
 	OpSys         opsys.Data      `json:"opsys"`
@@ -75,7 +81,9 @@ type Cache struct {
 	Disks      disks.Cache      `json:"disks"`
 	Dock2Box   dock2box.Cache   `json:"dock2box"`
 	Interfaces interfaces.Cache `json:"interfaces"`
-	LVM        lvm.Cache        `json:"lvm"`
+	PhysVols   physVols.Cache   `json:"phys_vols"`
+	LogVols    logVols.Cache    `json:"log_vols"`
+	VolGrps    volGrps.Cache    `json:"vol_grps"`
 	Memory     memory.Cache     `json:"memory"`
 	Mounts     mounts.Cache     `json:"mounts"`
 	OpSys      opsys.Cache      `json:"opsys"`
@@ -91,7 +99,9 @@ func New() HWInfo {
 		Disks:      disks.New(),
 		Dock2Box:   dock2box.New(),
 		Interfaces: interfaces.New(),
-		LVM:        lvm.New(),
+		PhysVols:   physVols.New(),
+		LogVols:    logVols.New(),
+		VolGrps:    volGrps.New(),
 		Memory:     memory.New(),
 		Mounts:     mounts.New(),
 		OpSys:      opsys.New(),
@@ -120,8 +130,16 @@ func (h *hwInfo) GetInterfaces() interfaces.Interfaces {
 	return h.Interfaces
 }
 
-func (h *hwInfo) GetLVM() lvm.LVM {
-	return h.LVM
+func (h *hwInfo) GetPhysVols() physvols.PhysVols {
+	return h.PhysVols
+}
+
+func (h *hwInfo) GetLogVols() logvols.LogVols {
+	return h.LogVols
+}
+
+func (h *hwInfo) GetPhysVols() physvols.PhysVols {
+	return h.PhysVols
 }
 
 func (h *hwInfo) GetMemory() memory.Memory {
@@ -237,12 +255,26 @@ func (h *hwInfo) Update() error {
 	h.data.Routes = h.Routes.GetData()
 	h.cache.Routes = h.Routes.GetCache()
 
-	// LVM
-	if err := h.LVM.Update(); err != nil {
+	// PhysVols
+	if err := h.PhysVols.Update(); err != nil {
 		return err
 	}
-	h.data.LVM = h.LVM.GetData()
-	h.cache.LVM = h.LVM.GetCache()
+	h.data.PhysVols = h.PhysVols.GetData()
+	h.cache.PhysVols = h.PhysVols.GetCache()
+
+	// LogVols
+	if err := h.LogVols.Update(); err != nil {
+		return err
+	}
+	h.data.LogVols = h.LogVols.GetData()
+	h.cache.LogVols = h.LogVols.GetCache()
+
+	// VolGroups
+	if err := h.VolGrps.Update(); err != nil {
+		return err
+	}
+	h.data.VolGrps = h.VolGrps.GetData()
+	h.cache.VolGrps = h.VolGrps.GetCache()
 
 	return nil
 }
