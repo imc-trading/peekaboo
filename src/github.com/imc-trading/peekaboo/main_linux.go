@@ -125,7 +125,7 @@ func apiAddRoute(r *mux.Router, endpoint string, forceUpdate func() error, updat
 	log.Infof("Add API endpoint: %s method: %s", endpoint+"/update", "PUT")
 	r.HandleFunc(endpoint+"/update", apiUpdate(forceUpdate)).Methods("PUT")
 
-	log.Infof("Add static endpoint: %s path: %s", endpoint, "PUT")
+	log.Infof("Add API endpoint: %s method: %s", endpoint, "PUT")
 	r.HandleFunc(endpoint, apiSetTimeout(setTimeout)).Methods("PUT")
 }
 
@@ -143,6 +143,7 @@ func routes(r *mux.Router, hwi hwinfo.HWInfo) {
 	htmlAddRoute(r, "/pci", "PCI", "pci", hwi)
 	htmlAddRoute(r, "/sysctl", "Sysctl", "sysctl", hwi)
 	htmlAddRoute(r, "/dock2box", "Dock2Box", "dock2box", hwi)
+	htmlAddRoute(r, "/docker", "Docker", "docker", hwi)
 
 	apiURL := "/api/v1"
 
@@ -151,43 +152,43 @@ func routes(r *mux.Router, hwi hwinfo.HWInfo) {
 
 	// CPU
 	cpu := hwi.GetCPU()
-	apiAddRoute(r, apiURL+"/cpu", cpu.ForceUpdate, cpu.Update, cpu.SetTimeout, cpu.GetDataIntf, cpu.GetCacheIntf)
+	apiAddRoute(r, apiURL+"/system/cpu", cpu.ForceUpdate, cpu.Update, cpu.SetTimeout, cpu.GetDataIntf, cpu.GetCacheIntf)
 
 	// Memory
 	mem := hwi.GetMemory()
-	apiAddRoute(r, apiURL+"/memory", mem.ForceUpdate, mem.Update, mem.SetTimeout, mem.GetDataIntf, mem.GetCacheIntf)
+	apiAddRoute(r, apiURL+"/system/memory", mem.ForceUpdate, mem.Update, mem.SetTimeout, mem.GetDataIntf, mem.GetCacheIntf)
 
 	// Interfaces
 	ifs := hwi.GetInterfaces()
-	apiAddRoute(r, apiURL+"/interfaces", ifs.ForceUpdate, ifs.Update, ifs.SetTimeout, ifs.GetDataIntf, ifs.GetCacheIntf)
+	apiAddRoute(r, apiURL+"/network/interfaces", ifs.ForceUpdate, ifs.Update, ifs.SetTimeout, ifs.GetDataIntf, ifs.GetCacheIntf)
 
 	// OpSys
 	os := hwi.GetInterfaces()
-	apiAddRoute(r, apiURL+"/os", os.ForceUpdate, os.Update, os.SetTimeout, os.GetDataIntf, os.GetCacheIntf)
+	apiAddRoute(r, apiURL+"/system/os", os.ForceUpdate, os.Update, os.SetTimeout, os.GetDataIntf, os.GetCacheIntf)
 
 	// Disks
 	disks := hwi.GetDisks()
-	apiAddRoute(r, apiURL+"/disks", disks.ForceUpdate, disks.Update, disks.SetTimeout, disks.GetDataIntf, disks.GetCacheIntf)
+	apiAddRoute(r, apiURL+"/storage/disks", disks.ForceUpdate, disks.Update, disks.SetTimeout, disks.GetDataIntf, disks.GetCacheIntf)
 
 	// PCI
 	pci := hwi.GetPCI()
-	apiAddRoute(r, apiURL+"/pci", pci.ForceUpdate, pci.Update, pci.SetTimeout, pci.GetDataIntf, pci.GetCacheIntf)
+	apiAddRoute(r, apiURL+"/system/pci", pci.ForceUpdate, pci.Update, pci.SetTimeout, pci.GetDataIntf, pci.GetCacheIntf)
 
 	// Routes
 	routes := hwi.GetRoutes()
-	apiAddRoute(r, apiURL+"/routes", routes.ForceUpdate, routes.Update, routes.SetTimeout, routes.GetDataIntf, routes.GetCacheIntf)
+	apiAddRoute(r, apiURL+"/network/routes", routes.ForceUpdate, routes.Update, routes.SetTimeout, routes.GetDataIntf, routes.GetCacheIntf)
 
 	// PhysVols
 	pvs := hwi.GetPhysVols()
-	apiAddRoute(r, apiURL+"/lvm/physvols", pvs.ForceUpdate, pvs.Update, pvs.SetTimeout, pvs.GetDataIntf, pvs.GetCacheIntf)
+	apiAddRoute(r, apiURL+"/storage/lvm/physvols", pvs.ForceUpdate, pvs.Update, pvs.SetTimeout, pvs.GetDataIntf, pvs.GetCacheIntf)
 
 	// LogVols
 	lvs := hwi.GetLogVols()
-	apiAddRoute(r, apiURL+"/lvm/logvols", lvs.ForceUpdate, lvs.Update, lvs.SetTimeout, lvs.GetDataIntf, lvs.GetCacheIntf)
+	apiAddRoute(r, apiURL+"/storage/lvm/logvols", lvs.ForceUpdate, lvs.Update, lvs.SetTimeout, lvs.GetDataIntf, lvs.GetCacheIntf)
 
 	// VolGrps
 	vgs := hwi.GetVolGrps()
-	apiAddRoute(r, apiURL+"/lvm/volgrps", vgs.ForceUpdate, vgs.Update, vgs.SetTimeout, vgs.GetDataIntf, vgs.GetCacheIntf)
+	apiAddRoute(r, apiURL+"/storage/lvm/volgrps", vgs.ForceUpdate, vgs.Update, vgs.SetTimeout, vgs.GetDataIntf, vgs.GetCacheIntf)
 
 	// System
 	sys := hwi.GetSystem()
@@ -195,13 +196,29 @@ func routes(r *mux.Router, hwi hwinfo.HWInfo) {
 
 	// Sysctl
 	sysctl := hwi.GetSysctl()
-	apiAddRoute(r, apiURL+"/sysctl", sysctl.ForceUpdate, sysctl.Update, sysctl.SetTimeout, sysctl.GetDataIntf, sysctl.GetCacheIntf)
+	apiAddRoute(r, apiURL+"/system/sysctl", sysctl.ForceUpdate, sysctl.Update, sysctl.SetTimeout, sysctl.GetDataIntf, sysctl.GetCacheIntf)
 
 	// Dock2Box
 	d2b := hwi.GetDock2Box()
 	apiAddRoute(r, apiURL+"/dock2box", d2b.ForceUpdate, d2b.Update, d2b.SetTimeout, d2b.GetDataIntf, d2b.GetCacheIntf)
 
+	// Docker
+	dkr := hwi.GetDocker()
+	apiAddRoute(r, apiURL+"/docker", dkr.ForceUpdate, dkr.Update, dkr.SetTimeout, dkr.GetDataIntf, dkr.GetCacheIntf)
+
+	// Containers
+	cont := hwi.GetContainers()
+	apiAddRoute(r, apiURL+"/docker/containers", cont.ForceUpdate, cont.Update, cont.SetTimeout, cont.GetDataIntf, cont.GetCacheIntf)
+
+	// Images
+	imgs := hwi.GetImages()
+	apiAddRoute(r, apiURL+"/docker/images", imgs.ForceUpdate, imgs.Update, imgs.SetTimeout, imgs.GetDataIntf, imgs.GetCacheIntf)
+
+	// Layers
+	ls := hwi.GetLayers()
+	apiAddRoute(r, apiURL+"/dock2box/layers", ls.ForceUpdate, ls.Update, ls.SetTimeout, ls.GetDataIntf, ls.GetCacheIntf)
+
 	// Mounts
 	mnts := hwi.GetMounts()
-	apiAddRoute(r, apiURL+"/mounts", mnts.ForceUpdate, mnts.Update, mnts.SetTimeout, mnts.GetDataIntf, mnts.GetCacheIntf)
+	apiAddRoute(r, apiURL+"/storage/mounts", mnts.ForceUpdate, mnts.Update, mnts.SetTimeout, mnts.GetDataIntf, mnts.GetCacheIntf)
 }

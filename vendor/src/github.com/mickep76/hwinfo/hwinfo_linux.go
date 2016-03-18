@@ -7,6 +7,10 @@ import (
 	"github.com/mickep76/hwinfo/cpu"
 	"github.com/mickep76/hwinfo/disks"
 	"github.com/mickep76/hwinfo/dock2box"
+	"github.com/mickep76/hwinfo/dock2box/layers"
+	"github.com/mickep76/hwinfo/docker"
+	"github.com/mickep76/hwinfo/docker/containers"
+	"github.com/mickep76/hwinfo/docker/images"
 	"github.com/mickep76/hwinfo/interfaces"
 	"github.com/mickep76/hwinfo/lvm/logvols"
 	"github.com/mickep76/hwinfo/lvm/physvols"
@@ -27,8 +31,14 @@ type HWInfo interface {
 	GetCPU() cpu.CPU
 	GetDisks() disks.Disks
 	GetDock2Box() dock2box.Dock2Box
+	GetDocker() docker.Docker
+	GetContainers() containers.Containers
+	GetImages() images.Images
+	GetLayers() layers.Layers
 	GetInterfaces() interfaces.Interfaces
-	GetLVM() lvm.LVM
+	GetPhysVols() physvols.PhysVols
+	GetLogVols() logvols.LogVols
+	GetVolGrps() volgrps.VolGrps
 	GetMemory() memory.Memory
 	GetMounts() mounts.Mounts
 	GetOpSys() opsys.OpSys
@@ -42,10 +52,14 @@ type hwInfo struct {
 	CPU        cpu.CPU
 	Disks      disks.Disks
 	Dock2Box   dock2box.Dock2Box
+	Docker     docker.Docker
+	Containers containers.Containers
+	Images     images.Images
+	Layers     layers.Layers
 	Interfaces interfaces.Interfaces
-	PhysVols   physVols.PhysVols
-	LogVols    logVols.LogVols
-	VolGrps    volGrps.VolGrps
+	PhysVols   physvols.PhysVols
+	LogVols    logvols.LogVols
+	VolGrps    volgrps.VolGrps
 	Memory     memory.Memory
 	Mounts     mounts.Mounts
 	OpSys      opsys.OpSys
@@ -63,10 +77,14 @@ type Data struct {
 	CPU           cpu.Data        `json:"cpu"`
 	Disks         disks.Data      `json:"disks"`
 	Dock2Box      dock2box.Data   `json:"dock2box"`
+	Docker        docker.Data     `json:"docker"`
+	Containers    containers.Data `json:"containers"`
+	Images        images.Data     `json:"images"`
+	Layers        layers.Data     `json:"layers"`
 	Interfaces    interfaces.Data `json:"interfaces"`
-	PhysVols      physVols.Data   `json:"phys_vols"`
-	LogVols       logVols.Data    `json:"log_vols"`
-	VolGrps       volGrps.Data    `json:"vol_grps"`
+	PhysVols      physvols.Data   `json:"phys_vols"`
+	LogVols       logvols.Data    `json:"log_vols"`
+	VolGrps       volgrps.Data    `json:"vol_grps"`
 	Memory        memory.Data     `json:"memory"`
 	Mounts        mounts.Data     `json:"mounts"`
 	OpSys         opsys.Data      `json:"opsys"`
@@ -80,10 +98,14 @@ type Cache struct {
 	CPU        cpu.Cache        `json:"cpu"`
 	Disks      disks.Cache      `json:"disks"`
 	Dock2Box   dock2box.Cache   `json:"dock2box"`
+	Docker     docker.Cache     `json:"docker"`
+	Containers containers.Cache `json:"containers"`
+	Images     images.Images    `json:"images"`
+	Layers     layers.Cache     `json:"layers"`
 	Interfaces interfaces.Cache `json:"interfaces"`
-	PhysVols   physVols.Cache   `json:"phys_vols"`
-	LogVols    logVols.Cache    `json:"log_vols"`
-	VolGrps    volGrps.Cache    `json:"vol_grps"`
+	PhysVols   physvols.Cache   `json:"phys_vols"`
+	LogVols    logvols.Cache    `json:"log_vols"`
+	VolGrps    volgrps.Cache    `json:"vol_grps"`
 	Memory     memory.Cache     `json:"memory"`
 	Mounts     mounts.Cache     `json:"mounts"`
 	OpSys      opsys.Cache      `json:"opsys"`
@@ -98,10 +120,14 @@ func New() HWInfo {
 		CPU:        cpu.New(),
 		Disks:      disks.New(),
 		Dock2Box:   dock2box.New(),
+		Docker:     docker.New(),
+		Containers: containers.New(),
+		Images:     images.New(),
+		Layers:     layers.New(),
 		Interfaces: interfaces.New(),
-		PhysVols:   physVols.New(),
-		LogVols:    logVols.New(),
-		VolGrps:    volGrps.New(),
+		PhysVols:   physvols.New(),
+		LogVols:    logvols.New(),
+		VolGrps:    volgrps.New(),
 		Memory:     memory.New(),
 		Mounts:     mounts.New(),
 		OpSys:      opsys.New(),
@@ -126,6 +152,22 @@ func (h *hwInfo) GetDock2Box() dock2box.Dock2Box {
 	return h.Dock2Box
 }
 
+func (h *hwInfo) GetDocker() docker.Docker {
+	return h.Docker
+}
+
+func (h *hwInfo) GetContainers() containers.Containers {
+	return h.Containers
+}
+
+func (h *hwInfo) GetImages() images.Images {
+	return h.Images
+}
+
+func (h *hwInfo) GetLayers() layers.Layers {
+	return h.Layers
+}
+
 func (h *hwInfo) GetInterfaces() interfaces.Interfaces {
 	return h.Interfaces
 }
@@ -138,8 +180,8 @@ func (h *hwInfo) GetLogVols() logvols.LogVols {
 	return h.LogVols
 }
 
-func (h *hwInfo) GetPhysVols() physvols.PhysVols {
-	return h.PhysVols
+func (h *hwInfo) GetVolGrps() volgrps.VolGrps {
+	return h.VolGrps
 }
 
 func (h *hwInfo) GetMemory() memory.Memory {
@@ -226,6 +268,20 @@ func (h *hwInfo) Update() error {
 	}
 	h.data.Dock2Box = h.Dock2Box.GetData()
 	h.cache.Dock2Box = h.Dock2Box.GetCache()
+
+	// Docker
+	if err := h.Docker.Update(); err != nil {
+		return err
+	}
+	h.data.Docker = h.Docker.GetData()
+	h.cache.Docker = h.Docker.GetCache()
+
+	// Containers
+	if err := h.Containers.Update(); err != nil {
+		return err
+	}
+	h.data.Containers = h.Containers.GetData()
+	h.cache.Containers = h.Containers.GetCache()
 
 	// Mounts
 	if err := h.Mounts.Update(); err != nil {

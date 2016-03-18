@@ -7,9 +7,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path"
-	"path/filepath"
-	"strings"
 	"time"
 )
 
@@ -28,26 +25,9 @@ type dock2box struct {
 	cache *Cache `json:"cache"`
 }
 
-type layers []layer
-
-type layer struct {
-	Layer             string `json:"layer"`
-	Image             string `json:"image"`
-	Repo              string `json:"repo"`
-	Commit            string `json:"commit"`
-	Created           string `json:"created"`
-	CPU               string `json:"cpu"`
-	CPUFlags          string `json:"cpuflags"`
-	KernelConfig      string `json:"kernelconfig"`
-	GCCVersion        string `json:"gcc_version"`
-	CFlags            string `json:"cflags"`
-	CFlagsMarchNative string `json:"cflags_march_native"`
-}
-
 type Data struct {
 	FirstBoot string `json:"firstboot"`
 	CFlags    string `json:"cflags_march_native"`
-	Layers    layers `json:"layers"`
 }
 
 type Cache struct {
@@ -120,32 +100,6 @@ func (d *dock2box) ForceUpdate() error {
 
 	if err := json.Unmarshal(o, d.data); err != nil {
 		return err
-	}
-
-	files, err := filepath.Glob("/etc/dock2box/layers/*.json")
-	if err != nil {
-		return err
-	}
-
-	for _, file := range files {
-		if _, err := os.Stat(file); os.IsNotExist(err) {
-			return fmt.Errorf("file doesn't exist: %s", file)
-		}
-
-		o, err := ioutil.ReadFile(file)
-		if err != nil {
-			return err
-		}
-
-		l := layer{}
-		if err := json.Unmarshal(o, &l); err != nil {
-			return err
-		}
-
-		fn := path.Base(file)
-		l.Layer = strings.TrimSuffix(fn, filepath.Ext(fn))
-
-		d.data.Layers = append(d.data.Layers, l)
 	}
 
 	return nil
