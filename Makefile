@@ -2,7 +2,7 @@ NAME=peekaboo
 SRCDIR=src/github.com/imc-trading/${NAME}
 BUILDDIR=.build
 RESDIR=/var/lib/${NAME}
-VERSION:=$(shell awk -F '"' '/Version/ {print $$2}' ${SRCDIR}/version.go)
+VERSION:=$(shell awk -F '"' '/Version/ {print $$2}' ${SRCDIR}/version/version.go)
 RELEASE:=$(shell date -u +%Y%m%d%H%M)
 
 all: build
@@ -35,7 +35,7 @@ rpm:
 
 build-rpm: deps build
 	mkdir -p ${BUILDDIR}/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
-	cp -r bin files ${SRCDIR}/templates ${SRCDIR}/static ${BUILDDIR}/SOURCES
+	cp -r bin files static ${BUILDDIR}/SOURCES
 	sed -e "s/%NAME%/${NAME}/g" -e "s/%VERSION%/${VERSION}/g" -e "s/%RELEASE%/${RELEASE}/g" \
 	${NAME}.spec >${BUILDDIR}/SPECS/${NAME}.spec
 	rpmbuild -vv -bb --target="x86_64" --clean --define "_topdir $$(pwd)/${BUILDDIR}" ${BUILDDIR}/SPECS/${NAME}.spec

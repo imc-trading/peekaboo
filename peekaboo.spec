@@ -21,7 +21,6 @@ AutoReqProv: no
 mkdir -p %{buildroot}/usr/bin
 cp %{sources}/bin/* %{buildroot}/usr/bin
 mkdir -p %{buildroot}/var/lib/%{name}
-cp -r %{sources}/templates %{buildroot}/var/lib/%{name}
 cp -r %{sources}/static %{buildroot}/var/lib/%{name}
 mkdir -p %{buildroot}/etc/systemd/system
 cp %{sources}/files/%{name}.service %{buildroot}/etc/systemd/system/%{name}.service

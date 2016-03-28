@@ -2,7 +2,7 @@
   <img src="img/logo.png" width="50%">
 </p>
 
-Expose hardware info using JSON/REST and provide a system HTML Front-End.
+Expose hardware info using a REST API written in Go and a Front-End written in AngularJS.
 
 **FrontEnd:**
 
@@ -13,53 +13,55 @@ http://myserver.example.com:5050
 **JSON endpoints:**
 
 ```
-/json
-/cpu/json
-/disks/json
-/lvm/json
-/lvm/log_vols/json
-/lvm/phys_vols/json
-/lvm/vol_grps/json
-/memory/json
-/mounts/json
-/network/interfaces/json
-/network/json
-/network/json
-/network/routes/json
-/opsys/json
-/pci/json
-/sysctl/json
+/api/v1/network/interfaces
+/api/v1/network/routes
+/api/v1/system
+/api/v1/system/os
+/api/v1/system/cpu
+/api/v1/system/memory
+/api/v1/system/sysctls (Linux only)
+/api/v1/storage/disks (Linux only)
+/api/v1/storage/mounts (Linux only)
+/api/v1/storage/lvm/physvols (Linux only)
+/api/v1/storage/lvm/logvols (Linux only)
+/api/v1/storage/lvm/volgrps (Linux only)
+/api/v1/docker
+/api/v1/docker/containers
+/api/v1/docker/images
 ```
 
 **Example:**
 
 ```bash
-curl http://myserver.example.com:5050/cpu/json
+curl http://myserver.example.com:5050/api/v1/system
 ```
 
 # Usage
 
 ```bash
+Peekaboo
+
 Usage:
-  peekaboo [OPTIONS]
+  peekaboo daemon [--debug] [--bind=<addr>] [--static=<dir>]
+  peekaboo list
+  peekaboo get <hardware-type>
+  peekaboo -h | --help
+  peekaboo --version
 
-Application Options:
-  -v, --verbose       Verbose
-      --version       Version
-  -b, --bind-addr=    Bind to address (0.0.0.0)
-  -p, --port=         Port (5050)
-  -s, --static-dir=   Static content (static)
-  -t, --template-dir= Templates (templates)
-  -K, --kafka         Enable Kafka message bus
-      --kafka-topic=  Kafka topic (peekaboo)
-      --kafka-peers=  Comma-delimited list of Kafka brokers
-      --kafka-cert=   Certificate file for client authentication
-      --kafka-key=    Key file for client client authentication
-      --kafka-ca=     CA file for TLS client authentication
-      --kafka-verify  Verify SSL certificate
+Commands:
+  daemon               Start as a daemon serving HTTP requests.
+  list                 List hardware names available.
+  get                  Return information about hardware.
 
-Help Options:
-  -h, --help          Show this help message
+Arguments:
+  hardware-type        Name of hardware to return information about.
+
+Options:
+  -h --help            Show this screen.
+  --version            Show version.
+  -d --debug           Debug.
+  -b --bind=<addr>     Bind to address and port. [default: 0.0.0.0:5050]
+  -s --static=<dir>    Directory for static content. [default: static]
 ```
 
 # Setup Go on Linux
@@ -72,18 +74,16 @@ export PATH=$GOPATH/bin:$PATH
 go get github.com/constabulary/gb/...
 ```
 
-## Build
+## Build and run
 
 ```bash
 gb build
-sudo bin/peekaboo \
-  --static-dir src/github.com/mickep76/peekaboo/static \
-  --template-dir src/github.com/mickep76/peekaboo/templates
+sudo bin/peekaboo daemon -d
 ```
 
 ## Build RPM
 
-Make sure you have Docker configured.
+Fiest make sure you have Docker configured.
 
 ```bash
 make rpm
@@ -96,12 +96,12 @@ systemctl stop peekaboo
 vi /etc/sysconfig/peekaboo
 ```
 
-Add "--bind-addr" bind address, defaults to "0.0.0.0". For port add "--port", defaults to 5050.
+Change port to 8080.
 
 **Example:**
 
 ```
-OPTIONS="--bind-addr 192.168.1.153 --port 8080"
+OPTIONS="--bind 0.0.0.0:8080"
 ```
 
 Reload SystemD and then restart Peekaboo.
@@ -110,26 +110,7 @@ Reload SystemD and then restart Peekaboo.
 systemctl start peekaboo
 ```
 
-# Setup Go on Mac OS X
-
-```bash
-brew install go
-mkdir ~/go
-export GOPATH=~/go
-export PATH=$GOPATH/bin:$PATH
-go get github.com/constabulary/gb/...
-```
-
-## Build
-
-```bash
-gb build
-sudo bin/peekaboo \
-  --static-dir src/github.com/mickep76/peekaboo/static \
-  --template-dir src/github.com/mickep76/peekaboo/templates
-```
-
-## Install using Brew
+## Install using Brew on Mac OS X
 
 ```bash
 brew tap mickep76/funk-gnarge
@@ -145,21 +126,14 @@ launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.peekaboo.plist
 vi ~/Library/LaunchAgents/homebrew.mxcl.peekaboo.plist
 ```
 
-Add "--bind-addr" to change bind address, defaults to "0.0.0.0". To change port add "--port", defaults to 5050.
+Change port to 8080.
 
 **Example:**
 
 ```
 ...
-    <string>/usr/local/Cellar/peekaboo/0.2.1/bin/peekaboo</string>
-    <string>--static-dir</string>
-    <string>/usr/local/Cellar/peekaboo/0.2.1/peekaboo/static</string>
-    <string>--template-dir</string>
-    <string>/usr/local/Cellar/peekaboo/0.2.1/peekaboo/templates</string>
-    <string>--bind-addr</string>
-    <string>192.168.1.153</string>
-    <string>--port</string>
-    <string>8080</string>
+    <string>--bind</string>
+    <string>0.0.0.0:8080</string>
 ..
 ```
 

@@ -2,6 +2,12 @@
 	"version": 0,
 	"dependencies": [
 		{
+			"importpath": "github.com/docopt/docopt-go",
+			"repository": "https://github.com/docopt/docopt-go",
+			"revision": "784ddc588536785e7299f7272f39101f7faccc3f",
+			"branch": "master"
+		},
+		{
 			"importpath": "github.com/gorilla/context",
 			"repository": "https://github.com/gorilla/context",
 			"revision": "1ea25387ff6f684839d82767c1733ff4d4d15d0a",
@@ -10,25 +16,13 @@
 		{
 			"importpath": "github.com/gorilla/handlers",
 			"repository": "https://github.com/gorilla/handlers",
-			"revision": "ee54c7b44cab12289237fb8631314790076e728b",
+			"revision": "d0f261246491e3a8613039e90764460448dc05f5",
 			"branch": "master"
 		},
 		{
 			"importpath": "github.com/gorilla/mux",
 			"repository": "https://github.com/gorilla/mux",
-			"revision": "acf3be1b335c8ce30b2c8d51300984666f0ceefa",
-			"branch": "master"
-		},
-		{
-			"importpath": "github.com/jessevdk/go-flags",
-			"repository": "https://github.com/jessevdk/go-flags",
-			"revision": "6b9493b3cb60367edd942144879646604089e3f7",
-			"branch": "master"
-		},
-		{
-			"importpath": "github.com/mickep76/hwinfo",
-			"repository": "https://github.com/mickep76/hwinfo",
-			"revision": "f213814d1b5d5bbe15c00f55ed4052944cfdfcc2",
+			"revision": "0eeaf8392f5b04950925b8a69fe70f110fa7cbfc",
 			"branch": "master"
 		}
 	]

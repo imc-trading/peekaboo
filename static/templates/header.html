@@ -1,0 +1,19 @@
+<nav class="navbar navbar-inverse navbar-static-top" ng-controller="osController">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#/"><img class="img-responsive2" src="/img/peekaboo_dark.png"></a>
+    </div>
+    <div>
+      <ul ng-if="os.kernel == 'linux'" class="nav navbar-nav">
+        <li><a href="#/network">Network</a></li>
+        <li><a href="#/storage">Storage</a></li>
+        <li><a href="#/system">System</a></li>
+        <li><a href="#/docker">Docker</a></li>
+      </ul>
+      <ul ng-if="os.kernel == 'darwin'" class="nav navbar-nav">
+        <li><a href="#/network">Network</a></li>
+        <li><a href="#/docker">Docker</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
