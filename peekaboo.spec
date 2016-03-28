@@ -24,15 +24,18 @@ mkdir -p %{buildroot}/var/lib/%{name}
 cp -r %{sources}/static %{buildroot}/var/lib/%{name}
 mkdir -p %{buildroot}/etc/systemd/system
 cp %{sources}/files/%{name}.service %{buildroot}/etc/systemd/system/%{name}.service
+mkdir -p %{buildroot}/etc/init.d
+cp %{sources}/files/%{name}.initd %{buildroot}/etc/init.d/%{name}
 mkdir -p %{buildroot}/etc/sysconfig
 cp %{sources}/files/%{name} %{buildroot}/etc/sysconfig/%{name}
 
 %post
-systemctl daemon-reload
+which systemctl &>/dev/null && systemctl daemon-reload
 
 %files
 %defattr(-,root,root)
 /usr/bin/%{name}
 /var/lib/%{name}
 /etc/systemd/system/%{name}.service
+%(755,-,-) /etc/init.d/%{name}
 %config(noreplace) /etc/sysconfig/%{name}
