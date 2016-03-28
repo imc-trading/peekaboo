@@ -4,13 +4,16 @@
 
 Expose hardware info using a REST API written in Go and a Front-End written in AngularJS.
 
-**FrontEnd:**
+
+## FrontEnd
 
 ```
 http://myserver.example.com:5050
 ```
 
-**JSON endpoints:**
+## BackEnd
+
+### Endpoints
 
 ```
 /api/v1/network/interfaces
@@ -28,6 +31,48 @@ http://myserver.example.com:5050
 /api/v1/docker
 /api/v1/docker/containers
 /api/v1/docker/images
+```
+
+### Options
+
+**envelope**
+
+Include an envelope with error, cache and status information.
+
+```
+?envlope=true
+```
+
+**Example:**
+
+```json
+{
+  "cache": {
+    "lastUpdated": "...",
+    "timeoutSec": 0,
+    "fromCache": false
+  },
+  "data": {
+  },
+  "error": [],
+  "status": 200
+}
+```
+
+**refresh**
+
+Refresh cache.
+
+```
+?refresh=true
+```
+
+**indent**
+
+Don't indent JSON.
+
+```
+?indent=false
 ```
 
 **Example:**
