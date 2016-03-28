@@ -25,15 +25,15 @@ func New() Daemon {
 	return &daemon{
 		data: map[string]interface{}{},
 		cache: map[string]cache{
-			"/system":             {Timeout: 5 * 60}, // 5 min.
-			"/system/os":          {Timeout: 5 * 60}, // 5 min.
-			"/system/cpu":         {Timeout: 5 * 60}, // 5 min.
-			"/system/memory":      {Timeout: 5 * 60}, // 5 min.
-			"/network/interfaces": {Timeout: 5 * 60}, // 5 min.
-			"/network/routes":     {Timeout: 5 * 60}, // 5 min.
-			"/docker":             {Timeout: 5 * 60}, // 5 min.
-			"/docker/containers":  {Timeout: 5 * 60}, // 5 min.
-			"/docker/images":      {Timeout: 5 * 60}, // 5 min.
+			apiURL + "/system":             {Timeout: 5 * 60}, // 5 min.
+			apiURL + "/system/os":          {Timeout: 5 * 60}, // 5 min.
+			apiURL + "/system/cpu":         {Timeout: 5 * 60}, // 5 min.
+			apiURL + "/system/memory":      {Timeout: 5 * 60}, // 5 min.
+			apiURL + "/network/interfaces": {Timeout: 5 * 60}, // 5 min.
+			apiURL + "/network/routes":     {Timeout: 5 * 60}, // 5 min.
+			apiURL + "/docker":             {Timeout: 5 * 60}, // 5 min.
+			apiURL + "/docker/containers":  {Timeout: 5 * 60}, // 5 min.
+			apiURL + "/docker/images":      {Timeout: 5 * 60}, // 5 min.
 		},
 		router: mux.NewRouter(),
 	}

@@ -31,21 +31,21 @@ func New() Daemon {
 	return &daemon{
 		data: map[string]interface{}{},
 		cache: map[string]cache{
-			"/system":               {Timeout: 5 * 60},  // 5 min.
-			"/system/os":            {Timeout: 5 * 60},  // 5 min.
-			"/system/cpu":           {Timeout: 5 * 60},  // 5 min.
-			"/system/memory":        {Timeout: 5 * 60},  // 5 min.
-			"/system/sysctls":       {Timeout: 5 * 60},  // 5 min.
-			"/network/interfaces":   {Timeout: 5 * 60},  // 5 min.
-			"/network/routes":       {Timeout: 5 * 60},  // 5 min.
-			"/storage/disks":        {Timeout: 5 * 60},  // 5 min.
-			"/storage/mounts":       {Timeout: 5 * 60},  // 5 min.
-			"/storage/lvm/physvols": {Timeout: 15 * 60}, // 15 min.
-			"/storage/lvm/logvols":  {Timeout: 15 * 60}, // 15 min.
-			"/storage/lvm/volgrps":  {Timeout: 15 * 60}, // 15 min.
-			"/docker":               {Timeout: 5 * 60},  // 5 min.
-			"/docker/containers":    {Timeout: 5 * 60},  // 5 min.
-			"/docker/images":        {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/system":               {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/system/os":            {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/system/cpu":           {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/system/memory":        {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/system/sysctls":       {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/network/interfaces":   {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/network/routes":       {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/storage/disks":        {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/storage/mounts":       {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/storage/lvm/physvols": {Timeout: 15 * 60}, // 15 min.
+			apiURL + "/storage/lvm/logvols":  {Timeout: 15 * 60}, // 15 min.
+			apiURL + "/storage/lvm/volgrps":  {Timeout: 15 * 60}, // 15 min.
+			apiURL + "/docker":               {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/docker/containers":    {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/docker/images":        {Timeout: 5 * 60},  // 5 min.
 		},
 		router: mux.NewRouter(),
 	}
