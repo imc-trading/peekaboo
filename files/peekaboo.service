@@ -7,7 +7,7 @@ Type=simple
 EnvironmentFile=/etc/sysconfig/peekaboo
 User=root
 Group=root
-ExecStart=/usr/bin/peekaboo -s /var/lib/peekaboo/static $OPTIONS
+ExecStart=/usr/bin/peekaboo daemon --debug --static /var/lib/peekaboo/static $OPTIONS
 
 [Install]
 WantedBy=multi-user.target
