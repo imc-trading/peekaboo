@@ -33,6 +33,22 @@ http://myserver.example.com:5050
 /api/v1/docker/images
 ```
 
+### Methods
+
+**GET**
+
+```
+curl -i -X GET http://<host>:<port>/api/v1/system?envelope=true
+```
+
+**PURGE**
+
+Purge cache i.e. next get request will refresh the cache.
+
+```
+curl -i -X PURGE http://<host>:<port>/api/v1/system?envelope=true
+```
+
 ### Options
 
 **envelope**
