@@ -1,1 +1,5 @@
+# /etc/sysconfig/peekaboo
+
+# Modify these options if you want to change the port,
+# e.g. OPTIONS="--bind 0.0.0.0:8080"
 OPTIONS=
