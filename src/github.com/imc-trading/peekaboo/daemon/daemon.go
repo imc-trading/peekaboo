@@ -70,16 +70,17 @@ func (d *daemon) funcAPIRoute(endpoint string, getHwType func() (interface{}, er
 func (d *daemon) addAPIRoute(endpoint string, getHwType func() (interface{}, error)) {
 	log.Infof("Add API endpoint: %s method: GET", endpoint)
 	d.router.HandleFunc(endpoint, d.funcAPIRoute(endpoint, getHwType)).Methods("GET")
+
+	log.Infof("Add API purge cache endpoint: %s method: PURGE", endpoint)
+	d.router.HandleFunc(endpoint, d.funcAPIPurgeRoute(endpoint, getHwType)).Methods("PURGE")
 }
 
-/*
-func (d *daemon) addAPIPurgeRoute(endpoint string, getHwType func() (interface{}, error)) {
-    log.Infof("Add API purge cache endpoint: %s method: PURGE", endpoint)
-    d.router.HandleFunc(endpoint, d.funcAPIRoute(endpoint).Methods("PURGE")
+func (d *daemon) funcAPIPurgeRoute(endpoint string, getHwType func() (interface{}, error)) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		d.data[endpoint] = map[string]interface{}{}
+		d.cache[endpoint] = cache{
+			Timeout: d.cache[endpoint].Timeout,
+		}
+		writeJSON(w, r, d.data[endpoint], d.cache[endpoint])
+	}
 }
-
-func apiPurgeCache(forceUpdate func() error) func(w http.ResponseWriter, r *http.Request) {
-    return func(w http.ResponseWriter, r *http.Request) {
-    }
-}
-*/
