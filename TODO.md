@@ -1,0 +1,10 @@
+- TLS 1.2+
+- Split daemon in root/ non-root using a socket for communication or similar solution to minimize security risks
+- Support for plugins
+- Configuration file for endpoints/ timeouts, hide/ show
+- Toggle to enable/ hide columns in Front-end (responsive tables?)
+- Button for horizontal table in Front-end
+- Refresh cache button in Front-end
+- Endpoint for enabled plugins "/plugins"
+- Front-end check if a plugin is enabled otherwise hide the page
+- Improve documentation
