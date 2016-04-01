@@ -8,6 +8,7 @@ import (
 
 func writeJSON(w http.ResponseWriter, r *http.Request, data interface{}, cache interface{}) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
 
 	if strings.ToLower(r.URL.Query().Get("envelope")) == "true" {
@@ -26,6 +27,7 @@ func writeJSON(w http.ResponseWriter, r *http.Request, data interface{}, cache i
 
 func writeJSONErrors(w http.ResponseWriter, r *http.Request, data interface{}, errors []string, code int) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(code)
 
 	if strings.ToLower(r.URL.Query().Get("envelope")) == "true" {
