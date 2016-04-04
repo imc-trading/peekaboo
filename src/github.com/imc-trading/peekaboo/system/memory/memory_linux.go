@@ -91,6 +91,10 @@ type Memory struct {
 	DirectMap4kKB       *int     `json:"directMap4kKB,omitempty"`
 	DirectMap2MKB       *int     `json:"directMap2mKB,omitempty"`
 	DirectMap1GKB       *int     `json:"directMap1gKB,omitempty"`
+	CapacityFreeKB      *int     `json:"capacityFreeKB,omitempty"`
+	CapacityUsedKB      *int     `json:"capacityUsedKB,omitempty"`
+	CapacityFreeGB      *float32 `json:"capacityFreeGB,omitempty"`
+	CapacityUsedGB      *float32 `json:"capacityUsedGB,omitempty"`
 }
 
 func strToIntPtr(m map[string]string, f string) (*int, *float32, error) {
@@ -378,6 +382,21 @@ func Get() (Memory, error) {
 	m.DirectMap1GKB, _, err = strToIntPtr(o, "DirectMap1G")
 	if err != nil {
 		return Memory{}, err
+	}
+
+	if m.CommittedASKB != nil && m.HugePageSizeKB != nil && m.HugePagesTotal != nil && m.TotalKB != nil {
+		var usedKB, freeKB int
+		var usedGB, freeGB float32
+
+		usedKB = *m.CommittedASKB + *m.HugePageSizeKB**m.HugePagesTotal
+		usedGB = float32(usedKB) / 1024 / 1024
+		m.CapacityUsedKB = &usedKB
+		m.CapacityUsedGB = &usedGB
+
+		freeKB = *m.TotalKB - *m.CapacityUsedKB
+		freeGB = float32(freeKB) / 1024 / 1024
+		m.CapacityFreeKB = &freeKB
+		m.CapacityFreeGB = &freeGB
 	}
 
 	return m, nil

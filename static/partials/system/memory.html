@@ -1,31 +1,51 @@
-<table ng-controller="memoryController" st-table="displayedMemory" st-safe-src="memory" class="table table-striped sortable">
-  <thead>
-    <tr>
-      <th colspan="2" class="container">
-        <div class="form-group">
-          <div class="input-group">
-            <div class="input-group-addon"><i class="fa fa-search"></i></div>
-            <input st-search="" type="text" class="form-control" placeholder="Search...">
-          </div>
-        </div>
-      </th>
-    </tr>
-    <tr>
-      <th st-sort="key">Key</th>
-      <th st-sort="value">Value</th>
-    </tr>
-  </thead>
-  <tbody ng-repeat="mem in displayedMemory">
-    <tr ng-repeat="(key, value) in mem">
-      <td>{{ key }}</td>
-      <td>{{ value }}</td>
-    </tr>
-  </tbody>
-  <tfoot>
-    <tr>
-      <td colspan="2" class="text-center">
-        <div st-pagination="" st-items-by-page="10"></div>
-      </td>
-    </tr>
-  </tfoot>
-</table>
+<fieldset>
+  <legend>General</legend>
+  <dl class="dl-horizontal" ng-controller="memoryController">
+    <dt>Total</dt>
+    <dd>{{ memory.totalGB | number:2 }} GB</dd>
+    <dt>Free</dt>
+    <dd>{{ memory.freeGB | number:2 }} GB</dd>
+    <dt>Available</dt>
+    <dd>{{ memory.availableGB | number:2 }} GB</dd>
+    <dt>Buffers</dt>
+    <dd>{{ memory.availableGB | number:2 }} GB</dd>
+    <dt>Cached</dt>
+    <dd>{{ memory.cachedGB | number:2 }} GB</dd>
+    <dt>Capacity Used</dt>
+    <dd>{{ memory.capacityUsedGB | number:2 }} KB</dt>
+    <dt>Capacity Free</dt>
+    <dd>{{ memory.capacityFreeGB | number:2 }} KB</dt>
+  </dl>
+</fieldset>
+
+<fieldset>
+  <legend>Swap</legend>
+  <dl class="dl-horizontal" ng-controller="memoryController">
+    <dt>Swap Total</dt>
+    <dd>{{ memory.swapTotalGB | number:2 }} GB</dt>
+    <dt>Swap Free</dt>
+    <dd>{{ memory.swapFreeGB | number:2 }} GB</dt>
+    <dt>Swap Cached</dt>
+    <dd>{{ memory.swapCachedGB | number:2 }} GB</dd>
+  </dl>
+</fieldset>
+
+<fieldset>
+  <legend>Huge Pages</legend>
+  <dl class="dl-horizontal" ng-controller="memoryController">
+    <dt>Page Tables</dt>
+    <dd>{{ memory.pageTablesKB | number:2 }} KB</dt>
+    <dt>Anon. Huge Pages</dt>
+    <dd>{{ memory.anonHugePagesKB | number:2 }} KB</dt>
+    <dt>Huge Pages Total</dt>
+    <dd>{{ memory.hugePagesTotal }}</dt>
+    <dt>Huge Pages Free</dt>
+    <dd>{{ memory.hugePagesFree }}</dt>
+    <dt>Huge Pages Free</dt>
+    <dd>{{ memory.hugePagesRsvd }}</dt>
+    <dt>Huge Pages Surp.</dt>
+    <dd>{{ memory.hugePagesSurp }}</dt>
+    <dt>Huge Pages Size</dt>
+    <dd>{{ memory.hugePagesSizeKB | number:2 }} KB</dt>
+  </dl>
+</fieldset>
