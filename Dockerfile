@@ -17,6 +17,9 @@ RUN set -ex ;\
     mv ${GOPATH}/bin/gb-vendor /usr/local/bin/gb-vendor ;\
     mkdir ${PROJECT}
 
+COPY ipmi /usr/loca/bin/ipmi
+RUN chmod +X /usr/loca/bin/ipmi
+
 EXPOSE 5050
 
 WORKDIR ${PROJECT}

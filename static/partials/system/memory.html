@@ -8,13 +8,13 @@
     <dt>Available</dt>
     <dd>{{ memory.availableGB | number:2 }} GB</dd>
     <dt>Buffers</dt>
-    <dd>{{ memory.availableGB | number:2 }} GB</dd>
+    <dd>{{ memory.buffersGB | number:2 }} GB</dd>
     <dt>Cached</dt>
     <dd>{{ memory.cachedGB | number:2 }} GB</dd>
     <dt>Capacity Used</dt>
-    <dd>{{ memory.capacityUsedGB | number:2 }} KB</dt>
+    <dd>{{ memory.capacityUsedGB | number:2 }} GB</dt>
     <dt>Capacity Free</dt>
-    <dd>{{ memory.capacityFreeGB | number:2 }} KB</dt>
+    <dd>{{ memory.capacityFreeGB | number:2 }} GB</dt>
   </dl>
 </fieldset>
 
@@ -34,9 +34,9 @@
   <legend>Huge Pages</legend>
   <dl class="dl-horizontal" ng-controller="memoryController">
     <dt>Page Tables</dt>
-    <dd>{{ memory.pageTablesKB | number:2 }} KB</dt>
+    <dd>{{ memory.pageTablesKB }} KB</dt>
     <dt>Anon. Huge Pages</dt>
-    <dd>{{ memory.anonHugePagesKB | number:2 }} KB</dt>
+    <dd>{{ memory.anonHugePagesGB | number:2 }} GB</dt>
     <dt>Huge Pages Total</dt>
     <dd>{{ memory.hugePagesTotal }}</dt>
     <dt>Huge Pages Free</dt>
@@ -46,6 +46,6 @@
     <dt>Huge Pages Surp.</dt>
     <dd>{{ memory.hugePagesSurp }}</dt>
     <dt>Huge Pages Size</dt>
-    <dd>{{ memory.hugePagesSizeKB | number:2 }} KB</dt>
+    <dd>{{ memory.hugePagesSizeKB }} KB</dt>
   </dl>
 </fieldset>

@@ -197,3 +197,13 @@ app.controller('containersController', [ '$scope', '$resource', function($scope,
 //    console.log (value);
   });
 } ]);
+
+// Containers
+app.controller('ipmiController', [ '$scope', '$resource', function($scope, $resource) {
+  var resource = $resource('/api/system/ipmi');
+
+  resource.get().$promise.then(function(value) {
+    $scope.ipmi = value;
+    console.log (value);
+  });
+} ]);

@@ -1,0 +1,56 @@
+#!/bin/bash
+
+cat << EOF
+SEL              | Not Readable      | ns
+Intrusion        | 0x00              | ok
+Fan1A            | 5040 RPM          | ok
+Fan2A            | 4920 RPM          | ok
+Fan3A            | 5040 RPM          | ok
+Fan4A            | 4920 RPM          | ok
+Fan5A            | 4920 RPM          | ok
+Fan6A            | 5160 RPM          | ok
+Inlet Temp       | 22 degrees C      | ok
+CPU Usage        | 0 percent         | ok
+IO Usage         | 0 percent         | ok
+MEM Usage        | 0 percent         | ok
+SYS Usage        | 0 percent         | ok
+Exhaust Temp     | 36 degrees C      | ok
+Temp             | 52 degrees C      | ok
+Temp             | 48 degrees C      | ok
+OS Watchdog      | 0x00              | ok
+VCORE PG         | 0x00              | ok
+VCORE PG         | 0x00              | ok
+3.3V PG          | 0x00              | ok
+5V AUX PG        | 0x00              | ok
+USB Cable Pres   | 0x00              | ok
+VGA Cable Pres   | 0x00              | ok
+Dedicated NIC    | 0x00              | ok
+Presence         | 0x00              | ok
+Presence         | 0x00              | ok
+Presence         | 0x00              | ok
+M23 VPP PG       | 0x00              | ok
+M23 VPP PG       | 0x00              | ok
+2.5V AUX PG      | 0x00              | ok
+1.05V PG         | 0x00              | ok
+M23 VDDQ PG      | 0x00              | ok
+M23 VTT PG       | 0x00              | ok
+5V SWITCH PG     | 0x00              | ok
+Presence         | 0x00              | ok
+DIMM PG          | 0x00              | ok
+VCCIO PG         | 0x00              | ok
+M01 VDDQ PG      | 0x00              | ok
+M01 VDDQ PG      | 0x00              | ok
+M23 VTT PG       | 0x00              | ok
+M01 VTT PG       | 0x00              | ok
+NDC PG           | 0x00              | ok
+LCD Cable Pres   | 0x00              | ok
+M01 VPP PG       | 0x00              | ok
+M01 VPP PG       | 0x00              | ok
+M23 VDDQ PG      | 0x00              | ok
+Presence         | 0x00              | ok
+Presence         | 0x00              | ok
+Status           | 0x00              | ok
+Status           | 0x00              | ok
+Fan Redundancy   | 0x00              | ok
+Riser Config Err | 0x00              | ok
+EOF
