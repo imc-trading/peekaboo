@@ -1,9 +1,14 @@
 <table ng-controller="volGrpsController" st-table="displayedVolGrps" st-safe-src="volGrps" class="table table-striped fixed sortable">
   <thead>
-   <tr>
-      <td colspan="4" class="text-left">
-        <ng-include src="'partials/st_search.html'"></ng-include>
-      </td>
+    <tr>
+      <th colspan="4" class="container">
+        <div class="form-group">
+          <div class="input-group">
+            <div class="input-group-addon"><i class="fa fa-search"></i></div>
+            <input st-search="" type="text" class="form-control" placeholder="Search...">
+          </div>
+        </div>
+      </th>
     </tr>
     <tr>
       <th st-sort="name">Name</th>
@@ -13,7 +18,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="volGrp in displayedVolGrps">
+    <tr ng-repeat="logVol in displayedLogVols">
       <td>{{ volGrp.name }}</td>
       <td>{{ volGrp.attr }}</td>
       <td>{{ volGrp.sizeGB | number:2 }}</td>

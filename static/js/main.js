@@ -50,7 +50,7 @@ app.filter('replace', function () {
 
 // CPU
 app.controller('cpuController', [ '$scope', '$resource', function($scope, $resource) {
-  var resource = $resource('/api/v1/system/cpu');
+  var resource = $resource('/api/system/cpu');
 
   resource.get().$promise.then(function(value) {
     $scope.cpu = value;
@@ -60,7 +60,7 @@ app.controller('cpuController', [ '$scope', '$resource', function($scope, $resou
 
 // Memory
 app.controller('memoryController', [ '$scope', '$resource', function($scope, $resource) {
-  var resource = $resource('/api/v1/system/memory');
+  var resource = $resource('/api/system/memory');
 
   resource.get().$promise.then(function(value) {
     $scope.memory = value;
@@ -70,7 +70,7 @@ app.controller('memoryController', [ '$scope', '$resource', function($scope, $re
 
 // System
 app.controller('systemController', [ '$scope', '$resource', function($scope, $resource) {
-  var resource = $resource('/api/v1/system');
+  var resource = $resource('/api/system');
 
   resource.get().$promise.then(function(value) {
     $scope.system = value;
@@ -80,7 +80,7 @@ app.controller('systemController', [ '$scope', '$resource', function($scope, $re
 
 // OS
 app.controller('osController', [ '$scope', '$resource', function($scope, $resource) {
-  var resource = $resource('/api/v1/system/os');
+  var resource = $resource('/api/system/os');
 
   resource.get().$promise.then(function(value) {
     $scope.os = value;
@@ -90,7 +90,7 @@ app.controller('osController', [ '$scope', '$resource', function($scope, $resour
 
 // Interfaces
 app.controller('interfacesController', [ '$scope', '$resource', function($scope, $resource) {
-  var resource = $resource('/api/v1/network/interfaces');
+  var resource = $resource('/api/network/interfaces');
 
   resource.query().$promise.then(function(value) {
     $scope.interfaces = value;
@@ -100,7 +100,7 @@ app.controller('interfacesController', [ '$scope', '$resource', function($scope,
 
 // Routes
 app.controller('routesController', [ '$scope', '$resource', function($scope, $resource) {
-  var resource = $resource('/api/v1/network/routes');
+  var resource = $resource('/api/network/routes');
 
   resource.query().$promise.then(function(value) {
     $scope.routes = value;
@@ -110,7 +110,7 @@ app.controller('routesController', [ '$scope', '$resource', function($scope, $re
 
 // Disks
 app.controller('disksController', [ '$scope', '$resource', function($scope, $resource) {
-  var resource = $resource('/api/v1/storage/disks');
+  var resource = $resource('/api/storage/disks');
 
   resource.query().$promise.then(function(value) {
     $scope.disks = value;
@@ -120,7 +120,7 @@ app.controller('disksController', [ '$scope', '$resource', function($scope, $res
 
 // Mounts
 app.controller('mountsController', [ '$scope', '$resource', function($scope, $resource) {
-  var resource = $resource('/api/v1/storage/mounts');
+  var resource = $resource('/api/storage/mounts');
 
   resource.query().$promise.then(function(value) {
     $scope.mounts = value;
@@ -130,7 +130,7 @@ app.controller('mountsController', [ '$scope', '$resource', function($scope, $re
 
 // LVM Physical Volumes
 app.controller('physVolsController', [ '$scope', '$resource', function($scope, $resource) {
-  var resource = $resource('/api/v1/storage/lvm/physvols');
+  var resource = $resource('/api/storage/lvm/physvols');
 
   resource.query().$promise.then(function(value) {
     $scope.physVols = value;
@@ -140,7 +140,7 @@ app.controller('physVolsController', [ '$scope', '$resource', function($scope, $
 
 // LVM Logical Volumes
 app.controller('logVolsController', [ '$scope', '$resource', function($scope, $resource) {
-  var resource = $resource('/api/v1/storage/lvm/logvols');
+  var resource = $resource('/api/storage/lvm/logvols');
 
   resource.query().$promise.then(function(value) {
     $scope.logVols = value;
@@ -150,7 +150,7 @@ app.controller('logVolsController', [ '$scope', '$resource', function($scope, $r
 
 // LVM Volume Groups
 app.controller('volGrpsController', [ '$scope', '$resource', function($scope, $resource) {
-  var resource = $resource('/api/v1/storage/lvm/volgrps');
+  var resource = $resource('/api/storage/lvm/volgrps');
 
   resource.query().$promise.then(function(value) {
     $scope.volGrps = value;
@@ -160,7 +160,7 @@ app.controller('volGrpsController', [ '$scope', '$resource', function($scope, $r
 
 // Sysctls
 app.controller('sysctlsController', [ '$scope', '$resource', function($scope, $resource) {
-  var resource = $resource('/api/v1/system/sysctls');
+  var resource = $resource('/api/system/sysctls');
 
   resource.query().$promise.then(function(value) {
     $scope.sysctls = value;
@@ -170,7 +170,7 @@ app.controller('sysctlsController', [ '$scope', '$resource', function($scope, $r
 
 // Docker
 app.controller('dockerController', [ '$scope', '$resource', function($scope, $resource) {
-  var resource = $resource('/api/v1/docker');
+  var resource = $resource('/api/docker');
 
   resource.get().$promise.then(function(value) {
     $scope.docker = value;
@@ -180,7 +180,7 @@ app.controller('dockerController', [ '$scope', '$resource', function($scope, $re
 
 // Images
 app.controller('imagesController', [ '$scope', '$resource', function($scope, $resource) {
-  var resource = $resource('/api/v1/docker/images');
+  var resource = $resource('/api/docker/images');
 
   resource.query().$promise.then(function(value) {
     $scope.images = value;
@@ -190,7 +190,7 @@ app.controller('imagesController', [ '$scope', '$resource', function($scope, $re
 
 // Containers
 app.controller('containersController', [ '$scope', '$resource', function($scope, $resource) {
-  var resource = $resource('/api/v1/docker/containers');
+  var resource = $resource('/api/docker/containers');
 
   resource.query().$promise.then(function(value) {
     $scope.containers = value;

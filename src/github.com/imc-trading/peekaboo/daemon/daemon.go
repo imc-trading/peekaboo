@@ -10,7 +10,7 @@ import (
 	"github.com/imc-trading/peekaboo/log"
 )
 
-var apiURL = "/api/v1"
+var apiURL = "/api"
 
 type Daemon interface {
 	Run(string, string) error

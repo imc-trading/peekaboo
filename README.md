@@ -16,21 +16,21 @@ http://myserver.example.com:5050
 ### Endpoints
 
 ```
-/api/v1/network/interfaces
-/api/v1/network/routes
-/api/v1/system
-/api/v1/system/os
-/api/v1/system/cpu
-/api/v1/system/memory
-/api/v1/system/sysctls (Linux only)
-/api/v1/storage/disks (Linux only)
-/api/v1/storage/mounts (Linux only)
-/api/v1/storage/lvm/physvols (Linux only)
-/api/v1/storage/lvm/logvols (Linux only)
-/api/v1/storage/lvm/volgrps (Linux only)
-/api/v1/docker
-/api/v1/docker/containers
-/api/v1/docker/images
+/api/network/interfaces
+/api/network/routes
+/api/system
+/api/system/os
+/api/system/cpu
+/api/system/memory
+/api/system/sysctls (Linux only)
+/api/storage/disks (Linux only)
+/api/storage/mounts (Linux only)
+/api/storage/lvm/physvols (Linux only)
+/api/storage/lvm/logvols (Linux only)
+/api/storage/lvm/volgrps (Linux only)
+/api/docker
+/api/docker/containers
+/api/docker/images
 ```
 
 ### Methods
@@ -38,7 +38,7 @@ http://myserver.example.com:5050
 **GET**
 
 ```
-curl -i -X GET http://<host>:<port>/api/v1/system?envelope=true
+curl -i -X GET http://<host>:<port>/api/system?envelope=true
 ```
 
 **PURGE**
@@ -46,7 +46,7 @@ curl -i -X GET http://<host>:<port>/api/v1/system?envelope=true
 Purge cache i.e. next get request will refresh the cache.
 
 ```
-curl -i -X PURGE http://<host>:<port>/api/v1/system?envelope=true
+curl -i -X PURGE http://<host>:<port>/api/system?envelope=true
 ```
 
 ### Options
@@ -94,7 +94,7 @@ Don't indent JSON.
 **Example:**
 
 ```bash
-curl http://myserver.example.com:5050/api/v1/system
+curl http://myserver.example.com:5050/api/system
 ```
 
 # Usage

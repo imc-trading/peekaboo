@@ -44,8 +44,3 @@
 .sortable th {
   cursor: pointer;
 }
-
-.fixed {
-  overflow: hidden;
-  table-layout:fixed;
-}

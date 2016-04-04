@@ -1,9 +1,14 @@
-<table ng-controller="disksController" st-table="displayedDisks" st-safe-src="disks" class="table table-striped fixed sortable">
+<table ng-controller="disksController" st-table="displayedDisks" st-safe-src="disks" class="table table-striped sortable">
   <thead>
-   <tr>
-      <td colspan="3" class="text-left">
-        <ng-include src="'partials/st_search.html'"></ng-include>
-      </td>
+    <tr>
+      <th colspan="3" class="container">
+        <div class="form-group">
+          <div class="input-group">
+            <div class="input-group-addon"><i class="fa fa-search"></i></div>
+            <input st-search="" type="text" class="form-control" placeholder="Search...">
+          </div>
+        </div>
+      </th>
     </tr>
     <tr>
       <th st-range="30" st-sort="device">Device</th>
