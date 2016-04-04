@@ -1,0 +1,31 @@
+<table ng-controller="memoryController" st-table="displayedMemory" st-safe-src="memory" class="table table-striped sortable">
+  <thead>
+    <tr>
+      <th colspan="2" class="container">
+        <div class="form-group">
+          <div class="input-group">
+            <div class="input-group-addon"><i class="fa fa-search"></i></div>
+            <input st-search="" type="text" class="form-control" placeholder="Search...">
+          </div>
+        </div>
+      </th>
+    </tr>
+    <tr>
+      <th st-sort="key">Key</th>
+      <th st-sort="value">Value</th>
+    </tr>
+  </thead>
+  <tbody ng-repeat="mem in displayedMemory">
+    <tr ng-repeat="(key, value) in mem">
+      <td>{{ key }}</td>
+      <td>{{ value }}</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="2" class="text-center">
+        <div st-pagination="" st-items-by-page="10"></div>
+      </td>
+    </tr>
+  </tfoot>
+</table>
