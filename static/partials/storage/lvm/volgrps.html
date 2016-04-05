@@ -1,4 +1,4 @@
-<table ng-controller="volGrpsController" st-table="displayedVolGrps" st-safe-src="volGrps" class="table table-striped fixed sortable">
+<table ng-controller="volGrpsController" st-table="displayedVolGrps" st-safe-src="volGrps" class="table table-striped sortable">
   <thead>
     <tr>
       <th colspan="4" class="container">
@@ -18,7 +18,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="logVol in displayedLogVols">
+    <tr ng-repeat="volGrp in displayedVolGrps">
       <td>{{ volGrp.name }}</td>
       <td>{{ volGrp.attr }}</td>
       <td>{{ volGrp.sizeGB | number:2 }}</td>

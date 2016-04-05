@@ -10,14 +10,14 @@ import (
 )
 
 type IPMI struct {
-	Fans        Fans     `json:"fans"`
-	InletTemp   *int     `json:"inletTemp,omitempty"`
-	ExhaustTemp *int     `json:"exhaustTemp,omitempty"`
-	Current1    *float32 `json:"current1Amps,omitempty"`
-	Current2    *float32 `json:"current2Amps,omitempty"`
-	Voltage1    *int     `json:"voltage1Volts,omitempty"`
-	Voltage2    *int     `json:"voltage2Volts,omitempty"`
-	PowerCons   *int     `json:"powerConsWatts,omitempty"`
+	Fans             Fans     `json:"fans"`
+	InletTempDegrC   *int     `json:"inletTempDegrC,omitempty"`
+	ExhaustTempDegrC *int     `json:"exhaustTempDegrC,omitempty"`
+	Current1         *float32 `json:"current1Amps,omitempty"`
+	Current2         *float32 `json:"current2Amps,omitempty"`
+	Voltage1         *int     `json:"voltage1Volts,omitempty"`
+	Voltage2         *int     `json:"voltage2Volts,omitempty"`
+	PowerCons        *int     `json:"powerConsWatts,omitempty"`
 }
 
 type Fans []Fan
@@ -57,7 +57,7 @@ func strToFloat32Ptr(m map[string]string, f string) (*float32, error) {
 func Get() (IPMI, error) {
 	i := IPMI{}
 
-	m, err := parse.ExecRegexpMap("ipmi", []string{"sdr"}, "\\|", "\\|\\sok")
+	m, err := parse.ExecRegexpMap("ipmitool", []string{"sdr"}, "\\|", "\\|\\sok")
 	if err != nil {
 		return IPMI{}, err
 	}
@@ -102,6 +102,16 @@ func Get() (IPMI, error) {
 	}
 
 	i.PowerCons, err = strToIntPtr(m, "Pwr Consumption")
+	if err != nil {
+		return IPMI{}, err
+	}
+
+	i.InletTempDegrC, err = strToIntPtr(m, "Inlet Temp")
+	if err != nil {
+		return IPMI{}, err
+	}
+
+	i.ExhaustTempDegrC, err = strToIntPtr(m, "Exhaust Temp")
 	if err != nil {
 		return IPMI{}, err
 	}

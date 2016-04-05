@@ -28,9 +28,14 @@ func Get() (LogVols, error) {
 		return LogVols{}, errors.New("command doesn't exist: lvs")
 	}
 
-	o, err := exec.Command("lvs", "--units", "B", "--readonly").Output()
+	var o []byte
+
+	o, err = exec.Command("lvs", "--units", "B", "--readonly").Output()
 	if err != nil {
-		return LogVols{}, err
+		o, err = exec.Command("lvs", "--units", "B").Output()
+		if err != nil {
+			return LogVols{}, err
+		}
 	}
 
 	for c, line := range strings.Split(string(o), "\n") {

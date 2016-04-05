@@ -32,9 +32,14 @@ func Get() (PhysVols, error) {
 		return PhysVols{}, errors.New("command doesn't exist: pvs")
 	}
 
-	o, err := exec.Command("pvs", "--units", "B", "--readonly").Output()
+	var o []byte
+
+	o, err = exec.Command("pvs", "--units", "B", "--readonly").Output()
 	if err != nil {
-		return PhysVols{}, err
+		o, err = exec.Command("pvs", "--units", "B").Output()
+		if err != nil {
+			return PhysVols{}, err
+		}
 	}
 
 	for c, line := range strings.Split(string(o), "\n") {

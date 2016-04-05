@@ -30,9 +30,14 @@ func Get() (VolGrps, error) {
 		return VolGrps{}, errors.New("command doesn't exist: vgs")
 	}
 
-	o, err := exec.Command("vgs", "--units", "B", "--readonly").Output()
+	var o []byte
+
+	o, err = exec.Command("vgs", "--units", "B", "--readonly").Output()
 	if err != nil {
-		return VolGrps{}, err
+		o, err = exec.Command("vgs", "--units", "B").Output()
+		if err != nil {
+			return VolGrps{}, err
+		}
 	}
 
 	for c, line := range strings.Split(string(o), "\n") {
