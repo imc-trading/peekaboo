@@ -11,6 +11,10 @@ Expose hardware info using a REST API written in Go and a Front-End written in A
 http://myserver.example.com:5050
 ```
 
+<p align="center">
+  <img src="img/screenshoot.png" width="50%">
+</p>
+
 ## BackEnd
 
 ### Endpoints
