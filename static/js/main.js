@@ -17,11 +17,28 @@ var app = angular.module('peekaboo', [
 
 app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
-    .when("/", {templateUrl: "partials/dashboard.html", controller: "PageCtrl"})
-    .when("/network", {templateUrl: "partials/network.html", controller: "PageCtrl"})
-    .when("/storage", {templateUrl: "partials/storage.html", controller: "PageCtrl"})
-    .when("/system", {templateUrl: "partials/system.html", controller: "PageCtrl"})
-    .when("/docker", {templateUrl: "partials/docker.html", controller: "PageCtrl"})
+    .when("/", {templateUrl: "partials/dashboard.html", controller: "PageCtrl", activeTab: "dashboard"})
+
+    .when("/network", {templateUrl: "partials/network/interfaces.html", controller: "PageCtrl", activeTab: "network", sideActiveTab: "interfaces"})
+    .when("/network/interfaces", {templateUrl: "partials/network/interfaces.html", controller: "PageCtrl", activeTab: "network", sideActiveTab: "interfaces"})
+    .when("/network/routes", {templateUrl: "partials/network/routes_linux.html", controller: "PageCtrl", activeTab: "network", sideActiveTab: "routes"})
+
+    .when("/storage", {templateUrl: "partials/storage/disks.html", controller: "PageCtrl", activeTab: "storage", sideActiveTab: "disks"})
+    .when("/storage/disks", {templateUrl: "partials/storage/disks.html", controller: "PageCtrl", activeTab: "storage", sideActiveTab: "disks"})
+    .when("/storage/lvm/physvols", {templateUrl: "partials/storage/lvm/physvols.html", controller: "PageCtrl", activeTab: "storage", sideActiveTab: "lvm/physvols"})
+    .when("/storage/lvm/logvols", {templateUrl: "partials/storage/lvm/logvols.html", controller: "PageCtrl", activeTab: "storage", sideActiveTab: "lvm/logvols"})
+    .when("/storage/lvm/volgrps", {templateUrl: "partials/storage/lvm/volgrps.html", controller: "PageCtrl", activeTab: "storage", sideActiveTab: "lvm/volgrps"})
+    .when("/storage/mounts", {templateUrl: "partials/storage/mounts.html", controller: "PageCtrl", activeTab: "storage", sideActiveTab: "mounts"})
+
+    .when("/system", {templateUrl: "partials/system/sysctl.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "sysctl"})
+    .when("/system/sysctl", {templateUrl: "partials/system/sysctl.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "sysctl"})
+    .when("/system/memory", {templateUrl: "partials/system/memory.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "memory"})
+    .when("/system/ipmi", {templateUrl: "partials/system/ipmi.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "ipmi"})
+
+    .when("/docker", {templateUrl: "partials/docker/general.html", controller: "PageCtrl", activeTab: "docker", sideActiveTab: "general"})
+    .when("/docker/general", {templateUrl: "partials/docker/general.html", controller: "PageCtrl", activeTab: "docker", sideActiveTab: "general"})
+    .when("/docker/images", {templateUrl: "partials/docker/images.html", controller: "PageCtrl", activeTab: "docker", sideActiveTab: "images"})
+    .when("/docker/containers", {templateUrl: "partials/docker/containers.html", controller: "PageCtrl", activeTab: "docker", sideActiveTab: "containers"})
 }]);
 
 /**
@@ -32,6 +49,11 @@ app.controller('PageCtrl', ['Flash', function(Flash) {
   console.log("Page Controller reporting for duty.");
   Flash.clear();
 }]);
+
+app.controller('PageCtrl', function ($scope, $route) {
+  $scope.activeTab = $route.current.activeTab;
+  $scope.sideActiveTab = $route.current.sideActiveTab;
+});
 
 /*
  * Filters

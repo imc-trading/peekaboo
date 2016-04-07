@@ -1,3 +1,20 @@
+<!-- Header -->
+<div ng-include='"templates/header.html"'></div>
+
+<!-- Container -->
+<div class="container">
+
+<flash-message duration="4" show-close="true" on-dismiss="myCallback(flash);"></flash-message>
+
+
+<div class="container-fluid">
+  <div class="row">
+
+    <!-- Sidebar -->
+    <div ng-include='"partials/system/sidebar.html"'></div>
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
 <fieldset>
   <dl class="dl-horizontal" ng-controller="ipmiController">
     <dt>Power Consumption</dt>
@@ -38,3 +55,5 @@
     </div>
   </dl>
 </fieldset>
+
+</div>

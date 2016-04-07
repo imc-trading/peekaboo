@@ -1,3 +1,19 @@
+<!-- Header -->
+<div ng-include='"templates/header.html"'></div>
+
+<!-- Container -->
+<div class="container">
+
+<flash-message duration="4" show-close="true" on-dismiss="myCallback(flash);"></flash-message>
+
+<div class="container-fluid">
+  <div class="row">
+
+    <!-- Sidebar -->
+    <div ng-include='"partials/storage/sidebar.html"'></div>
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
 <table ng-controller="physVolsController" st-table="displayedPhysVols" st-safe-src="physVols" class="table table-striped sortable">
   <thead>
     <tr>
@@ -37,3 +53,5 @@
     </tr>
   </tfoot>
 </table>
+
+</div>
