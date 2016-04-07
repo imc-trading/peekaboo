@@ -44,3 +44,11 @@
 .sortable th {
   cursor: pointer;
 }
+
+.alert.ng-leave {
+  opacity: 1;
+  transition: opacity 1.5s ease-out;
+}
+.alert.ng-leave-active {
+  opacity: 0;
+}
