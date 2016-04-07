@@ -12,7 +12,7 @@ http://myserver.example.com:5050
 ```
 
 <p align="center">
-  <img src="img/screenshoot.png" width="50%">
+  <img src="img/screenshoot.png" width="80%">
 </p>
 
 ## BackEnd
