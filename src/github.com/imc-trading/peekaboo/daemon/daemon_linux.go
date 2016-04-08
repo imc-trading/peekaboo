@@ -23,9 +23,9 @@ import (
 	"github.com/imc-trading/peekaboo/system"
 	"github.com/imc-trading/peekaboo/system/cpu"
 	"github.com/imc-trading/peekaboo/system/ipmi"
+	"github.com/imc-trading/peekaboo/system/kernelcfg"
 	"github.com/imc-trading/peekaboo/system/memory"
 	"github.com/imc-trading/peekaboo/system/opsys"
-	"github.com/imc-trading/peekaboo/system/opsys/kernelcfg"
 	"github.com/imc-trading/peekaboo/system/sysctls"
 )
 
@@ -35,7 +35,7 @@ func New() Daemon {
 		cache: map[string]cache{
 			apiURL + "/system":               {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/system/os":            {Timeout: 5 * 60},  // 5 min.
-			apiURL + "/system/os/kernelcfg":  {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/system/kernelcfg":     {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/system/cpu":           {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/system/memory":        {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/system/sysctls":       {Timeout: 5 * 60},  // 5 min.
@@ -61,7 +61,7 @@ func (d *daemon) Run(bind string, static string) error {
 	d.addAPIRoute(apiURL+"/network/routes", routes.GetInterface)
 	d.addAPIRoute(apiURL+"/system", system.GetInterface)
 	d.addAPIRoute(apiURL+"/system/os", opsys.GetInterface)
-	d.addAPIRoute(apiURL+"/system/os/kernelcfg", kernelcfg.GetInterface)
+	d.addAPIRoute(apiURL+"/system/kernelcfg", kernelcfg.GetInterface)
 	d.addAPIRoute(apiURL+"/system/cpu", cpu.GetInterface)
 	d.addAPIRoute(apiURL+"/system/memory", memory.GetInterface)
 	d.addAPIRoute(apiURL+"/system/sysctls", sysctls.GetInterface)

@@ -43,7 +43,7 @@ func Get() (KernelCfgs, error) {
 
 		k = append(k, KernelCfg{
 			Key:   v[0],
-			Value: v[1],
+			Value: strings.Trim(v[1], "\""),
 		})
 	}
 

@@ -34,6 +34,7 @@ app.config(['$routeProvider', function ($routeProvider) {
     .when("/system/sysctl", {templateUrl: "partials/system/sysctl.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "sysctl"})
     .when("/system/memory", {templateUrl: "partials/system/memory.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "memory"})
     .when("/system/ipmi", {templateUrl: "partials/system/ipmi.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "ipmi"})
+    .when("/system/kernelcfg", {templateUrl: "partials/system/kernelcfg.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "kernelcfg"})
 
     .when("/docker", {templateUrl: "partials/docker/general.html", controller: "PageCtrl", activeTab: "docker", sideActiveTab: "general"})
     .when("/docker/general", {templateUrl: "partials/docker/general.html", controller: "PageCtrl", activeTab: "docker", sideActiveTab: "general"})
@@ -279,6 +280,19 @@ app.controller('ipmiController', [ '$scope', '$resource', 'Flash', function($sco
 
   resource.get().$promise.then(function(value) {
     $scope.ipmi = value;
+//    console.log (value);
+  }, function(err) {
+    var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+    var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+  });
+} ]);
+
+// Kernel Config
+app.controller('kernelCfgController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
+  var resource = $resource('/api/system/kernelcfg');
+
+  resource.query().$promise.then(function(value) {
+    $scope.kernelCfgs = value;
 //    console.log (value);
   }, function(err) {
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
