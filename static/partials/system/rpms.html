@@ -16,7 +16,7 @@
 <table ng-controller="rpmsController" st-table="displayedRPMs" st-safe-src="rpms" class="table table-striped sortable">
   <thead>
     <tr>
-      <th colspan="4" class="container">
+      <th colspan="5" class="container">
         <div class="form-group">
           <div class="input-group">
             <div class="input-group-addon"><i class="fa fa-search"></i></div>
@@ -30,6 +30,7 @@
       <th st-sort="version">Version</th>
       <th st-sort="release">Release</th>
       <th st-sort="arch">Arch</th>
+      <th st-sort="installed">Installed</th>
     </tr>
   </thead>
   <tbody>
@@ -38,11 +39,12 @@
       <td>{{ rpm.version }}</td>
       <td>{{ rpm.release }}</td>
       <td>{{ rpm.arch }}</td>
+      <td>{{ rpm.installed }}</td>
     </tr>
   </tbody>
   <tfoot>
     <tr>
-      <td colspan="4" class="text-center">
+      <td colspan="5" class="text-center">
         <div st-pagination="" st-items-by-page="10"></div>
       </td>
     </tr>
