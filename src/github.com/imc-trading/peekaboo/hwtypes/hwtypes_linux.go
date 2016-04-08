@@ -20,6 +20,7 @@ import (
 	"github.com/imc-trading/peekaboo/system/kernelcfg"
 	"github.com/imc-trading/peekaboo/system/memory"
 	"github.com/imc-trading/peekaboo/system/opsys"
+	"github.com/imc-trading/peekaboo/system/rpms"
 	"github.com/imc-trading/peekaboo/system/sysctls"
 )
 
@@ -33,6 +34,7 @@ var hwTypes = []string{
 	"system/kernelcfg (short: kcfg)",
 	"system/sysctls (short: sysctls)",
 	"system/ipmi (short: ipmi)",
+	"system/rpms (short: rpms)",
 	"storage/disks (short: disks)",
 	"storage/mounts (short: disks)",
 	"storage/lvm/physvols (short: pvs)",
@@ -66,6 +68,8 @@ func Get(hwType string) error {
 		r, err = memory.Get()
 	case "ipmi", "system/ipmi":
 		r, err = ipmi.Get()
+	case "rpms", "system/rpms":
+		r, err = rpms.Get()
 	case "disks", "storage/disks":
 		r, err = disks.Get()
 	case "mounts", "storage/mounts":
