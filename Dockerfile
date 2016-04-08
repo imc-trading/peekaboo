@@ -4,7 +4,7 @@
 FROM centos:centos7
 
 RUN set -ex ;\
-    yum install -y go vim-enhanced net-tools lsb lvm2 docker git ;\
+    yum install -y go vim-enhanced net-tools lsb docker git ;\
     yum clean all
 
 ENV GOPATH=/root/go
@@ -17,8 +17,22 @@ RUN set -ex ;\
     mv ${GOPATH}/bin/gb-vendor /usr/local/bin/gb-vendor ;\
     mkdir ${PROJECT}
 
-COPY ipmitool /usr/local/bin/ipmitool
-RUN chmod +x /usr/local/bin/ipmitool
+# Add mock binaries
+COPY mock/ipmitool /usr/local/bin/ipmitool
+COPY mock/pvs /usr/local/bin/pvs
+COPY mock/lvs /usr/local/bin/lvs
+COPY mock/vgs /usr/local/bin/vgs
+
+RUN chmod +x /usr/local/bin/ipmitool \
+    /usr/local/bin/pvs \
+    /usr/local/bin/lvs \
+    /usr/local/bin/vgs
+
+# Add mock files
+COPY mock/config /config
+
+RUN mkdir /boot ;\
+    mv /config /boot/config-$(uname -r)
 
 EXPOSE 5050
 

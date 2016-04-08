@@ -1,0 +1,199 @@
+#!/bin/bash
+
+cat <<EOF
+FP_ID_LED        | 0x00              | ok
+BIOS_POST_CMPLT  | 0x00              | ok
+P_CATERR_N       | 0x00              | ok
+RISER1_CNIC_PRS  | no reading        | ns
+SAS_MEZZ_PRENT   | 0x00              | ok
+MAIN_POWER_PRS   | 0x00              | ok
+SEL_FULLNESS     | 20 unspecified    | ok
+BIOSPOST_TIMEOUT | disabled          | ns
+POWER_ON_FAIL    | 0x00              | ok
+FAN1_PRSNT       | 0x00              | ok
+FAN2_PRSNT       | 0x00              | ok
+FAN3_PRSNT       | 0x00              | ok
+FAN4_PRSNT       | 0x00              | ok
+FAN5_PRSNT       | 0x00              | ok
+FAN1_TACH1       | 3424 RPM          | ok
+FAN1_TACH2       | 3424 RPM          | ok
+FAN2_TACH1       | 3424 RPM          | ok
+FAN2_TACH2       | 3424 RPM          | ok
+FAN3_TACH1       | 3424 RPM          | ok
+FAN3_TACH2       | 3531 RPM          | ok
+FAN4_TACH1       | 3424 RPM          | ok
+FAN4_TACH2       | 3531 RPM          | ok
+FAN5_TACH1       | 3424 RPM          | ok
+FAN5_TACH2       | 3531 RPM          | ok
+LED_FAN1_FAULT   | 0x00              | ok
+LED_FAN2_FAULT   | 0x00              | ok
+LED_FAN3_FAULT   | 0x00              | ok
+LED_FAN4_FAULT   | 0x00              | ok
+LED_FAN5_FAULT   | 0x00              | ok
+FM_TPM_CARD_PRS  | 0x00              | ok
+RISER2_PRESENT   | 0x00              | ok
+RISER1_PRESENT   | 0x00              | ok
+RISER2_PRESENT_2 | 0x00              | ok
+RISER1_PRESENT_3 | 0x00              | ok
+RISER1_PRESENT_2 | 0x00              | ok
+RISER2_PRESENT_1 | 0x00              | ok
+RISER1_PRESENT_1 | 0x00              | ok
+PSU1_STATUS      | 0x00              | ok
+PSU2_STATUS      | 0x00              | ok
+P1_PROCHOT       | 0x00              | ok
+P2_PROCHOT       | 0x00              | ok
+PVCCD_P1_VRHOT   | 0x00              | ok
+PVCCP_P1_VRHOT   | 0x00              | ok
+PVCCD_P2_VRHOT   | 0x00              | ok
+PVCCP_P2_VRHOT   | 0x00              | ok
+MLOM_PRESENT     | 0x00              | ok
+PSU1_PWRGD       | 0x00              | ok
+PSU1_AC_OK       | 0x00              | ok
+PSU2_PWRGD       | 0x00              | ok
+PSU2_AC_OK       | 0x00              | ok
+P1_MEM23_MEMHOT  | 0x00              | ok
+P1_MEM01_MEMHOT  | 0x00              | ok
+P2_MEM23_MEMHOT  | 0x00              | ok
+P2_MEM01_MEMHOT  | 0x00              | ok
+LED_PSU_STATUS   | 0x00              | ok
+LED_TEMP_STATUS  | 0x00              | ok
+LED_FAN_STATUS   | 0x00              | ok
+LED_HLTH_STATUS  | 0x00              | ok
+PS_RDNDNT_MODE   | 0x00              | ok
+P1_TEMP_SENS     | 34.50 degrees C   | ok
+P2_TEMP_SENS     | 39 degrees C      | ok
+RISER1_INLET_TMP | 37 degrees C      | ok
+RISER2_INLET_TMP | 32 degrees C      | ok
+RISER1_OUTLETTMP | 43 degrees C      | ok
+RISER2_OUTLETTMP | 37 degrees C      | ok
+FP_TEMP_SENSOR   | 24 degrees C      | ok
+HDD1_STATUS      | 0x00              | ok
+HDD2_STATUS      | 0x00              | ok
+HDD3_STATUS      | 0x00              | ok
+HDD4_STATUS      | 0x00              | ok
+HDD5_STATUS      | 0x00              | ok
+HDD6_STATUS      | 0x00              | ok
+HDD7_STATUS      | 0x00              | ok
+HDD8_STATUS      | 0x00              | ok
+DDR3_P1_A1_PRS   | 0x00              | ok
+DDR3_P1_A1_TEMP  | 28 degrees C      | ok
+P1_DIMM_A1_LED   | 0x00              | ok
+DDR3_P1_A2_PRS   | 0x00              | ok
+DDR3_P1_A2_TEMP  | no reading        | ns
+P1_DIMM_A2_LED   | no reading        | ns
+DDR3_P1_B1_PRS   | 0x00              | ok
+DDR3_P1_B1_TEMP  | 28 degrees C      | ok
+P1_DIMM_B1_LED   | 0x00              | ok
+DDR3_P1_B2_PRS   | 0x00              | ok
+DDR3_P1_B2_TEMP  | no reading        | ns
+P1_DIMM_B2_LED   | no reading        | ns
+DDR3_P1_C1_PRS   | 0x00              | ok
+DDR3_P1_C1_TEMP  | 30 degrees C      | ok
+P1_DIMM_C1_LED   | 0x00              | ok
+DDR3_P1_C2_PRS   | 0x00              | ok
+DDR3_P1_C2_TEMP  | no reading        | ns
+P1_DIMM_C2_LED   | no reading        | ns
+DDR3_P1_D1_PRS   | 0x00              | ok
+DDR3_P1_D1_TEMP  | 29 degrees C      | ok
+P1_DIMM_D1_LED   | 0x00              | ok
+DDR3_P1_D2_PRS   | 0x00              | ok
+DDR3_P1_D2_TEMP  | no reading        | ns
+P1_DIMM_D2_LED   | no reading        | ns
+DDR3_P2_E1_PRS   | 0x00              | ok
+DDR3_P2_E1_TEMP  | 30 degrees C      | ok
+P2_DIMM_E1_LED   | 0x00              | ok
+DDR3_P2_E2_PRS   | 0x00              | ok
+DDR3_P2_E2_TEMP  | no reading        | ns
+P2_DIMM_E2_LED   | no reading        | ns
+DDR3_P2_F1_PRS   | 0x00              | ok
+DDR3_P2_F1_TEMP  | 30 degrees C      | ok
+P2_DIMM_F1_LED   | 0x00              | ok
+DDR3_P2_F2_PRS   | 0x00              | ok
+DDR3_P2_F2_TEMP  | no reading        | ns
+P2_DIMM_F2_LED   | no reading        | ns
+DDR3_P2_G1_PRS   | 0x00              | ok
+DDR3_P2_G1_TEMP  | 27 degrees C      | ok
+P2_DIMM_G1_LED   | 0x00              | ok
+DDR3_P2_G2_PRS   | 0x00              | ok
+DDR3_P2_G2_TEMP  | no reading        | ns
+P2_DIMM_G2_LED   | no reading        | ns
+DDR3_P2_H1_PRS   | 0x00              | ok
+DDR3_P2_H1_TEMP  | 27 degrees C      | ok
+P2_DIMM_H1_LED   | 0x00              | ok
+DDR3_P2_H2_PRS   | 0x00              | ok
+DDR3_P2_H2_TEMP  | no reading        | ns
+P2_DIMM_H2_LED   | no reading        | ns
+P12V_STBY_V_MOIN | 11.92 Volts       | ok
+P12V_AUX_V_MOIN  | 11.92 Volts       | ok
+P5V_AUX_V_MOIN   | 5.17 Volts        | ok
+P12V_V_MOIN      | 11.98 Volts       | ok
+P5V_V_MOIN       | 5.29 Volts        | ok
+P3V3_V_MOIN      | 3.44 Volts        | ok
+P1V5_SSB         | 1.50 Volts        | ok
+P1V1_SSB         | 1.10 Volts        | ok
+P3V3_BAT_V_MOIN  | 3.07 Volts        | ok
+PVTT_DDR_AB      | 0.76 Volts        | ok
+PVTT_DDR_CD      | 0.76 Volts        | ok
+PVTT_DDR_EF      | 0.75 Volts        | ok
+PVTT_DDR_GH      | 0.75 Volts        | ok
+MLOM_TEMP_SENS   | no reading        | ns
+PVTT_P1          | 0.99 Volts        | ok
+PVDDQ_AB         | 1.47 Volts        | ok
+PVDDQ_CD         | 1.50 Volts        | ok
+PVSA_P1          | 0.94 Volts        | ok
+PVPLL_P1         | 1.72 Volts        | ok
+PVCCP_P1         | 0.70 Volts        | ok
+PVTT_P2          | 1.00 Volts        | ok
+PVSA_P2          | 0.96 Volts        | ok
+PVCCP_P2         | 0.73 Volts        | ok
+PVDDQ_EF         | 1.50 Volts        | ok
+PVDDQ_GH         | 1.50 Volts        | ok
+PVPLL_P2         | 1.71 Volts        | ok
+POWER_USAGE      | 104 Watts         | ok
+PSU1_VOUT        | 12 Volts          | ok
+PSU1_IOUT        | 4 Amps            | ok
+PSU1_POUT        | 48 Watts          | ok
+PSU2_VOUT        | 11.90 Volts       | ok
+PSU2_IOUT        | 3 Amps            | ok
+PSU2_POUT        | 48 Watts          | ok
+VICP81E_0_PRS    | 0x00              | ok
+VICP81E_0_OVRTMP | no reading        | ns
+VICP81E_0_TMP1   | no reading        | ns
+VICP81E_0_TMP2   | no reading        | ns
+VICP81E_0_TMP3   | no reading        | ns
+P1_PRESENT       | 0x00              | ok
+P2_PRESENT       | 0x00              | ok
+DDR3_P1_A1_ECC   | 0 error           | ok
+DDR3_P1_A2_ECC   | no reading        | ns
+DDR3_P1_B1_ECC   | 0 error           | ok
+DDR3_P1_B2_ECC   | no reading        | ns
+DDR3_P1_C1_ECC   | 0 error           | ok
+DDR3_P1_C2_ECC   | no reading        | ns
+DDR3_P1_D1_ECC   | 0 error           | ok
+DDR3_P1_D2_ECC   | no reading        | ns
+DDR3_P2_E1_ECC   | 0 error           | ok
+DDR3_P2_E2_ECC   | no reading        | ns
+DDR3_P2_F1_ECC   | 0 error           | ok
+DDR3_P2_F2_ECC   | no reading        | ns
+DDR3_P2_G1_ECC   | 0 error           | ok
+DDR3_P2_G2_ECC   | no reading        | ns
+DDR3_P2_H1_ECC   | 0 error           | ok
+DDR3_P2_H2_ECC   | no reading        | ns
+P3V3_AUX         | 3.38 Volts        | ok
+P1V8_AUX         | 1.80 Volts        | ok
+P1V5_AUX         | 1.51 Volts        | ok
+P1V0_AUX         | 1.00 Volts        | ok
+P1V1_AUX         | 1.09 Volts        | ok
+P0V75_AUX        | 0.75 Volts        | ok
+PSU1_PIN         | 56 Watts          | ok
+PSU2_PIN         | 48 Watts          | ok
+PSU1_TEMP        | 30 degrees C      | ok
+PSU2_TEMP        | 31 degrees C      | ok
+PCH_TEMP_SENS    | 49 degrees C      | ok
+P1_THERMTRIP_N   | 0x00              | ok
+P2_THERMTRIP_N   | 0x00              | ok
+PCH_THERMTRIP_N  | 0x00              | ok
+STOR_STATUS      | 0x00              | ok
+BMC_WATCHDOG     | disabled          | ns
+OS_WATCHDOG      | disabled          | ns
+EOF

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cat << EOF
+  PV         VG      Fmt  Attr PSize   PFree 
+  /dev/sda3  vg_root lvm2 a--  556.46g 63.73g
+EOF

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cat <<EOF
+  LV          VG      Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  docker-pool vg_root twi-aot---  42.85g             1.76   0.10                            
+  lv_fs       vg_root -wi-ao---- 430.77g                                                    
+  lv_log      vg_root -wi-ao----   4.00g                                                    
+  lv_root     vg_root -wi-ao----  10.00g                                                    
+  lv_swap     vg_root -wi-ao----   4.00g                                                    
+EOF
