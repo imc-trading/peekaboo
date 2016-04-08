@@ -47,15 +47,12 @@ app.config(['$routeProvider', function ($routeProvider) {
  * Controls all other Pages
  */
 
-app.controller('PageCtrl', ['Flash', function(Flash) {
+app.controller('PageCtrl', ['$scope', '$route', 'Flash', function($scope, $route, Flash) {
   console.log("Page Controller reporting for duty.");
   Flash.clear();
-}]);
-
-app.controller('PageCtrl', function ($scope, $route) {
   $scope.activeTab = $route.current.activeTab;
   $scope.sideActiveTab = $route.current.sideActiveTab;
-});
+} ]);
 
 /*
  * Filters
