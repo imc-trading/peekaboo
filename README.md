@@ -40,6 +40,7 @@ http://myserver.example.com:5050
 /api/system/pcicards
 /api/system/rpms
 /api/system/sysctls
+/api/system/modules
 ```
 
 ### Methods
