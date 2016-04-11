@@ -64,7 +64,7 @@ curl -i -X PURGE http://<host>:<port>/api/system?envelope=true
 Include an envelope with error, cache and status information.
 
 ```
-?envlope=true
+?envelope=true
 ```
 
 **Example:**
