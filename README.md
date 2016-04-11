@@ -20,21 +20,25 @@ http://myserver.example.com:5050
 ### Endpoints
 
 ```
-/api/network/interfaces
-/api/network/routes
-/api/system
-/api/system/os
-/api/system/cpu
-/api/system/memory
-/api/system/sysctls (Linux only)
-/api/storage/disks (Linux only)
-/api/storage/mounts (Linux only)
-/api/storage/lvm/physvols (Linux only)
-/api/storage/lvm/logvols (Linux only)
-/api/storage/lvm/volgrps (Linux only)
 /api/docker
 /api/docker/containers
 /api/docker/images
+/api/network/interfaces
+/api/network/routes
+/api/storage/disks
+/api/storage/lvm/logvols
+/api/storage/lvm/physvols
+/api/storage/lvm/volgrps
+/api/storage/mounts
+/api/system
+/api/system/cpu
+/api/system/ipmi
+/api/system/kernelcfg
+/api/system/memory
+/api/system/os
+/api/system/pcicards
+/api/system/rpms
+/api/system/sysctls
 ```
 
 ### Methods
