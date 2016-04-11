@@ -7,13 +7,22 @@ import (
 )
 
 type Docker struct {
-	Version string `json:"version"`
-	Build   string `json:"build"`
-	Running bool   `json:"running"`
+	Installed bool   `json:"installed"`
+	Version   string `json:"version"`
+	Build     string `json:"build"`
+	Running   bool   `json:"running"`
 }
 
 func Get() (Docker, error) {
 	d := Docker{}
+
+	if err := parse.Exists("docker"); err == nil {
+		d.Installed = true
+	} else {
+		d.Installed = false
+		d.Running = false
+		return d, nil
+	}
 
 	o, err := parse.Exec("docker", []string{"--version"})
 	if err != nil {

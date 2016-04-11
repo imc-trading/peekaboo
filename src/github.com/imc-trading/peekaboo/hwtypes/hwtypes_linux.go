@@ -7,6 +7,7 @@ import (
 	"github.com/imc-trading/peekaboo/docker"
 	"github.com/imc-trading/peekaboo/docker/containers"
 	"github.com/imc-trading/peekaboo/docker/images"
+	"github.com/imc-trading/peekaboo/network"
 	"github.com/imc-trading/peekaboo/network/interfaces"
 	"github.com/imc-trading/peekaboo/network/routes"
 	"github.com/imc-trading/peekaboo/storage/disks"
@@ -26,6 +27,7 @@ import (
 )
 
 var hwTypes = []string{
+	"network (short: net)",
 	"network/interfaces (short: ifs)",
 	"network/routes (short: routes)",
 	"system (short: sys)",
@@ -52,6 +54,8 @@ func Get(hwType string) error {
 	var err error
 
 	switch hwType {
+	case "net", "network":
+		r, err = network.Get()
 	case "ifs", "network/interfaces":
 		r, err = interfaces.Get()
 	case "routes", "network/routes":

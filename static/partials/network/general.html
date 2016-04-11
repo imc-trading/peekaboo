@@ -1,0 +1,29 @@
+<!-- Header -->
+<div ng-include='"templates/header.html"'></div>
+
+<!-- Container -->
+<div class="container-fluid">
+
+  <flash-message duration="4" show-close="true" on-dismiss="myCallback(flash);"></flash-message>
+
+  <div class="row">
+
+    <!-- Sidebar -->
+    <div ng-include='"partials/network/sidebar.html"'></div>
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+<div ng-controller="networkController">
+  <dl class="dl-horizontal">
+    <dt>ethtool Installed</dt>
+    <dd>{{ network.ethtoolInstalled }}</dd>
+    <dt>ethtool Version</dt>
+    <dd>{{ network.ethtoolVersion }}</dd>
+    <dt>lldpctl Installed</dt>
+    <dd>{{ network.lldpctlInstalled }}</dd>
+    <dt>lldpctl Version</dt>
+    <dd>{{ network.lldpctlVersion }}</dd>
+  </dl>
+</div>
+
+</div>

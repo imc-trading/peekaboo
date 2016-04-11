@@ -19,7 +19,7 @@ app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
     .when("/", {templateUrl: "partials/dashboard.html", controller: "PageCtrl", activeTab: "dashboard"})
 
-    .when("/network", {templateUrl: "partials/network/interfaces.html", controller: "PageCtrl", activeTab: "network", sideActiveTab: "interfaces"})
+    .when("/network", {templateUrl: "partials/network/general.html", controller: "PageCtrl", activeTab: "network", sideActiveTab: "general"})
     .when("/network/interfaces", {templateUrl: "partials/network/interfaces.html", controller: "PageCtrl", activeTab: "network", sideActiveTab: "interfaces"})
     .when("/network/routes", {templateUrl: "partials/network/routes_linux.html", controller: "PageCtrl", activeTab: "network", sideActiveTab: "routes"})
 
@@ -318,6 +318,19 @@ app.controller('pciCardsController', [ '$scope', '$resource', 'Flash', function(
 
   resource.query().$promise.then(function(value) {
     $scope.pciCards = value;
+//    console.log (value);
+  }, function(err) {
+    var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+    var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+  });
+} ]);
+
+// Network
+app.controller('networkController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
+  var resource = $resource('/api/network');
+
+  resource.get().$promise.then(function(value) {
+    $scope.network = value;
 //    console.log (value);
   }, function(err) {
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;

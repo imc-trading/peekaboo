@@ -13,6 +13,7 @@ import (
 	"github.com/imc-trading/peekaboo/docker/containers"
 	"github.com/imc-trading/peekaboo/docker/images"
 	"github.com/imc-trading/peekaboo/log"
+	"github.com/imc-trading/peekaboo/network"
 	"github.com/imc-trading/peekaboo/network/interfaces"
 	"github.com/imc-trading/peekaboo/network/routes"
 	"github.com/imc-trading/peekaboo/storage/disks"
@@ -44,6 +45,7 @@ func New() Daemon {
 			apiURL + "/system/ipmi":          {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/system/rpms":          {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/system/pcicards":      {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/network":              {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/network/interfaces":   {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/network/routes":       {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/storage/disks":        {Timeout: 5 * 60},  // 5 min.
@@ -61,6 +63,7 @@ func New() Daemon {
 
 func (d *daemon) Run(bind string, static string) error {
 	// Add routes.
+	d.addAPIRoute(apiURL+"/network", network.GetInterface)
 	d.addAPIRoute(apiURL+"/network/interfaces", interfaces.GetInterface)
 	d.addAPIRoute(apiURL+"/network/routes", routes.GetInterface)
 	d.addAPIRoute(apiURL+"/system", system.GetInterface)
