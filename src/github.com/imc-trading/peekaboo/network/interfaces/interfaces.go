@@ -46,7 +46,7 @@ func Get() (Interfaces, error) {
 
 	rIntfs, err := net.Interfaces()
 	if err != nil {
-		return nil, err
+		return Interfaces{}, err
 	}
 
 	i := Interfaces{}
@@ -58,7 +58,7 @@ func Get() (Interfaces, error) {
 
 		addrs, err := rIntf.Addrs()
 		if err != nil {
-			return nil, err
+			return Interfaces{}, err
 		}
 
 		wIntf := Interface{
@@ -90,7 +90,7 @@ func Get() (Interfaces, error) {
 		if runtime.GOOS == "linux" && hasEthtool == true {
 			m, err := parse.ExecRegexpMap("ethtool", []string{"-i", rIntf.Name}, ":", "\\S+:\\s\\S+")
 			if err != nil {
-				return nil, err
+				return Interfaces{}, err
 			}
 
 			s1 := m["driver"]
@@ -108,23 +108,35 @@ func Get() (Interfaces, error) {
 		}
 
 		if runtime.GOOS == "linux" && hasLldpctl == true {
-			m, err := parse.ExecRegexpMap("lldpctl", []string{rIntf.Name}, ":", "\\S+:\\s\\S+")
+			o, err := parse.Exec("lldpctl", []string{rIntf.Name})
 			if err != nil {
-				return nil, err
+				return Interfaces{}, err
 			}
 
-			s1 := m["ChassisID"]
-			wIntf.SwChassisID = &s1
-			s2 := m["SysName"]
-			wIntf.SwName = &s2
-			s3 := m["SysDescr"]
-			wIntf.SwDescr = &s3
-			s4 := m["PortID"]
-			wIntf.SwPortID = &s4
-			s5 := m["PortDescr"]
-			wIntf.SwPortDescr = &s5
-			s6 := m["VLAN"]
-			wIntf.SwVLAN = &s6
+			for _, line := range strings.Split(o, "\n") {
+				arr := strings.SplitN(line, ":", 2)
+				if len(arr) < 2 {
+					continue
+				}
+
+				key := strings.TrimSpace(arr[0])
+				val := strings.TrimSpace(arr[1])
+
+				switch key {
+				case "ChassisID":
+					wIntf.SwChassisID = &val
+				case "SysName":
+					wIntf.SwName = &val
+				case "SysDescr":
+					wIntf.SwDescr = &val
+				case "PortID":
+					wIntf.SwPortID = &val
+				case "PortDescr":
+					wIntf.SwPortDescr = &val
+				case "VLAN":
+					wIntf.SwVLAN = &val
+				}
+			}
 		}
 
 		i = append(i, wIntf)
