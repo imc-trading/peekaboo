@@ -132,6 +132,7 @@
   padding-right: 20px;
   padding-left: 20px;
   color: #8b8b8b;
+  border-left: 3px solid #eaeaea;
 }
 
 /* Active */
@@ -146,4 +147,5 @@
 .nav-sidebar > li > a:hover {
   color: #0e0e0e;
   background-color: #cacaca;
+  border-left: 3px solid #ad542a;
 }
