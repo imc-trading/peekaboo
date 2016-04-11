@@ -23,6 +23,7 @@ http://myserver.example.com:5050
 /api/docker
 /api/docker/containers
 /api/docker/images
+/api/network
 /api/network/interfaces
 /api/network/routes
 /api/storage/disks
