@@ -16,7 +16,7 @@
 <table ng-controller="interfacesController" st-table="displayedInterfaces" st-safe-src="interfaces" class="table table-striped sortable">
   <thead>
     <tr>
-      <th colspan="5" class="container">
+      <th colspan="14" class="container">
         <div class="form-group">
           <div class="input-group">
             <div class="input-group-addon"><i class="fa fa-search"></i></div>
@@ -30,7 +30,16 @@
       <th st-sort="mtu">MTU</th>
       <th st-sort="ipAddr">IP Address</th>
       <th st-sort="hwAddr">HW Address</th>
-      <th st-sort="Flags">Flags</th>
+      <th st-sort="flags">Flags</th>
+      <th st-sort="driver">Driver</th>
+      <th st-sort="driverVersion">Driver Version</th>
+      <th st-sort="firmwareVersion">Firmware Version</th>
+      <th st-sort="swChassisId">Sw. Chassis ID</th>
+      <th st-sort="swName">Sw. Chassis ID</th>
+      <th st-sort="swDescr">Sw. Descr.</th>
+      <th st-sort="swPortId">Sw. Port ID</th>
+      <th st-sort="swPortDescr">Sw. Port Descr.</th>
+      <th st-sort="swVLan">Sw. VLAN</th>
     </tr>
   </thead>
   <tbody>
@@ -40,11 +49,20 @@
       <td>{{ interface.ipAddr | joinBy:', ' }}</td>
       <td>{{ interface.hwAddr }}</td>
       <td>{{ interface.flags | joinBy:' ' }}</td>
+      <td>{{ interface.driver }}</td>
+      <td>{{ interface.driverVersion }}</td>
+      <td>{{ interface.firmwareVersion }}</td>
+      <td>{{ interface.swChassisId }}</td>
+      <td>{{ interface.swName }}</td>
+      <td>{{ interface.swDescr }}</td>
+      <td>{{ interface.swPortId }}</td>
+      <td>{{ interface.swPortDescr }}</td>
+      <td>{{ interface.swVLAN }}</td>
     </tr>
   </tbody>
   <tfoot>
     <tr>
-      <td colspan="5" class="text-center">
+      <td colspan="14" class="text-center">
         <div st-pagination="" st-items-by-page="10"></div>
       </td>
     </tr>

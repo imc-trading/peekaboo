@@ -1,7 +1,12 @@
 package interfaces
 
 import (
+	"fmt"
 	"net"
+	"runtime"
+	"strings"
+
+	"github.com/imc-trading/peekaboo/parse"
 )
 
 // Interfaces multiple network interfaes.
@@ -14,28 +19,37 @@ type Interface struct {
 	IPAddr          []string `json:"ipAddr"`
 	HWAddr          string   `json:"hwAddr"`
 	Flags           []string `json:"flags"`
-	Driver          string   `json:"driver,omitempty"`
-	DriverVersion   string   `json:"driverVersion,omitempty"`
-	FirmwareVersion string   `json:"firmwareVersion,omitempty"`
-	PCIBus          string   `json:"pciBus,omitempty"`
-	PCIBusURL       string   `json:"pciBusURL,omitempty"`
-	SwChassisID     string   `json:"swChassisId"`
-	SwName          string   `json:"swName"`
-	SwDescr         string   `json:"swDescr"`
-	SwPortID        string   `json:"swPortId"`
-	SwPortDescr     string   `json:"swPortDescr"`
-	SwVLAN          string   `json:"swVLan"`
+	Driver          *string  `json:"driver,omitempty"`
+	DriverVersion   *string  `json:"driverVersion,omitempty"`
+	FirmwareVersion *string  `json:"firmwareVersion,omitempty"`
+	PCIBus          *string  `json:"pciBus,omitempty"`
+	PCIBusURL       *string  `json:"pciBusURL,omitempty"`
+	SwChassisID     *string  `json:"swChassisId,omitempty"`
+	SwName          *string  `json:"swName,omitempty"`
+	SwDescr         *string  `json:"swDescr,omitempty"`
+	SwPortID        *string  `json:"swPortId,omitempty"`
+	SwPortDescr     *string  `json:"swPortDescr,omitempty"`
+	SwVLAN          *string  `json:"swVLan,omitempty"`
 }
 
 // Get network interfaces.
 func Get() (Interfaces, error) {
-	i := Interfaces{}
+	hasEthtool := false
+	if err := parse.Exists("ethtool"); err == nil {
+		hasEthtool = true
+	}
+
+	hasLldpctl := false
+	if err := parse.Exists("lldpctl"); err == nil {
+		hasLldpctl = true
+	}
 
 	rIntfs, err := net.Interfaces()
 	if err != nil {
 		return nil, err
 	}
 
+	i := Interfaces{}
 	for _, rIntf := range rIntfs {
 		// Skip loopback interfaces
 		if rIntf.Flags&net.FlagLoopback != 0 {
@@ -73,34 +87,45 @@ func Get() (Interfaces, error) {
 			wIntf.Flags = append(wIntf.Flags, "MULTICAST")
 		}
 
-		/*
-		   		switch runtime.GOOS {
-		   		case "linux":
-		   		    m, err := parse.ExecRegexpMap("/usr/sbin/ethtool", []string{"-i", rIntf.Name}, ":", "\\S+:\\s\\S+")
-		   		    if err != nil {
-		   				return err
-		   		    }
+		if runtime.GOOS == "linux" && hasEthtool == true {
+			m, err := parse.ExecRegexpMap("ethtool", []string{"-i", rIntf.Name}, ":", "\\S+:\\s\\S+")
+			if err != nil {
+				return nil, err
+			}
 
-		   			wIntf.Driver = m["driver"]
-		   			wIntf.DriverVersion = m["version"]
-		   			wIntf.FirmwareVersion = m["firmware-version"]
-		   			if strings.HasPrefix(m["bus-info"], "0000:") {
-		   				wIntf.PCIBus = m["bus-info"]
-		   				wIntf.PCIBusURL = fmt.Sprintf("/pci/%v", o["bus-info"])
-		   			}
+			s1 := m["driver"]
+			wIntf.Driver = &s1
+			s2 := m["version"]
+			wIntf.DriverVersion = &s2
+			s3 := m["firmware-version"]
+			wIntf.FirmwareVersion = &s3
+			if strings.HasPrefix(m["bus-info"], "0000:") {
+				s4 := m["bus-info"]
+				wIntf.PCIBus = &s4
+				s5 := fmt.Sprintf("/pci/%v", m["bus-info"])
+				wIntf.PCIBusURL = &s5
+			}
+		}
 
-		   			m, err := parse.ExecRegexpMap("/usr/sbin/lldpctl", []string{rIntf.Name}, ":", "\\S+:\\s\\S+")
-		       if err != nil {
-		   				return err
-		   			}
+		if runtime.GOOS == "linux" && hasLldpctl == true {
+			m, err := parse.ExecRegexpMap("lldpctl", []string{rIntf.Name}, ":", "\\S+:\\s\\S+")
+			if err != nil {
+				return nil, err
+			}
 
-		   			wIntf.SwChassisID = o2["ChassisID"]
-		   			wIntf.SwName = o2["SysName"]
-		   			wIntf.SwDescr = o2["SysDescr"]
-		   			wIntf.SwPortID = o2["PortID"]
-		   			wIntf.SwPortDescr = o2["PortDescr"]
-		   			wIntf.SwVLAN = o2["VLAN"]
-		*/
+			s1 := m["ChassisID"]
+			wIntf.SwChassisID = &s1
+			s2 := m["SysName"]
+			wIntf.SwName = &s2
+			s3 := m["SysDescr"]
+			wIntf.SwDescr = &s3
+			s4 := m["PortID"]
+			wIntf.SwPortID = &s4
+			s5 := m["PortDescr"]
+			wIntf.SwPortDescr = &s5
+			s6 := m["VLAN"]
+			wIntf.SwVLAN = &s6
+		}
 
 		i = append(i, wIntf)
 	}

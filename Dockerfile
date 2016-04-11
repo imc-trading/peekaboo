@@ -4,7 +4,7 @@
 FROM centos:centos7
 
 RUN set -ex ;\
-    yum install -y go vim-enhanced net-tools lsb docker git ;\
+    yum install -y go vim-enhanced net-tools lsb docker git wget ;\
     yum clean all
 
 ENV GOPATH=/root/go
@@ -16,6 +16,11 @@ RUN set -ex ;\
     mv ${GOPATH}/bin/gb /usr/local/bin/gb ;\
     mv ${GOPATH}/bin/gb-vendor /usr/local/bin/gb-vendor ;\
     mkdir ${PROJECT}
+
+# Install lldpd
+RUN cd /etc/yum.repos.d ;\
+    wget http://download.opensuse.org/repositories/home:vbernat/RHEL_7/home:vbernat.repo ;\
+    yum install -y lldpd
 
 # Add mock binaries
 COPY mock/ipmitool /usr/local/bin/ipmitool
