@@ -26,6 +26,7 @@ import (
 	"github.com/imc-trading/peekaboo/system/kernelcfg"
 	"github.com/imc-trading/peekaboo/system/memory"
 	"github.com/imc-trading/peekaboo/system/opsys"
+	"github.com/imc-trading/peekaboo/system/pcicards"
 	"github.com/imc-trading/peekaboo/system/rpms"
 	"github.com/imc-trading/peekaboo/system/sysctls"
 )
@@ -42,6 +43,7 @@ func New() Daemon {
 			apiURL + "/system/sysctls":       {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/system/ipmi":          {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/system/rpms":          {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/system/pcicards":      {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/network/interfaces":   {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/network/routes":       {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/storage/disks":        {Timeout: 5 * 60},  // 5 min.
@@ -69,6 +71,7 @@ func (d *daemon) Run(bind string, static string) error {
 	d.addAPIRoute(apiURL+"/system/sysctls", sysctls.GetInterface)
 	d.addAPIRoute(apiURL+"/system/ipmi", ipmi.GetInterface)
 	d.addAPIRoute(apiURL+"/system/rpms", rpms.GetInterface)
+	d.addAPIRoute(apiURL+"/system/pcicards", pcicards.GetInterface)
 	d.addAPIRoute(apiURL+"/storage/disks", disks.GetInterface)
 	d.addAPIRoute(apiURL+"/storage/mounts", mounts.GetInterface)
 	d.addAPIRoute(apiURL+"/storage/lvm/physvols", physvols.GetInterface)
