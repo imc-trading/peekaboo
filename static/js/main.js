@@ -37,6 +37,7 @@ app.config(['$routeProvider', function ($routeProvider) {
     .when("/system/kernelcfg", {templateUrl: "partials/system/kernelcfg.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "kernelcfg"})
     .when("/system/rpms", {templateUrl: "partials/system/rpms.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "rpms"})
     .when("/system/pcicards", {templateUrl: "partials/system/pcicards.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "pcicards"})
+    .when("/system/modules", {templateUrl: "partials/system/modules.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "modules"})
 
     .when("/docker", {templateUrl: "partials/docker/general.html", controller: "PageCtrl", activeTab: "docker", sideActiveTab: "general"})
     .when("/docker/general", {templateUrl: "partials/docker/general.html", controller: "PageCtrl", activeTab: "docker", sideActiveTab: "general"})
@@ -331,6 +332,19 @@ app.controller('networkController', [ '$scope', '$resource', 'Flash', function($
 
   resource.get().$promise.then(function(value) {
     $scope.network = value;
+//    console.log (value);
+  }, function(err) {
+    var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+    var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+  });
+} ]);
+
+// Modules
+app.controller('modulesController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
+  var resource = $resource('/api/system/modules');
+
+  resource.query().$promise.then(function(value) {
+    $scope.modules = value;
 //    console.log (value);
   }, function(err) {
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
