@@ -90,6 +90,19 @@ app.controller('cpuController', [ '$scope', '$resource', 'Flash',  function($sco
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
   });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/system/cpu?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.cpu = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
 } ]);
 
 // Memory
@@ -129,6 +142,19 @@ app.controller('systemController', [ '$scope', '$resource', 'Flash', function($s
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
   });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/system?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.system = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
 } ]);
 
 // OS
@@ -142,6 +168,19 @@ app.controller('osController', [ '$scope', '$resource', 'Flash', function($scope
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
   });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/system/os?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.os = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
 } ]);
 
 // Interfaces
@@ -155,6 +194,19 @@ app.controller('interfacesController', [ '$scope', '$resource', 'Flash', functio
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
   });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/network/interfaces?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.interfaces = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
 } ]);
 
 // Routes
@@ -168,6 +220,19 @@ app.controller('routesController', [ '$scope', '$resource', 'Flash', function($s
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
   });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/network/routes?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.routes = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
 } ]);
 
 // Disks
@@ -181,6 +246,19 @@ app.controller('disksController', [ '$scope', '$resource', 'Flash', function($sc
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
   });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/storage/disks?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.disks = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
 } ]);
 
 // Mounts
@@ -194,6 +272,19 @@ app.controller('mountsController', [ '$scope', '$resource', 'Flash', function($s
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
   });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/storage/mounts?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.mounts = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
 } ]);
 
 // LVM Physical Volumes
@@ -207,6 +298,19 @@ app.controller('physVolsController', [ '$scope', '$resource', 'Flash', function(
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
   });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/storage/lvm/physvols?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.physVols = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
 } ]);
 
 // LVM Logical Volumes
@@ -220,6 +324,19 @@ app.controller('logVolsController', [ '$scope', '$resource', 'Flash', function($
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
   });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/storage/lvm/logvols?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.logVols = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
 } ]);
 
 // LVM Volume Groups
@@ -233,6 +350,19 @@ app.controller('volGrpsController', [ '$scope', '$resource', 'Flash', function($
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
   });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/storage/lvm/volgrps?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.volGrps = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
 } ]);
 
 // Sysctls
@@ -251,7 +381,7 @@ app.controller('sysctlsController', [ '$scope', '$resource', 'Flash', function($
     var resource = $resource('/api/system/sysctls?refresh=true');
 
     resource.query().$promise.then(function(value) {
-      $scope.sysctl = value;
+      $scope.sysctls = value;
 //      console.log (value);
     }, function(err) {
       var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
@@ -272,6 +402,19 @@ app.controller('dockerController', [ '$scope', '$resource', 'Flash', function($s
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
   });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/docker?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.docker = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
 } ]);
 
 // Images
@@ -363,6 +506,19 @@ app.controller('kernelCfgController', [ '$scope', '$resource', 'Flash', function
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
   });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/system/kernelcfg?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.kernelCfgs = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
 } ]);
 
 // RPMs
@@ -376,6 +532,19 @@ app.controller('rpmsController', [ '$scope', '$resource', 'Flash', function($sco
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
   });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/system/rpms?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.rpms = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
 } ]);
 
 // PCICards
@@ -389,6 +558,19 @@ app.controller('pciCardsController', [ '$scope', '$resource', 'Flash', function(
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
   });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/system/pcicards?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.pciCards = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
 } ]);
 
 // Network
@@ -402,6 +584,19 @@ app.controller('networkController', [ '$scope', '$resource', 'Flash', function($
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
   });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/network?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.network = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
 } ]);
 
 // Modules
@@ -415,4 +610,17 @@ app.controller('modulesController', [ '$scope', '$resource', 'Flash', function($
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
   });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/system/modules?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.modules = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
 } ]);
