@@ -28,11 +28,11 @@
     <tr>
       <th st-sort="id">ID</th>
       <th st-sort="image">Image</th>
+      <th st-sort="status">Status</th>
       <th st-sort="command">Command</th>
       <th st-sort="created">Created&nbsp;At</th>
       <th st-sort="runningFor">Running&nbsp;For</th>
       <th st-sort="ports">Ports</th>
-      <th st-sort="status">Status</th>
       <th st-sort="size">Size</th>
       <th st-sort="names">Names</th>
       <th st-sort="labels">Labels</th>
@@ -41,15 +41,15 @@
   <tbody>
     <tr ng-repeat="container in displayedContainers">
       <td>{{ container.id | limitTo:12 }}</td>
-      <td>{{ container.image | limitTo:12 }}</td>
-      <td>{{ container.command }}</td>
+      <td>{{ container.image | limitTo:25}}</td>
+      <td>{{ container.status }}</td>
+      <td>{{ container.command | limitTo:20 }}</td>
       <td>{{ container.createdAt }}</td>
       <td>{{ container.runningFor }}</td>
       <td>{{ container.ports }}</td>
-      <td>{{ container.status }}</td>
       <td>{{ container.size }}</td>
-      <td>{{ container.names | replace:",":", " }}</td>
-      <td>{{ container.labels | replace:",":", " }}</td>
+      <td>{{ container.names | replace:",":" " }}</td>
+      <td>{{ container.labels | replace:",":" " }}</td>
     </tr>
   </tbody>
   <tfoot>

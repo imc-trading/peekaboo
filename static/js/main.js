@@ -70,7 +70,7 @@ app.filter('joinBy', function () {
 // replace
 app.filter('replace', function () {
   return function (input,restr,newstr) {
-    var re = new RegExp(restr);
+    var re = new RegExp(restr, "g");
     return input.replace(re, newstr)
   };
 });

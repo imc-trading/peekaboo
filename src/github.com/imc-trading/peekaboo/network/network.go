@@ -22,51 +22,51 @@ func Get() (Network, error) {
 	n.EthtoolInstalled = false
 	if err := parse.Exists("ethtool"); err == nil {
 		n.EthtoolInstalled = true
-	}
 
-	o, err := parse.Exec("ethtool", []string{"--version"})
-	if err != nil {
-		return Network{}, err
+		o, err := parse.Exec("ethtool", []string{"--version"})
+		if err != nil {
+			return Network{}, err
+		}
+		arr := strings.Split(o, " ")
+		n.EthtoolVersion = arr[2]
 	}
-	arr := strings.Split(o, " ")
-	n.EthtoolVersion = arr[2]
 
 	// lldpctl
 	n.LldpctlInstalled = false
 	if err := parse.Exists("lldpctl"); err == nil {
 		n.LldpctlInstalled = true
-	}
 
-	o2, err := parse.Exec("lldpctl", []string{"-v"})
-	if err != nil {
-		return Network{}, err
+		o, err := parse.Exec("lldpctl", []string{"-v"})
+		if err != nil {
+			return Network{}, err
+		}
+		n.LldpctlVersion = o
 	}
-	n.LldpctlVersion = o2
 
 	// onload
 	n.OnloadInstalled = false
 	if err := parse.Exists("onload"); err == nil {
 		n.OnloadInstalled = true
-	}
 
-	o3, err := parse.Exec("onload", []string{"--version"})
-	if err != nil {
-		return Network{}, err
-	}
-	n.OnloadVersion = o2
-
-	for _, line := range strings.Split(o3, "\n") {
-		arr := strings.SplitN(line, " ", 2)
-		if len(arr) < 2 {
-			continue
+		o, err := parse.Exec("onload", []string{"--version"})
+		if err != nil {
+			return Network{}, err
 		}
+		n.OnloadVersion = o
 
-		key := strings.TrimSpace(arr[0])
-		val := strings.TrimSpace(arr[1])
+		for _, line := range strings.Split(o, "\n") {
+			arr := strings.SplitN(line, " ", 2)
+			if len(arr) < 2 {
+				continue
+			}
 
-		switch key {
-		case "OpenOnload":
-			n.OnloadVersion = val
+			key := strings.TrimSpace(arr[0])
+			val := strings.TrimSpace(arr[1])
+
+			switch key {
+			case "OpenOnload":
+				n.OnloadVersion = val
+			}
 		}
 	}
 
