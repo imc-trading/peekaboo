@@ -149,3 +149,11 @@
   background-color: #cacaca;
   border-left: 3px solid #ad542a;
 }
+
+.btn-space {
+  margin-right: 5px !important;
+}
+
+.btn-toolbar {
+  margin-bottom: 15px;
+}

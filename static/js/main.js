@@ -103,6 +103,19 @@ app.controller('memoryController', [ '$scope', '$resource', 'Flash', function($s
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
   });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/system/memory?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.memory = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
 } ]);
 
 // System
@@ -233,6 +246,19 @@ app.controller('sysctlsController', [ '$scope', '$resource', 'Flash', function($
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
   });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/system/sysctls?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.sysctl = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
 } ]);
 
 // Docker
@@ -259,6 +285,19 @@ app.controller('imagesController', [ '$scope', '$resource', 'Flash', function($s
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
   });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/docker/images?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.images = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
 } ]);
 
 // Containers
@@ -272,9 +311,22 @@ app.controller('containersController', [ '$scope', '$resource', 'Flash', functio
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
   });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/docker/containers?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.containers = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
 } ]);
 
-// Containers
+// IPMI
 app.controller('ipmiController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
   var resource = $resource('/api/system/ipmi');
 
@@ -285,6 +337,19 @@ app.controller('ipmiController', [ '$scope', '$resource', 'Flash', function($sco
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
   });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/system/ipmi?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.ipmi = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
 } ]);
 
 // Kernel Config
