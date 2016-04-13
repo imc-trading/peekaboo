@@ -116,7 +116,7 @@ func Get() (IPMI, error) {
 	}
 
 	// Current
-	m, err = parse.ExecRegexpMap("ipmitool", []string{"sdr", "type", "voltage"}, "\\|.*\\|", "\\|\\sok")
+	m, err = parse.ExecRegexpMap("ipmitool", []string{"sdr", "type", "current"}, "\\|.*\\|", "\\|\\sok")
 	if err != nil {
 		return IPMI{}, err
 	}
