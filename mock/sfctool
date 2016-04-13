@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo "sfutils version 3.5.1.1202"

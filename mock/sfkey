@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cat <<EOF
+sfkey firmware update utility: v3.4.3.2100
+Copyright Solarflare Communications 2006-2013, Level 5 Networks 2002-2005
+EOF
