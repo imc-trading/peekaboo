@@ -1,6 +1,6 @@
 #!/bin/bash
 
 cat <<EOF
-  VG      #PV #LV #SN Attr   VSize   VFree 
-  vg_root   1   5   0 wz--n- 556.46g 63.73g
+  VG      #PV #LV #SN Attr   VSize         VFree
+  vg_root   1   5   0 wz--n- 598376185856B 68530733056B
 EOF

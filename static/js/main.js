@@ -94,7 +94,7 @@ app.controller('cpuController', [ '$scope', '$resource', 'Flash',  function($sco
   $scope.refresh = function() {
     var resource = $resource('/api/system/cpu?refresh=true');
 
-    resource.query().$promise.then(function(value) {
+    resource.get().$promise.then(function(value) {
       $scope.cpu = value;
 //      console.log (value);
     }, function(err) {
@@ -120,7 +120,7 @@ app.controller('memoryController', [ '$scope', '$resource', 'Flash', function($s
   $scope.refresh = function() {
     var resource = $resource('/api/system/memory?refresh=true');
 
-    resource.query().$promise.then(function(value) {
+    resource.get().$promise.then(function(value) {
       $scope.memory = value;
 //      console.log (value);
     }, function(err) {
@@ -146,7 +146,7 @@ app.controller('systemController', [ '$scope', '$resource', 'Flash', function($s
   $scope.refresh = function() {
     var resource = $resource('/api/system?refresh=true');
 
-    resource.query().$promise.then(function(value) {
+    resource.get().$promise.then(function(value) {
       $scope.system = value;
 //      console.log (value);
     }, function(err) {
@@ -172,7 +172,7 @@ app.controller('osController', [ '$scope', '$resource', 'Flash', function($scope
   $scope.refresh = function() {
     var resource = $resource('/api/system/os?refresh=true');
 
-    resource.query().$promise.then(function(value) {
+    resource.get().$promise.then(function(value) {
       $scope.os = value;
 //      console.log (value);
     }, function(err) {
@@ -406,7 +406,7 @@ app.controller('dockerController', [ '$scope', '$resource', 'Flash', function($s
   $scope.refresh = function() {
     var resource = $resource('/api/docker?refresh=true');
 
-    resource.query().$promise.then(function(value) {
+    resource.get().$promise.then(function(value) {
       $scope.docker = value;
 //      console.log (value);
     }, function(err) {
@@ -484,7 +484,7 @@ app.controller('ipmiController', [ '$scope', '$resource', 'Flash', function($sco
   $scope.refresh = function() {
     var resource = $resource('/api/system/ipmi?refresh=true');
 
-    resource.query().$promise.then(function(value) {
+    resource.get().$promise.then(function(value) {
       $scope.ipmi = value;
 //      console.log (value);
     }, function(err) {
@@ -588,7 +588,7 @@ app.controller('networkController', [ '$scope', '$resource', 'Flash', function($
   $scope.refresh = function() {
     var resource = $resource('/api/network?refresh=true');
 
-    resource.query().$promise.then(function(value) {
+    resource.get().$promise.then(function(value) {
       $scope.network = value;
 //      console.log (value);
     }, function(err) {

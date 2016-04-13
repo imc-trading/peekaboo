@@ -4,7 +4,7 @@
 FROM centos:centos7
 
 RUN set -ex ;\
-    yum install -y go vim-enhanced net-tools lsb docker git wget ;\
+    yum install -y go vim-enhanced net-tools lsb docker git wget ethtool ;\
     yum clean all
 
 ENV GOPATH=/root/go

@@ -74,7 +74,8 @@ func Get() (IPMI, error) {
 		return i, nil
 	}
 
-	m, err := parse.ExecRegexpMap("ipmitool", []string{"sdr"}, "\\|", "\\|\\sok")
+	// Fans
+	m, err := parse.ExecRegexpMap("ipmitool", []string{"sdr", "type", "fan"}, "\\|.*\\|", "\\|\\sok")
 	if err != nil {
 		return IPMI{}, err
 	}
@@ -98,12 +99,8 @@ func Get() (IPMI, error) {
 		})
 	}
 
-	i.Current1, err = strToFloat32Ptr(m, "Current 1")
-	if err != nil {
-		return IPMI{}, err
-	}
-
-	i.Current2, err = strToFloat32Ptr(m, "Current 2")
+	// Voltage
+	m, err = parse.ExecRegexpMap("ipmitool", []string{"sdr", "type", "voltage"}, "\\|.*\\|", "\\|\\sok")
 	if err != nil {
 		return IPMI{}, err
 	}
@@ -118,7 +115,29 @@ func Get() (IPMI, error) {
 		return IPMI{}, err
 	}
 
+	// Current
+	m, err = parse.ExecRegexpMap("ipmitool", []string{"sdr", "type", "voltage"}, "\\|.*\\|", "\\|\\sok")
+	if err != nil {
+		return IPMI{}, err
+	}
+
+	i.Current1, err = strToFloat32Ptr(m, "Current 1")
+	if err != nil {
+		return IPMI{}, err
+	}
+
+	i.Current2, err = strToFloat32Ptr(m, "Current 2")
+	if err != nil {
+		return IPMI{}, err
+	}
+
 	i.PowerCons, err = strToIntPtr(m, "Pwr Consumption")
+	if err != nil {
+		return IPMI{}, err
+	}
+
+	// Temperature
+	m, err = parse.ExecRegexpMap("ipmitool", []string{"sdr", "type", "temperature"}, "\\|.*\\|", "\\|\\sok")
 	if err != nil {
 		return IPMI{}, err
 	}

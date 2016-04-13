@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ "${1}" == "-V" ]; then
+  echo "ipmitool version 1.8.15"
+  exit 0
+fi
+
 cat <<EOF
 FP_ID_LED        | 0x00              | ok
 BIOS_POST_CMPLT  | 0x00              | ok
