@@ -19,7 +19,8 @@ app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
     .when("/", {templateUrl: "partials/dashboard.html", controller: "PageCtrl", activeTab: "dashboard"})
 
-    .when("/network", {templateUrl: "partials/network/general.html", controller: "PageCtrl", activeTab: "network", sideActiveTab: "general"})
+    .when("/network", {templateUrl: "partials/network/interfaces.html", controller: "PageCtrl", activeTab: "network", sideActiveTab: "interfaces"})
+    .when("/network/general", {templateUrl: "partials/network/general.html", controller: "PageCtrl", activeTab: "network", sideActiveTab: "general"})
     .when("/network/interfaces", {templateUrl: "partials/network/interfaces.html", controller: "PageCtrl", activeTab: "network", sideActiveTab: "interfaces"})
     .when("/network/routes", {templateUrl: "partials/network/routes_linux.html", controller: "PageCtrl", activeTab: "network", sideActiveTab: "routes"})
 
@@ -30,7 +31,7 @@ app.config(['$routeProvider', function ($routeProvider) {
     .when("/storage/lvm/volgrps", {templateUrl: "partials/storage/lvm/volgrps.html", controller: "PageCtrl", activeTab: "storage", sideActiveTab: "lvm/volgrps"})
     .when("/storage/mounts", {templateUrl: "partials/storage/mounts.html", controller: "PageCtrl", activeTab: "storage", sideActiveTab: "mounts"})
 
-    .when("/system", {templateUrl: "partials/system/sysctl.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "sysctl"})
+    .when("/system", {templateUrl: "partials/system/memory.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "memory"})
     .when("/system/sysctl", {templateUrl: "partials/system/sysctl.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "sysctl"})
     .when("/system/memory", {templateUrl: "partials/system/memory.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "memory"})
     .when("/system/ipmi", {templateUrl: "partials/system/ipmi.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "ipmi"})
@@ -39,7 +40,7 @@ app.config(['$routeProvider', function ($routeProvider) {
     .when("/system/pcicards", {templateUrl: "partials/system/pcicards.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "pcicards"})
     .when("/system/modules", {templateUrl: "partials/system/modules.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "modules"})
 
-    .when("/docker", {templateUrl: "partials/docker/general.html", controller: "PageCtrl", activeTab: "docker", sideActiveTab: "general"})
+    .when("/docker", {templateUrl: "partials/docker/containers.html", controller: "PageCtrl", activeTab: "docker", sideActiveTab: "containers"})
     .when("/docker/general", {templateUrl: "partials/docker/general.html", controller: "PageCtrl", activeTab: "docker", sideActiveTab: "general"})
     .when("/docker/images", {templateUrl: "partials/docker/images.html", controller: "PageCtrl", activeTab: "docker", sideActiveTab: "images"})
     .when("/docker/containers", {templateUrl: "partials/docker/containers.html", controller: "PageCtrl", activeTab: "docker", sideActiveTab: "containers"})
