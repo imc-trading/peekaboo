@@ -3,53 +3,54 @@
 
 <!-- Container -->
 <div class="container-fluid">
-
   <flash-message duration="4" show-close="true" on-dismiss="myCallback(flash);"></flash-message>
-
   <div class="row">
 
     <!-- Sidebar -->
     <div ng-include='"partials/storage/sidebar.html"'></div>
 
-    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
-<table ng-controller="logVolsController" st-table="displayedLogVols" st-safe-src="logVols" class="table table-striped sortable">
-  <thead>
-    <tr>
-      <th colspan="4">
-        <div class="btn-toolbar" role="toolbar">
-          <div class="input-group">
-            <div class="input-group-addon"><i class="fa fa-search"></i></div>
-            <input st-search="" type="text" class="form-control" placeholder="Search...">
-          </div>
-          <div class="btn-group pull-right" role="group">
-            <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>
-          </div>
+    <!-- Content -->
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-controller="logVolsController">
+      <div class="form-group">
+        <div class="input-btn-group pull-right">
+          <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>
         </div>
-      </th>
-    </tr>
-    <tr>
-      <th st-sort="name">Name</th>
-      <th st-sort="volGrp">Volume Group</th>
-      <th st-sort="attr">Attributes</th>
-      <th st-sort="sizeGB">Size (GB)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="logVol in displayedLogVols">
-      <td>{{ logVol.name }}</td>
-      <td>{{ logVol.volGrp }}</td>
-      <td>{{ logVol.attr }}</td>
-      <td>{{ logVol.sizeGB | number:2 }}</td>
-    </tr>
-  </tbody>
-  <tfoot>
-    <tr>
-      <td colspan="4" class="text-center">
-        <div st-pagination="" st-items-by-page="10"></div>
-      </td>
-    </tr>
-  </tfoot>
-</table>
-
+      </div>
+      <table st-table="displayedLogVols" st-safe-src="logVols" class="table table-striped sortable">
+        <thead>
+          <tr>
+            <th colspan="0" class="th-no-border">
+              <div class="btn-toolbar" role="toolbar">
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                  <input st-search="" type="text" class="form-control" placeholder="Search...">
+                </div>
+              </div>
+            </th>
+          </tr>
+          <tr>
+            <th st-sort="name">Name</th>
+            <th st-sort="volGrp">Volume Group</th>
+            <th st-sort="attr">Attributes</th>
+            <th st-sort="sizeGB">Size (GB)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="logVol in displayedLogVols">
+            <td>{{ logVol.name }}</td>
+            <td>{{ logVol.volGrp }}</td>
+            <td>{{ logVol.attr }}</td>
+            <td>{{ logVol.sizeGB | number:2 }}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="0" class="text-center">
+              <div st-pagination="" st-items-by-page="10"></div>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
 </div>

@@ -3,65 +3,66 @@
 
 <!-- Container -->
 <div class="container-fluid">
-
   <flash-message duration="4" show-close="true" on-dismiss="myCallback(flash);"></flash-message>
-
   <div class="row">
 
     <!-- Sidebar -->
     <div ng-include='"partials/docker/sidebar.html"'></div>
 
-    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
-<table ng-controller="containersController" st-table="displayedContainers" st-safe-src="containers" class="table table-striped sortable">
-  <thead>
-    <tr>
-      <th colspan="10">
-        <div class="btn-toolbar" role="toolbar">
-          <div class="input-group">
-            <div class="input-group-addon"><i class="fa fa-search"></i></div>
-            <input st-search="" type="text" class="form-control" placeholder="Search...">
-          </div>
-          <div class="btn-group pull-right" role="group">
-            <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>
-          </div>
+    <!-- Content -->
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-controller="containersController">
+      <div class="form-group">
+        <div class="input-btn-group pull-right">
+          <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>
         </div>
-      </th>
-    </tr>
-    <tr>
-      <th st-sort="id">ID</th>
-      <th st-sort="image">Image</th>
-      <th st-sort="status">Status</th>
-      <th st-sort="command">Command</th>
-      <th st-sort="created">Created&nbsp;At</th>
-      <th st-sort="runningFor">Running&nbsp;For</th>
-      <th st-sort="ports">Ports</th>
-      <th st-sort="size">Size</th>
-      <th st-sort="names">Names</th>
-      <th st-sort="labels">Labels</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="container in displayedContainers">
-      <td>{{ container.id | limitTo:12 }}</td>
-      <td>{{ container.image | limitTo:25}}</td>
-      <td>{{ container.status }}</td>
-      <td>{{ container.command | limitTo:20 }}</td>
-      <td>{{ container.createdAt }}</td>
-      <td>{{ container.runningFor }}</td>
-      <td>{{ container.ports }}</td>
-      <td>{{ container.size }}</td>
-      <td>{{ container.names | replace:",":" " }}</td>
-      <td>{{ container.labels | replace:",":" " }}</td>
-    </tr>
-  </tbody>
-  <tfoot>
-    <tr>
-      <td colspan="10" class="text-center">
-        <div st-pagination="" st-items-by-page="10"></div>
-      </td>
-    </tr>
-  </tfoot>
-</table>
-
+      </div>
+      <table st-table="displayedContainers" st-safe-src="containers" class="table table-striped sortable">
+        <thead>
+          <tr>
+            <th colspan="0" class="th-no-border">
+              <div class="btn-toolbar" role="toolbar">
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                  <input st-search="" type="text" class="form-control" placeholder="Search...">
+                </div>
+              </div>
+            </th>
+          </tr>
+          <tr>
+            <th st-sort="id">ID</th>
+            <th st-sort="image">Image</th>
+            <th st-sort="status">Status</th>
+            <th st-sort="command">Command</th>
+            <th st-sort="created">Created&nbsp;At</th>
+            <th st-sort="runningFor">Running&nbsp;For</th>
+            <th st-sort="ports">Ports</th>
+            <th st-sort="size">Size</th>
+            <th st-sort="names">Names</th>
+            <th st-sort="labels">Labels</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="container in displayedContainers">
+            <td>{{ container.id }}</td>
+            <td>{{ container.image }}</td>
+            <td>{{ container.status }}</td>
+            <td>{{ container.command }}</td>
+            <td>{{ container.createdAt }}</td>
+            <td>{{ container.runningFor }}</td>
+            <td>{{ container.ports }}</td>
+            <td>{{ container.size }}</td>
+            <td>{{ container.names | replace:",":" " }}</td>
+            <td>{{ container.labels | replace:",":" " }}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="0" class="text-center">
+              <div st-pagination="" st-items-by-page="10"></div>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
 </div>

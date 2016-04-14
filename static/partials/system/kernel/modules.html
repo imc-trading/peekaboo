@@ -10,13 +10,13 @@
     <div ng-include='"partials/system/sidebar.html"'></div>
 
     <!-- Content -->
-    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-controller="rpmsController">
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-controller="modulesController">
       <div class="form-group">
         <div class="input-btn-group pull-right">
           <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>
         </div>
       </div>
-      <table st-table="displayedRPMs" st-safe-src="rpms" class="table table-striped sortable">
+      <table st-table="displayedModules" st-safe-src="modules" class="table table-striped sortable">
         <thead>
           <tr>
             <th colspan="0" class="th-no-border">
@@ -29,20 +29,16 @@
             </th>
           </tr>
           <tr>
-            <th st-sort="name">Name</th>
-            <th st-sort="version">Version</th>
-            <th st-sort="release">Release</th>
-            <th st-sort="arch">Arch</th>
-            <th st-sort="installed">Installed</th>
+            <th st-sort="module">Module</th>
+            <th st-sort="size">Size</th>
+            <th st-sort="usedBy">Used By</th>
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="rpm in displayedRPMs">
-            <td>{{ rpm.name }}</td>
-            <td>{{ rpm.version }}</td>
-            <td>{{ rpm.release }}</td>
-            <td>{{ rpm.arch }}</td>
-            <td>{{ rpm.installed }}</td>
+          <tr ng-repeat="module in displayedModules">
+            <td>{{ module.module }}</td>
+            <td>{{ module.size }}</td>
+            <td>{{ module.usedBy | joinBy:', ' }}</td>
           </tr>
         </tbody>
         <tfoot>

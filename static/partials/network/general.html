@@ -3,39 +3,43 @@
 
 <!-- Container -->
 <div class="container-fluid">
-
   <flash-message duration="4" show-close="true" on-dismiss="myCallback(flash);"></flash-message>
-
   <div class="row">
 
     <!-- Sidebar -->
     <div ng-include='"partials/network/sidebar.html"'></div>
 
-    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
-<div ng-controller="networkController">
-  <dl class="dl-horizontal">
-    <dt>ethtool Installed</dt>
-    <dd>{{ network.ethtoolInstalled }}</dd>
-    <dt>ethtool Version</dt>
-    <dd>{{ network.ethtoolVersion }}</dd>
-    <dt>lldpctl Installed</dt>
-    <dd>{{ network.lldpctlInstalled }}</dd>
-    <dt>lldpctl Version</dt>
-    <dd>{{ network.lldpctlVersion }}</dd>
-    <dt>onload Installed</dt>
-    <dd>{{ network.onloadInstalled }}</dd>
-    <dt>onload Version</dt>
-    <dd>{{ network.onloadVersion }}</dd>
-    <dt>sfctool Installed</dt>
-    <dd>{{ network.sfctoolInstalled }}</dd>
-    <dt>sfctool Version</dt>
-    <dd>{{ network.sfctoolVersion }}</dd>
-    <dt>sfkey Installed</dt>
-    <dd>{{ network.sfkeyInstalled }}</dd>
-    <dt>sfkey Version</dt>
-    <dd>{{ network.sfkeyVersion }}</dd>
-  </dl>
-</div>
-
+    <!-- Content -->
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-controller="networkController">
+      <div class="form-group">
+        <div class="input-btn-group pull-right">
+          <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>
+        </div>
+      </div>
+      <div>
+        <dl class="dl-horizontal">
+          <dt>ethtool Installed</dt>
+          <dd>{{ network.ethtoolInstalled }}</dd>
+          <dt>ethtool Version</dt>
+          <dd>{{ network.ethtoolVersion }}</dd>
+          <dt>lldpctl Installed</dt>
+          <dd>{{ network.lldpctlInstalled }}</dd>
+          <dt>lldpctl Version</dt>
+          <dd>{{ network.lldpctlVersion }}</dd>
+          <dt>onload Installed</dt>
+          <dd>{{ network.onloadInstalled }}</dd>
+          <dt>onload Version</dt>
+          <dd>{{ network.onloadVersion }}</dd>
+          <dt>sfctool Installed</dt>
+          <dd>{{ network.sfctoolInstalled }}</dd>
+          <dt>sfctool Version</dt>
+          <dd>{{ network.sfctoolVersion }}</dd>
+          <dt>sfkey Installed</dt>
+          <dd>{{ network.sfkeyInstalled }}</dd>
+          <dt>sfkey Version</dt>
+          <dd>{{ network.sfkeyVersion }}</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
 </div>

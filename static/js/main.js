@@ -35,15 +35,18 @@ app.config(['$routeProvider', function ($routeProvider) {
     .when("/system/sysctl", {templateUrl: "partials/system/sysctl.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "sysctl"})
     .when("/system/memory", {templateUrl: "partials/system/memory.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "memory"})
     .when("/system/ipmi", {templateUrl: "partials/system/ipmi.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "ipmi"})
-    .when("/system/kernelcfg", {templateUrl: "partials/system/kernelcfg.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "kernelcfg"})
     .when("/system/rpms", {templateUrl: "partials/system/rpms.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "rpms"})
     .when("/system/pcicards", {templateUrl: "partials/system/pcicards.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "pcicards"})
-    .when("/system/modules", {templateUrl: "partials/system/modules.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "modules"})
+    .when("/system/kernel/config", {templateUrl: "partials/system/kernel/config.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "kernel/config"})
+    .when("/system/kernel/modules", {templateUrl: "partials/system/kernel/modules.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "kernel/modules"})
 
     .when("/docker", {templateUrl: "partials/docker/containers.html", controller: "PageCtrl", activeTab: "docker", sideActiveTab: "containers"})
     .when("/docker/general", {templateUrl: "partials/docker/general.html", controller: "PageCtrl", activeTab: "docker", sideActiveTab: "general"})
     .when("/docker/images", {templateUrl: "partials/docker/images.html", controller: "PageCtrl", activeTab: "docker", sideActiveTab: "images"})
     .when("/docker/containers", {templateUrl: "partials/docker/containers.html", controller: "PageCtrl", activeTab: "docker", sideActiveTab: "containers"})
+
+    .otherwise({ controller: 'PageCtrl', templateUrl: 'partials/404.html'});
+
 }]);
 
 /**
@@ -75,6 +78,20 @@ app.filter('replace', function () {
     return input.replace(re, newstr)
   };
 });
+
+
+
+
+app.directive('stRatio',function(){
+        return {
+          link:function(scope, element, attr){
+            var ratio=+(attr.stRatio);
+            
+            element.css('width',ratio+'%');
+            
+          }
+        };
+    });
 
 /*
  * Controllers

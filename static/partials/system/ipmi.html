@@ -3,69 +3,64 @@
 
 <!-- Container -->
 <div class="container-fluid">
-
   <flash-message duration="4" show-close="true" on-dismiss="myCallback(flash);"></flash-message>
-
   <div class="row">
 
     <!-- Sidebar -->
     <div ng-include='"partials/system/sidebar.html"'></div>
 
+    <!-- Content -->
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-controller="ipmiController">
-
-        <div class="form-group">
-          <div class="input-btn-group pull-right">
-            <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>
-          </div>
+      <div class="form-group">
+        <div class="input-btn-group pull-right">
+          <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>
         </div>
-
-<fieldset>
-  <dl class="dl-horizontal">
-    <dt>ipmitool Installed</dt>
-    <dd>{{ ipmi.ipmitoolInstalled }}</dt>
-    <dt>ipmitool Version</dt>
-    <dd>{{ ipmi.ipmitoolVersion }}</dt>
-  </dl>
-  <dl class="dl-horizontal">
-    <dt>Power Consumption</dt>
-    <dd>{{ ipmi.powerConsWatts }} Watts</dt>
-  </dl>
-  <dl class="dl-horizontal">
-    <dt>Inlet Temp.</dt>
-    <dd>{{ ipmi.inletTempDegrC }} C</dt>
-    <dt>Exhaust Temp.</dt>
-    <dd>{{ ipmi.exhaustTempDegrC }} C</dt>
-  </dl>
-</fieldset>
-
-<fieldset>
-  <legend>Power Supply 1</legend>
-  <dl class="dl-horizontal">
-    <dt>Current</dt>
-    <dd>{{ ipmi.current1Amps | number:2 }} Amps</dd>
-    <dt>Voltage</dt>
-    <dd>{{ ipmi.voltage1Volts }} Volts</dd>
-  </dl>
-</fieldset>
-
-<fieldset>
-  <legend>Power Supply 2</legend>
-  <dl class="dl-horizontal">
-    <dt>Current</dt>
-    <dd>{{ ipmi.current2Amps | number:2 }} Amps</dd>
-    <dt>Voltage</dt>
-    <dd>{{ ipmi.voltage2Volts }} Volts</dd>
-  </dl>
-</fieldset>
-
-<fieldset>
-  <legend>Fans</legend>
-  <dl class="dl-horizontal">
-    <div ng-repeat="fan in ipmi.fans">
-      <dt>{{ fan.name }}</dt>
-      <dd>{{ fan.speedRPM }} RPM</dd>
+      </div>
+      <fieldset>
+        <dl class="dl-horizontal">
+          <dt>ipmitool Installed</dt>
+          <dd>{{ ipmi.ipmitoolInstalled }}</dt>
+          <dt>ipmitool Version</dt>
+          <dd>{{ ipmi.ipmitoolVersion }}</dt>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>Power Consumption</dt>
+          <dd>{{ ipmi.powerConsWatts }} Watts</dt>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>Inlet Temp.</dt>
+          <dd>{{ ipmi.inletTempDegrC }} C</dt>
+          <dt>Exhaust Temp.</dt>
+          <dd>{{ ipmi.exhaustTempDegrC }} C</dt>
+        </dl>
+      </fieldset>
+      <fieldset>
+        <legend>Power Supply 1</legend>
+        <dl class="dl-horizontal">
+          <dt>Current</dt>
+          <dd>{{ ipmi.current1Amps | number:2 }} Amps</dd>
+          <dt>Voltage</dt>
+          <dd>{{ ipmi.voltage1Volts }} Volts</dd>
+        </dl>
+      </fieldset>
+      <fieldset>
+        <legend>Power Supply 2</legend>
+        <dl class="dl-horizontal">
+          <dt>Current</dt>
+          <dd>{{ ipmi.current2Amps | number:2 }} Amps</dd>
+          <dt>Voltage</dt>
+          <dd>{{ ipmi.voltage2Volts }} Volts</dd>
+        </dl>
+      </fieldset>
+      <fieldset>
+        <legend>Fans</legend>
+        <dl class="dl-horizontal">
+          <div ng-repeat="fan in ipmi.fans">
+            <dt>{{ fan.name }}</dt>
+            <dd>{{ fan.speedRPM }} RPM</dd>
+          </div>
+        </dl>
+      </fieldset>
     </div>
-  </dl>
-</fieldset>
-
+  </div>
 </div>

@@ -3,73 +3,74 @@
 
 <!-- Container -->
 <div class="container-fluid">
-
   <flash-message duration="4" show-close="true" on-dismiss="myCallback(flash);"></flash-message>
-
   <div class="row">
 
     <!-- Sidebar -->
     <div ng-include='"partials/network/sidebar.html"'></div>
 
-    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
-<table ng-controller="interfacesController" st-table="displayedInterfaces" st-safe-src="interfaces" class="table table-striped sortable">
-  <thead>
-    <tr>
-      <th colspan="14">
-        <div class="btn-toolbar" role="toolbar">
-          <div class="input-group">
-            <div class="input-group-addon"><i class="fa fa-search"></i></div>
-            <input st-search="" type="text" class="form-control" placeholder="Search...">
-          </div>
-          <div class="btn-group pull-right" role="group">
-            <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>
-          </div>
+    <!-- Content -->
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-controller="interfacesController">
+      <div class="form-group">
+        <div class="input-btn-group pull-right">
+          <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>
         </div>
-      </th>
-    </tr>
-    <tr>
-      <th st-sort="name">Name</th>
-      <th st-sort="mtu">MTU</th>
-      <th st-sort="ipAddr">IP Address</th>
-      <th st-sort="hwAddr">HW Address</th>
-      <th st-sort="flags">Flags</th>
-      <th st-sort="driver">Driver</th>
-      <th st-sort="driverVersion">Driver Version</th>
-      <th st-sort="firmwareVersion">Firmware Version</th>
-      <th st-sort="swChassisId">Sw. Chassis ID</th>
-      <th st-sort="swName">Sw. Chassis ID</th>
-      <th st-sort="swDescr">Sw. Descr.</th>
-      <th st-sort="swPortId">Sw. Port ID</th>
-      <th st-sort="swPortDescr">Sw. Port Descr.</th>
-      <th st-sort="swVLan">Sw. VLAN</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="interface in displayedInterfaces">
-      <td>{{ interface.name }}</td>
-      <td>{{ interface.mtu }}</td>
-      <td>{{ interface.ipAddr | joinBy:', ' }}</td>
-      <td>{{ interface.hwAddr }}</td>
-      <td>{{ interface.flags | joinBy:' ' }}</td>
-      <td>{{ interface.driver }}</td>
-      <td>{{ interface.driverVersion }}</td>
-      <td>{{ interface.firmwareVersion }}</td>
-      <td>{{ interface.swChassisId }}</td>
-      <td>{{ interface.swName }}</td>
-      <td>{{ interface.swDescr }}</td>
-      <td>{{ interface.swPortId }}</td>
-      <td>{{ interface.swPortDescr }}</td>
-      <td>{{ interface.swVLAN }}</td>
-    </tr>
-  </tbody>
-  <tfoot>
-    <tr>
-      <td colspan="14" class="text-center">
-        <div st-pagination="" st-items-by-page="10"></div>
-      </td>
-    </tr>
-  </tfoot>
-</table>
-
+      </div>
+      <table st-table="displayedInterfaces" st-safe-src="interfaces" class="table table-striped sortable">
+        <thead>
+          <tr>
+            <th colspan="0" class="th-no-border">
+              <div class="btn-toolbar" role="toolbar">
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                  <input st-search="" type="text" class="form-control" placeholder="Search...">
+                </div>
+              </div>
+            </th>
+          </tr>
+          <tr>
+            <th st-sort="name">Name</th>
+            <th st-sort="mtu">MTU</th>
+            <th st-sort="ipAddr">IP Address</th>
+            <th st-sort="hwAddr">HW Address</th>
+            <th st-sort="flags">Flags</th>
+            <th st-sort="driver">Driver</th>
+            <th st-sort="driverVersion">Driver Version</th>
+            <th st-sort="firmwareVersion">Firmware Version</th>
+            <th st-sort="swChassisId">Sw. Chassis ID</th>
+            <th st-sort="swName">Sw. Chassis ID</th>
+            <th st-sort="swDescr">Sw. Descr.</th>
+            <th st-sort="swPortId">Sw. Port ID</th>
+            <th st-sort="swPortDescr">Sw. Port Descr.</th>
+            <th st-sort="swVLan">Sw. VLAN</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="interface in displayedInterfaces">
+            <td>{{ interface.name }}</td>
+            <td>{{ interface.mtu }}</td>
+            <td>{{ interface.ipAddr | joinBy:', ' }}</td>
+            <td>{{ interface.hwAddr }}</td>
+            <td>{{ interface.flags | joinBy:' ' }}</td>
+            <td>{{ interface.driver }}</td>
+            <td>{{ interface.driverVersion }}</td>
+            <td>{{ interface.firmwareVersion }}</td>
+            <td>{{ interface.swChassisId }}</td>
+            <td>{{ interface.swName }}</td>
+            <td>{{ interface.swDescr }}</td>
+            <td>{{ interface.swPortId }}</td>
+            <td>{{ interface.swPortDescr }}</td>
+            <td>{{ interface.swVLAN }}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="0" class="text-center">
+              <div st-pagination="" st-items-by-page="10"></div>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
 </div>
