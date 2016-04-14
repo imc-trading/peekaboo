@@ -88,19 +88,26 @@
 
 .sidebar {
   position: absolute;
-  top: 51;
-  left: -160px;;
+  top: 130px;
+  left: -167px;;
   transition: 100ms left;
   z-index: 1000;
 }
 
 #navigation-toggle {
   position: absolute;
-  left: 160px;
+  left: 0px;
+  box-shadow: 3px 3px 1px #888888;
+  
   color: white;
   text-decoration: none;
   padding: 14px;
   background-color: #1a1a1a;
+
+/*
+  left: 5px;
+  box-shadow: 5px 5px 2px #888888;
+*/
 }
 
 .show {
@@ -111,6 +118,7 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  box-shadow: 7px 7px 3px #888888;
 }
 
 .navigation-items a, .navigation-title {
