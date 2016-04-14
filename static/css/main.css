@@ -15,6 +15,8 @@
 .navbar-brand>img {
   height: 46px;
   padding: 6px 0px 3px 0px;
+  margin-left: 15px;
+  margin-right: 15px;
   width: auto;
 }
 
@@ -139,7 +141,7 @@
   border-left: 3px solid #ad542a;
 }
 
-.container-fluid {
+.content {
   margin-left: 50px;
 }
 
