@@ -25,30 +25,30 @@
         </th>
       </tr>
       <tr>
-        <th st-sort="id">ID</th>
-        <th st-sort="image">Image</th>
-        <th st-sort="status">Status</th>
-        <th st-sort="command">Command</th>
-        <th st-sort="created">Created&nbsp;At</th>
-        <th st-sort="runningFor">Running&nbsp;For</th>
-        <th st-sort="ports">Ports</th>
-        <th st-sort="size">Size</th>
-        <th st-sort="names">Names</th>
-        <th st-sort="labels">Labels</th>
+        <th st-size="5" st-sort="id">ID</th>
+        <th st-size="40" st-sort="image">Image</th>
+        <th st-size="15" st-sort="status">Status</th>
+        <th st-size="10" st-sort="command">Command</th>
+        <th st-size="5" st-sort="created">Created&nbsp;At</th>
+        <th st-size="5" st-sort="runningFor">Running&nbsp;For</th>
+        <th st-size="5" st-sort="ports">Ports</th>
+        <th st-size="5" st-sort="size">Size</th>
+        <th st-size="5" st-sort="names">Names</th>
+        <th st-size="5" st-sort="labels">Labels</th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="container in displayedContainers">
-        <td>{{ container.id }}</td>
-        <td>{{ container.image }}</td>
-        <td>{{ container.status }}</td>
-        <td>{{ container.command }}</td>
-        <td>{{ container.createdAt }}</td>
-        <td>{{ container.runningFor }}</td>
-        <td>{{ container.ports }}</td>
-        <td>{{ container.size }}</td>
-        <td>{{ container.names | replace:",":" " }}</td>
-        <td>{{ container.labels | replace:",":" " }}</td>
+        <td st-size="5">{{ container.id }}</td>
+        <td st-size="40">{{ container.image }}</td>
+        <td st-size="15">{{ container.status }}</td>
+        <td st-size="10">{{ container.command }}</td>
+        <td st-size="5">{{ container.createdAt }}</td>
+        <td st-size="5">{{ container.runningFor }}</td>
+        <td st-size="5">{{ container.ports }}</td>
+        <td st-size="5">{{ container.size }}</td>
+        <td st-size="5">{{ container.names | replace:",":" " }}</td>
+        <td st-size="5">{{ container.labels | replace:",":" " }}</td>
       </tr>
     </tbody>
     <tfoot>
