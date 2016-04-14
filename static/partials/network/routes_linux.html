@@ -1,64 +1,58 @@
 <!-- Header -->
 <div ng-include='"templates/header.html"'></div>
 
-<!-- Container -->
-<div class="container-fluid">
+<!-- Sidebar -->
+<div ng-include='"partials/network/sidebar.html"'></div>
+
+<!-- Content -->
+<div class="container-fluid" ng-controller="routesController">
   <flash-message duration="4" show-close="true" on-dismiss="myCallback(flash);"></flash-message>
-  <div class="row">
-
-    <!-- Sidebar -->
-    <div ng-include='"partials/network/sidebar.html"'></div>
-
-    <!-- Content -->
-    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-controller="routesController">
-      <div class="form-group">
-        <div class="input-btn-group pull-right">
-          <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>
-        </div>
-      </div>
-      <table st-table="displayedRoutes" st-safe-src="routes" class="table table-striped sortable">
-        <thead>
-          <tr>
-            <th colspan="0" class="th-no-border">
-              <div class="btn-toolbar" role="toolbar">
-                <div class="input-group">
-                  <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                  <input st-search="" type="text" class="form-control" placeholder="Search...">
-                </div>
-              </div>
-            </th>
-          </tr>
-          <tr>
-            <th st-sort="destination">Destination</th>
-            <th st-sort="gateway">Gateway</th>
-            <th st-sort="genmask">Genmask</th>
-            <th st-sort="flags">Flags</th>
-            <th st-sort="mss">MSS</th>
-            <th st-sort="window">Window</th>
-            <th st-sort="irtt">IRTT</th>
-            <th st-sort="interface">Interface</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="route in displayedRoutes">
-            <td>{{ route.destination }}</td>
-            <td>{{ route.gateway }}</td>
-            <td>{{ route.genmask }}</td>
-            <td>{{ route.flags }}</td>
-            <td>{{ route.mss }}</td>
-            <td>{{ route.window }}</td>
-            <td>{{ route.irtt }}</td>
-            <td>{{ route.interface }}</td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="0" class="text-center">
-              <div st-pagination="" st-items-by-page="10"></div>
-            </td>
-          </tr>
-        </tfoot>
-      </table>
+  <div class="form-group">
+    <div class="input-btn-group pull-right">
+      <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>
     </div>
   </div>
+  <table st-table="displayedRoutes" st-safe-src="routes" class="table table-striped sortable">
+    <thead>
+      <tr>
+        <th colspan="0" class="th-no-border">
+          <div class="btn-toolbar" role="toolbar">
+            <div class="input-group">
+              <div class="input-group-addon"><i class="fa fa-search"></i></div>
+              <input st-search="" type="text" class="form-control" placeholder="Search...">
+            </div>
+          </div>
+        </th>
+      </tr>
+      <tr>
+        <th st-sort="destination">Destination</th>
+        <th st-sort="gateway">Gateway</th>
+        <th st-sort="genmask">Genmask</th>
+        <th st-sort="flags">Flags</th>
+        <th st-sort="mss">MSS</th>
+        <th st-sort="window">Window</th>
+        <th st-sort="irtt">IRTT</th>
+        <th st-sort="interface">Interface</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="route in displayedRoutes">
+        <td>{{ route.destination }}</td>
+        <td>{{ route.gateway }}</td>
+        <td>{{ route.genmask }}</td>
+        <td>{{ route.flags }}</td>
+        <td>{{ route.mss }}</td>
+        <td>{{ route.window }}</td>
+        <td>{{ route.irtt }}</td>
+        <td>{{ route.interface }}</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="0" class="text-center">
+          <div st-pagination="" st-items-by-page="10"></div>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
 </div>

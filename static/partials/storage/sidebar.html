@@ -1,9 +1,15 @@
-<div class="col-sm-3 col-md-2 sidebar">
-  <ul class="nav nav-sidebar fa-ul">
-    <li ng-class="{active: sideActiveTab == 'disks'}"><a href="#/storage/disks">Disks</a></li>
-    <li ng-class="{active: sideActiveTab == 'lvm/physvols'}"><a href="#/storage/lvm/physvols">LVM Physical Vols</a></li>
-    <li ng-class="{active: sideActiveTab == 'lvm/logvols'}"><a href="#/storage/lvm/logvols">LVM Logical Vols</a></li>
-    <li ng-class="{active: sideActiveTab == 'lvm/volgrps'}"><a href="#/storage/lvm/volgrps">LVM Vol. Groups</a></li>
-    <li ng-class="{active: sideActiveTab == 'mounts'}"><a href="#/storage/mounts">Mounts</a></li>
-  </ul>
+<div class="container">
+  <div ng-controller="SidebarController">
+    <div class="sidebar" sidebar-directive="state">
+      <a href="" id="navigation-toggle" ng-click="toggleState()"><i class="fa fa-bars" aria-hidden="true"></i></a>
+      <ul class="navigation">
+        <li class="navigation-title">Menu</li>
+        <li class="navigation-items"><a href="#/storage/disks">Disks</a></li>
+        <li class="navigation-items"><a href="#/storage/lvm/physvols">LVM Physical Vols</a></li>
+        <li class="navigation-items"><a href="#/storage/lvm/logvols">LVM Logical Vols</a></li>
+        <li class="navigation-items"><a href="#/storage/lvm/volgrps">LVM Vol. Groups</a></li>
+        <li class="navigation-items"><a href="#/storage/mounts">Mounts</a></li>
+      </ul>
+    </div>
+  </div>
 </div>

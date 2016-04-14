@@ -4,29 +4,18 @@
   -moz-border-radius: 0 !important;
 }
 
-.list-sm {
-  height: 200px;
-  overflow: auto;
-}
-
 .top-margin {
   margin-top: 30px;
 }
 
 .navbar-brand {
   padding: 0px;
-  width: 180px;
 }
 
 .navbar-brand>img {
   height: 46px;
   padding: 6px 0px 3px 0px;
   width: auto;
-
- /* margin: auto 15px;*/
-
-  /* Logo center */
-  margin: auto auto;
 }
 
 .navbar-right {
@@ -86,76 +75,72 @@
 }
 
 /*
- * Awesome Fonts
- */
-
-.fa-1-2x {
-  font-size: 1.2em;
-}
-
-.fa-1-5x {
-  font-size: 1.5em;
-}
-
-/*
  * Sidebar
  */
 
-@media (min-width: 768px) {
-  .sidebar {
-    position: fixed;
-    top: 51px;
-    bottom: 0;
-    left: 0;
-    z-index: 1000;
-    display: block;
-    padding: 20px;
-    overflow-x: hidden;
-    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-    background-color: #f2f2f2;
-    border-right: 1px solid #eee;
-
-
-    width: 180px;
-  }
-}
-
-/* Sidebar navigation */
 .nav-sidebar {
   margin-right: -21px; /* 20px padding + 1px border */
   margin-bottom: 20px;
   margin-left: -20px;
 }
 
-/* Default */
-.nav-sidebar > li > a {
+.sidebar {
+  position: absolute;
+  top: 51;
+  left: -160px;;
+  transition: 100ms left;
+  z-index: 1000;
+}
+
+#navigation-toggle {
+  position: absolute;
+  left: 160px;
+  color: white;
+  text-decoration: none;
+  padding: 14px;
+  background-color: #1a1a1a;
+}
+
+.show {
+  left: 0;
+}
+
+.navigation {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navigation-items a, .navigation-title {
+  display: block;
+  line-height: 2em;
+  text-decoration: none;
+  padding: 10px 30px;
+  width: 160px;
+
   padding-right: 20px;
   padding-left: 20px;
   color: #8b8b8b;
   border-left: 3px solid #eaeaea;
+
+  background-color: #f2f2f2;
 }
 
-/* Active */
-.nav-sidebar > .active > a,
-.nav-sidebar > .active > a:focus {
+.navigation-title {
   font-weight: bold;
-  color: #0e0e0e;
-  background-color: #eaeaea;
+  border-left: 0px;
+  color: #8b8b8b;
+  background-color: #1a1a1a;
 }
 
-/* Hover */
-.nav-sidebar > li > a:hover {
+.navigation-items a:hover {
   color: #0e0e0e;
   background-color: #cacaca;
   border-left: 3px solid #ad542a;
 }
 
-.btn-space {
-  margin-right: 5px !important;
-}
-
-.btn-toolbar {
-  margin-bottom: 15px;
+.container-fluid {
+  margin-left: 50px;
 }
 
 /*
@@ -215,7 +200,6 @@ tfoot td {
 }
 
 /* 404 */
-
 .peekaboo-bkgr {
     content : "";
     display: block;

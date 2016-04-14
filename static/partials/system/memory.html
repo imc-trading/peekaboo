@@ -1,69 +1,64 @@
 <!-- Header -->
 <div ng-include='"templates/header.html"'></div>
 
-<!-- Container -->
-<div class="container-fluid">
+<!-- Sidebar -->
+<div ng-include='"partials/system/sidebar.html"'></div>
+
+<!-- Content -->
+<div class="container-fluid" ng-controller="memoryController">
   <flash-message duration="4" show-close="true" on-dismiss="myCallback(flash);"></flash-message>
-  <div class="row">
-
-    <!-- Sidebar -->
-    <div ng-include='"partials/system/sidebar.html"'></div>
-
-    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-controller="memoryController">
-      <div class="form-group">
-        <div class="input-btn-group pull-right">
-          <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>
-        </div>
-      </div>
-      <fieldset>
-        <legend>General</legend>
-        <dl class="dl-horizontal">
-          <dt>Total</dt>
-          <dd>{{ memory.totalGB | number:2 }} GB</dd>
-          <dt>Free</dt>
-          <dd>{{ memory.freeGB | number:2 }} GB</dd>
-          <dt>Available</dt>
-          <dd>{{ memory.availableGB | number:2 }} GB</dd>
-          <dt>Buffers</dt>
-          <dd>{{ memory.buffersGB | number:2 }} GB</dd>
-          <dt>Cached</dt>
-          <dd>{{ memory.cachedGB | number:2 }} GB</dd>
-          <dt>Capacity Used</dt>
-          <dd>{{ memory.capacityUsedGB | number:2 }} GB</dt>
-          <dt>Capacity Free</dt>
-          <dd>{{ memory.capacityFreeGB | number:2 }} GB</dt>
-        </dl>
-      </fieldset>
-      <fieldset>
-        <legend>Swap</legend>
-        <dl class="dl-horizontal">
-          <dt>Swap Total</dt>
-          <dd>{{ memory.swapTotalGB | number:2 }} GB</dt>
-          <dt>Swap Free</dt>
-          <dd>{{ memory.swapFreeGB | number:2 }} GB</dt>
-          <dt>Swap Cached</dt>
-          <dd>{{ memory.swapCachedGB | number:2 }} GB</dd>
-        </dl>
-      </fieldset>
-      <fieldset>
-        <legend>Huge Pages</legend>
-        <dl class="dl-horizontal">
-          <dt>Page Tables</dt>
-          <dd>{{ memory.pageTablesKB }} KB</dt>
-          <dt>Anon. Huge Pages</dt>
-          <dd>{{ memory.anonHugePagesGB | number:2 }} GB</dt>
-          <dt>Huge Pages Total</dt>
-          <dd>{{ memory.hugePagesTotal }}</dt>
-          <dt>Huge Pages Free</dt>
-          <dd>{{ memory.hugePagesFree }}</dt>
-          <dt>Huge Pages Free</dt>
-          <dd>{{ memory.hugePagesRsvd }}</dt>
-          <dt>Huge Pages Surp.</dt>
-          <dd>{{ memory.hugePagesSurp }}</dt>
-          <dt>Huge Pages Size</dt>
-          <dd>{{ memory.hugePagesSizeKB }} KB</dt>
-        </dl>
-      </fieldset>
+  <div class="form-group">
+    <div class="input-btn-group pull-right">
+      <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>
     </div>
   </div>
+  <fieldset>
+    <legend>General</legend>
+    <dl class="dl-horizontal">
+      <dt>Total</dt>
+      <dd>{{ memory.totalGB | number:2 }} GB</dd>
+      <dt>Free</dt>
+      <dd>{{ memory.freeGB | number:2 }} GB</dd>
+      <dt>Available</dt>
+      <dd>{{ memory.availableGB | number:2 }} GB</dd>
+      <dt>Buffers</dt>
+      <dd>{{ memory.buffersGB | number:2 }} GB</dd>
+      <dt>Cached</dt>
+      <dd>{{ memory.cachedGB | number:2 }} GB</dd>
+      <dt>Capacity Used</dt>
+      <dd>{{ memory.capacityUsedGB | number:2 }} GB</dt>
+      <dt>Capacity Free</dt>
+      <dd>{{ memory.capacityFreeGB | number:2 }} GB</dt>
+    </dl>
+  </fieldset>
+  <fieldset>
+    <legend>Swap</legend>
+    <dl class="dl-horizontal">
+      <dt>Swap Total</dt>
+      <dd>{{ memory.swapTotalGB | number:2 }} GB</dt>
+      <dt>Swap Free</dt>
+      <dd>{{ memory.swapFreeGB | number:2 }} GB</dt>
+      <dt>Swap Cached</dt>
+      <dd>{{ memory.swapCachedGB | number:2 }} GB</dd>
+    </dl>
+  </fieldset>
+  <fieldset>
+    <legend>Huge Pages</legend>
+    <dl class="dl-horizontal">
+      <dt>Page Tables</dt>
+      <dd>{{ memory.pageTablesKB }} KB</dt>
+      <dt>Anon. Huge Pages</dt>
+      <dd>{{ memory.anonHugePagesGB | number:2 }} GB</dt>
+      <dt>Huge Pages Total</dt>
+      <dd>{{ memory.hugePagesTotal }}</dt>
+      <dt>Huge Pages Free</dt>
+      <dd>{{ memory.hugePagesFree }}</dt>
+      <dt>Huge Pages Free</dt>
+      <dd>{{ memory.hugePagesRsvd }}</dt>
+      <dt>Huge Pages Surp.</dt>
+      <dd>{{ memory.hugePagesSurp }}</dt>
+      <dt>Huge Pages Size</dt>
+      <dd>{{ memory.hugePagesSizeKB }} KB</dt>
+    </dl>
+  </fieldset>
 </div>
