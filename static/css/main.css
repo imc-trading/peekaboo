@@ -237,7 +237,8 @@ tfoot td {
 }
 
 .th-no-border {
-    border: 0px !important;
+  border: 0px !important;
+  margin-bottom: 20px;
 }
 
 .dropdown-menu > li > .checkbox {
@@ -261,6 +262,8 @@ tfoot td {
 .tr {
   font-family: "Lucida Console", Monaco, monospace;
 }
+
+/* Pagination */
 
 .pagination > li > a {
   color: #262626;
