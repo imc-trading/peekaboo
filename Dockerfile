@@ -29,7 +29,7 @@ COPY mock/lvs /usr/local/bin/lvs
 COPY mock/vgs /usr/local/bin/vgs
 COPY mock/onload /usr/local/bin/onload
 COPY mock/sfkey /usr/local/bin/sfkey
-COPY mock/sftool /usr/local/bin/sftool
+COPY mock/sfctool /usr/local/bin/sfctool
 
 
 RUN chmod +x /usr/local/bin/ipmitool \
@@ -38,7 +38,7 @@ RUN chmod +x /usr/local/bin/ipmitool \
     /usr/local/bin/vgs \
     /usr/local/bin/onload \
     /usr/local/bin/sfkey \
-    /usr/local/bin/sftool
+    /usr/local/bin/sfctool
 
 # Add mock files
 COPY mock/config /config

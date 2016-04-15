@@ -65,8 +65,8 @@
  */
 
 .alert {
-    margin-left: 190px;
-    width: 70%;
+  margin-left: 190px;
+  width: 70%;
 }
 
 .alert.ng-leave {
@@ -158,45 +158,45 @@
  */
 
 table {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    height: 550px; /* this can vary */
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: 550px; /* this can vary */
 }
 
 table * {
-    box-sizing: inherit;
-    -moz-box-sizing: inherit;
+  box-sizing: inherit;
+  -moz-box-sizing: inherit;
 }
 
 thead {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 tbody {
-    overflow-y: scroll;
-    display: inline-block;
+  overflow-y: scroll;
+  display: inline-block;
 }
 
 thead > tr, tbody > tr, tfoot > tr {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
 }
 
 thead, tfoot {
-    flex-shrink: 0;
+  flex-shrink: 0;
 }
 
 th, tbody td {
-    width: 50%; /* this can vary */
-    overflow-x: hidden;
-    text-overflow: ellipsis;
-    display: inline-block;
+  width: 50%; /* this can vary */
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
 }
 
 tfoot {
@@ -204,36 +204,36 @@ tfoot {
 }
 
 tfoot td {
-    width: 100%;
-    display: inline-block;
+  width: 100%;
+  display: inline-block;
 }
 
 /* 404 */
 .peekaboo-bkgr {
-    content : "";
-    display: block;
-    position: absolute;
+  content : "";
+  display: block;
+  position: absolute;
 
-    background-image: url(../img/peekaboo_light.svg); 
-    background-repeat: no-repeat;
-    background-position: center;
+  background-image: url(../img/peekaboo_light.svg); 
+  background-repeat: no-repeat;
+  background-position: center;
 
-    width: 100%;
-    height: 80%;
+  width: 100%;
+  height: 80%;
 
-    opacity: 0.2;
-    z-index: -1;
+  opacity: 0.2;
+  z-index: -1;
 }
 
 .text-abs-center {
-    text-align: center;
-    position: absolute;
-    top: 40%;
-    bottom: 60%;
-    width: 100%;
-    color: #505050;
-    font-family: Impact, fantasy;
-    font-size: 80px;
+  text-align: center;
+  position: absolute;
+  top: 40%;
+  bottom: 60%;
+  width: 100%;
+  color: #505050;
+  font-family: Impact, fantasy;
+  font-size: 80px;
 }
 
 .th-no-border {
@@ -260,4 +260,15 @@ tfoot td {
 
 .tr {
   font-family: "Lucida Console", Monaco, monospace;
+}
+
+.pagination > li > a {
+  color: #000000;
+  border-color: #c1c1c1;
+}
+
+.pagination > .active > a, .pagination > .active > a:hover {
+  color: #000000;
+  background-color: #c1c1c1;
+  border-color: #c1c1c1;
 }
