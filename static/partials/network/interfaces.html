@@ -7,11 +7,46 @@
 <!-- Content -->
 <div class="container-fluid content" ng-controller="interfacesController">
   <flash-message duration="4" show-close="true" on-dismiss="myCallback(flash);"></flash-message>
-  <div class="form-group">
-    <div class="input-btn-group pull-right">
+
+  <div class="form-group pull-right">
+    <div class="input-btn-group">
+      <div class="btn-group" uib-dropdown is-open="status.isopen">
+        <button id="rowLimit" type="button" class="btn btn-default" uib-dropdown-toggle>
+          <i class="fa fa-list" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="rowLimit">
+          <li role="menuitem" ng-click="rowLimit = 5"><a href="">5</a></li>
+          <li role="menuitem" ng-click="rowLimit = 10"><a href="">10</a></li>
+          <li role="menuitem" ng-click="rowLimit = 15"><a href="">15</a></li>
+          <li role="menuitem" ng-click="rowLimit = 20"><a href="">20</a></li>
+          <li role="menuitem" ng-click="rowLimit = 25"><a href="">25</a></li>
+        </ul>
+      </div>
+      <div class="btn-group" uib-dropdown>
+        <button id="toggleColumns" type="button" class="btn btn-default" uib-dropdown-toggle>
+          <i class="fa fa-columns" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="toggleColumns">
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.name"> Name</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.mtu"> MTU</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.ipAddr"> IP Address</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.hwAddr"> HW Address</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.flags"> Flags</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.driver"> Driver</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.driverVersion"> Driver Version</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.firmwareVersion"> Firmware Version</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.swChassisId"> Sw. Chassis Id</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.swName"> Sw. Chassis Id</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.swDescr"> Sw. Descr.</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.swPortId"> Sw. Port Id</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.swPortDescr"> Sw. Port Descr.</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.swVLAN"> Sw. VLAN</label></div></li>
+        </ul>
+      </div>
       <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>
     </div>
   </div>
+
   <table st-table="displayedInterfaces" st-safe-src="interfaces" class="table table-striped sortable">
     <thead>
       <tr>
@@ -25,38 +60,38 @@
         </th>
       </tr>
       <tr>
-        <th st-sort="name">Name</th>
-        <th st-sort="mtu">MTU</th>
-        <th st-sort="ipAddr">IP Address</th>
-        <th st-sort="hwAddr">HW Address</th>
-        <th st-sort="flags">Flags</th>
-        <th st-sort="driver">Driver</th>
-        <th st-sort="driverVersion">Driver Version</th>
-        <th st-sort="firmwareVersion">Firmware Version</th>
-        <th st-sort="swChassisId">Sw. Chassis ID</th>
-        <th st-sort="swName">Sw. Chassis ID</th>
-        <th st-sort="swDescr">Sw. Descr.</th>
-        <th st-sort="swPortId">Sw. Port ID</th>
-        <th st-sort="swPortDescr">Sw. Port Descr.</th>
-        <th st-sort="swVLan">Sw. VLAN</th>
+        <th ng-hide="!toggle.name" st-sort="name">Name</th>
+        <th ng-hide="!toggle.mtu" st-sort="mtu">MTU</th>
+        <th ng-hide="!toggle.ipAddr" st-sort="ipAddr">IP Address</th>
+        <th ng-hide="!toggle.hwAddr" st-sort="hwAddr">HW Address</th>
+        <th ng-hide="!toggle.flags" st-sort="flags">Flags</th>
+        <th ng-hide="!toggle.driver" st-sort="driver">Driver</th>
+        <th ng-hide="!toggle.driverVersion" st-sort="driverVersion">Driver Version</th>
+        <th ng-hide="!toggle.firmwareVersion" st-sort="firmwareVersion">Firmware Version</th>
+        <th ng-hide="!toggle.swChassisId" st-sort="swChassisId">Sw. Chassis ID</th>
+        <th ng-hide="!toggle.swName" st-sort="swName">Sw. Chassis Id</th>
+        <th ng-hide="!toggle.swDescr" st-sort="swDescr">Sw. Descr.</th>
+        <th ng-hide="!toggle.swPortId" st-sort="swPortId">Sw. Port Id</th>
+        <th ng-hide="!toggle.swPortDescr" st-sort="swPortDescr">Sw. Port Descr.</th>
+        <th ng-hide="!toggle.swVLAN" st-sort="swVLan">Sw. VLAN</th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="interface in displayedInterfaces">
-        <td>{{ interface.name }}</td>
-        <td>{{ interface.mtu }}</td>
-        <td>{{ interface.ipAddr | joinBy:', ' }}</td>
-        <td>{{ interface.hwAddr }}</td>
-        <td>{{ interface.flags | joinBy:' ' }}</td>
-        <td>{{ interface.driver }}</td>
-        <td>{{ interface.driverVersion }}</td>
-        <td>{{ interface.firmwareVersion }}</td>
-        <td>{{ interface.swChassisId }}</td>
-        <td>{{ interface.swName }}</td>
-        <td>{{ interface.swDescr }}</td>
-        <td>{{ interface.swPortId }}</td>
-        <td>{{ interface.swPortDescr }}</td>
-        <td>{{ interface.swVLAN }}</td>
+        <td ng-hide="!toggle.name">{{ interface.name }}</td>
+        <td ng-hide="!toggle.mtu">{{ interface.mtu }}</td>
+        <td ng-hide="!toggle.ipAddr">{{ interface.ipAddr | joinBy:' ' }}</td>
+        <td ng-hide="!toggle.hwAddr">{{ interface.hwAddr }}</td>
+        <td ng-hide="!toggle.flags">{{ interface.flags | joinBy:' ' }}</td>
+        <td ng-hide="!toggle.driver">{{ interface.driver }}</td>
+        <td ng-hide="!toggle.driverVersion">{{ interface.driverVersion }}</td>
+        <td ng-hide="!toggle.firmwareVersion">{{ interface.firmwareVersion }}</td>
+        <td ng-hide="!toggle.swChassisId">{{ interface.swChassisId }}</td>
+        <td ng-hide="!toggle.swName">{{ interface.swName }}</td>
+        <td ng-hide="!toggle.swDescr">{{ interface.swDescr }}</td>
+        <td ng-hide="!toggle.swPortId">{{ interface.swPortId }}</td>
+        <td ng-hide="!toggle.swPortDescr">{{ interface.swPortDescr }}</td>
+        <td ng-hide="!toggle.swVLAN">{{ interface.swVLAN }}</td>
       </tr>
     </tbody>
     <tfoot>

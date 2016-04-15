@@ -99,7 +99,7 @@
 #navigation-toggle {
   position: absolute;
   left: 0px;
-  box-shadow: 3px 3px 3px #888888;
+  box-shadow: 0px 5px 5px 0px #888888;
   
   color: white;
   text-decoration: none;
@@ -115,7 +115,7 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  box-shadow: 3px 3px 3px #888888;
+  box-shadow: 0px 5px 5px 0px #888888;
 }
 
 .navigation-items a, .navigation-title {
@@ -147,7 +147,8 @@
 }
 
 .content {
-  margin-left: 50px;
+  margin-left: 60px;
+  margin-right: 25px;
 }
 
 /*
@@ -236,4 +237,8 @@ tfoot td {
 
 .th-no-border {
     border: 0px !important;
+}
+
+.dropdown-menu > li > .checkbox {
+  padding-left: 15px;
 }

@@ -7,11 +7,36 @@
 <!-- Content -->
 <div class="container-fluid content" ng-controller="imagesController">
   <flash-message duration="4" show-close="true" on-dismiss="myCallback(flash);"></flash-message>
-  <div class="form-group">
-    <div class="input-btn-group pull-right">
+  <div class="form-group pull-right">
+    <div class="input-btn-group">
+      <div class="btn-group" uib-dropdown is-open="status.isopen">
+        <button id="rowLimit" type="button" class="btn btn-default" uib-dropdown-toggle>
+          <i class="fa fa-list" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="rowLimit">
+          <li role="menuitem" ng-click="rowLimit = 5"><a href="">5</a></li>
+          <li role="menuitem" ng-click="rowLimit = 10"><a href="">10</a></li>
+          <li role="menuitem" ng-click="rowLimit = 15"><a href="">15</a></li>
+          <li role="menuitem" ng-click="rowLimit = 20"><a href="">20</a></li>
+          <li role="menuitem" ng-click="rowLimit = 25"><a href="">25</a></li>
+        </ul>
+      </div>
+      <div class="btn-group" uib-dropdown>
+        <button id="toggleColumns" type="button" class="btn btn-default" uib-dropdown-toggle>
+          <i class="fa fa-columns" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="toggleColumns">
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.id"> Id</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.repo"> Repo</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.tag"> Tag</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.created"> Created</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.virtSize"> Virt. Size</label></div></li>
+        </ul>
+      </div>
       <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>
     </div>
   </div>
+
   <table st-table="displayedImages" st-safe-src="images" class="table table-striped sortable">
     <thead>
       <tr>
@@ -25,26 +50,26 @@
         </th>
       </tr>
       <tr>
-        <th st-size="20" st-sort="id">ID</th>
-        <th st-size="30" st-sort="repo">Repository</th>
-        <th st-size="30" st-sort="tag">Tag</th>
-        <th st-size="10"st-sort="created">Created</th>
-        <th st-size="10"st-sort="virtSize">Virtual&nbsp;Size</th>
+        <th ng-hide="!toggle.id" st-sort="id">ID</th>
+        <th ng-hide="!toggle.repo" st-sort="repo">Repository</th>
+        <th ng-hide="!toggle.tag" st-sort="tag">Tag</th>
+        <th ng-hide="!toggle.created" st-sort="created">Created</th>
+        <th ng-hide="!toggle.virtSize" st-sort="virtSize">Virtual Size</th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="image in displayedImages">
-        <td st-size="20">{{ image.id | limitTo:12 }}</td>
-        <td st-size="30">{{ image.repo }}</td>
-        <td st-size="30">{{ image.tag }}</td>
-        <td st-size="10">{{ image.created }}</td>
-        <td st-size="10">{{ image.virtSize }}</td>
+        <td ng-hide="!toggle.id">{{ image.id | limitTo:12 }}</td>
+        <td ng-hide="!toggle.repo">{{ image.repo }}</td>
+        <td ng-hide="!toggle.tag">{{ image.tag }}</td>
+        <td ng-hide="!toggle.created">{{ image.created }}</td>
+        <td ng-hide="!toggle.virtSize">{{ image.virtSize }}</td>
       </tr>
     </tbody>
     <tfoot>
       <tr>
         <td colspan="0" class="text-center">
-          <div st-pagination="" st-items-by-page="10"></div>
+          <div st-pagination="" st-items-by-page="rowLimit"></div>
         </td>
       </tr>
     </tfoot>

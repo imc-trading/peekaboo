@@ -231,6 +231,19 @@ app.controller('osController', [ '$scope', '$resource', 'Flash', function($scope
 app.controller('interfacesController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
   var resource = $resource('/api/network/interfaces');
 
+  var toggle = {
+    name: true,
+    mtu: true,
+    ipAddr: true,
+    hwAddr: true,
+    flags: true,
+    swChassisId: true,
+    swPortId: true
+  }
+
+  $scope.toggle = toggle
+  $scope.rowLimit = 10
+
   resource.query().$promise.then(function(value) {
     $scope.interfaces = value;
 //    console.log (value); 
@@ -465,6 +478,17 @@ app.controller('dockerController', [ '$scope', '$resource', 'Flash', function($s
 app.controller('imagesController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
   var resource = $resource('/api/docker/images');
 
+  var toggle = {
+    id: true,
+    repo: true,
+    tag: true,
+    created: true,
+    virtSize: true,
+  }
+
+  $scope.toggle = toggle
+  $scope.rowLimit = 10
+
   resource.query().$promise.then(function(value) {
     $scope.images = value;
 //    console.log (value);
@@ -491,6 +515,17 @@ app.controller('imagesController', [ '$scope', '$resource', 'Flash', function($s
 app.controller('containersController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
   var resource = $resource('/api/docker/containers');
 
+  var toggle = {
+    id: true,
+    image: true,
+    status: true,
+    runningFor: true,
+    ports: true
+  }
+
+  $scope.toggle = toggle
+  $scope.rowLimit = 10
+
   resource.query().$promise.then(function(value) {
     $scope.containers = value;
 //    console.log (value);
@@ -512,6 +547,11 @@ app.controller('containersController', [ '$scope', '$resource', 'Flash', functio
   }
 
 } ]);
+
+
+
+
+
 
 // IPMI
 app.controller('ipmiController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {

@@ -7,11 +7,41 @@
 <!-- Content -->
 <div class="container-fluid content" ng-controller="containersController">
   <flash-message duration="4" show-close="true" on-dismiss="myCallback(flash);"></flash-message>
-  <div class="form-group">
-    <div class="input-btn-group pull-right">
+  <div class="form-group pull-right">
+    <div class="input-btn-group">
+      <div class="btn-group" uib-dropdown is-open="status.isopen">
+        <button id="rowLimit" type="button" class="btn btn-default" uib-dropdown-toggle>
+          <i class="fa fa-list" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="rowLimit">
+          <li role="menuitem" ng-click="rowLimit = 5"><a href="">5</a></li>
+          <li role="menuitem" ng-click="rowLimit = 10"><a href="">10</a></li>
+          <li role="menuitem" ng-click="rowLimit = 15"><a href="">15</a></li>
+          <li role="menuitem" ng-click="rowLimit = 20"><a href="">20</a></li>
+          <li role="menuitem" ng-click="rowLimit = 25"><a href="">25</a></li>
+        </ul>
+      </div>
+      <div class="btn-group" uib-dropdown> <!-- is-open="status.isopen"> -->
+        <button id="toggleColumns" type="button" class="btn btn-default" uib-dropdown-toggle>
+          <i class="fa fa-columns" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="toggleColumns">
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.id"> Id</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.image"> Image</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.status"> Status</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.command"> Command</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.createdAt"> Created At</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.runningFor"> Running For</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.ports"> Ports</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.size"> Size</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.names"> Names</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.labels"> Labels</label></div></li>
+        </ul>
+      </div>
       <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>
     </div>
   </div>
+
   <table st-table="displayedContainers" st-safe-src="containers" class="table table-striped sortable">
     <thead>
       <tr>
@@ -25,36 +55,36 @@
         </th>
       </tr>
       <tr>
-        <th st-size="5" st-sort="id">ID</th>
-        <th st-size="40" st-sort="image">Image</th>
-        <th st-size="15" st-sort="status">Status</th>
-        <th st-size="10" st-sort="command">Command</th>
-        <th st-size="5" st-sort="created">Created&nbsp;At</th>
-        <th st-size="5" st-sort="runningFor">Running&nbsp;For</th>
-        <th st-size="5" st-sort="ports">Ports</th>
-        <th st-size="5" st-sort="size">Size</th>
-        <th st-size="5" st-sort="names">Names</th>
-        <th st-size="5" st-sort="labels">Labels</th>
+        <th ng-hide="!toggle.id" st-sort="id">Id</th>
+        <th ng-hide="!toggle.image" st-sort="image">Image</th>
+        <th ng-hide="!toggle.status" st-sort="status">Status</th>
+        <th ng-hide="!toggle.command" st-sort="command">Command</th>
+        <th ng-hide="!toggle.createdAt" st-sort="createdAt">Created At</th>
+        <th ng-hide="!toggle.runningFor" st-sort="runningFor">Running For</th>
+        <th ng-hide="!toggle.ports" st-sort="ports">Ports</th>
+        <th ng-hide="!toggle.size" st-sort="size">Size</th>
+        <th ng-hide="!toggle.names" st-sort="names">Names</th>
+        <th ng-hide="!toggle.labels" st-sort="labels">Labels</th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="container in displayedContainers">
-        <td st-size="5">{{ container.id }}</td>
-        <td st-size="40">{{ container.image }}</td>
-        <td st-size="15">{{ container.status }}</td>
-        <td st-size="10">{{ container.command }}</td>
-        <td st-size="5">{{ container.createdAt }}</td>
-        <td st-size="5">{{ container.runningFor }}</td>
-        <td st-size="5">{{ container.ports }}</td>
-        <td st-size="5">{{ container.size }}</td>
-        <td st-size="5">{{ container.names | replace:",":" " }}</td>
-        <td st-size="5">{{ container.labels | replace:",":" " }}</td>
+        <td ng-hide="!toggle.id">{{ container.id }}</td>
+        <td ng-hide="!toggle.image">{{ container.image }}</td>
+        <td ng-hide="!toggle.status">{{ container.status }}</td>
+        <td ng-hide="!toggle.command">{{ container.command }}</td>
+        <td ng-hide="!toggle.createdAt">{{ container.createdAt }}</td>
+        <td ng-hide="!toggle.runningFor">{{ container.runningFor }}</td>
+        <td ng-hide="!toggle.ports">{{ container.ports }}</td>
+        <td ng-hide="!toggle.size">{{ container.size }}</td>
+        <td ng-hide="!toggle.names">{{ container.names | replace:",":" " }}</td>
+        <td ng-hide="!toggle.labels">{{ container.labels | replace:",":" " }}</td>
       </tr>
     </tbody>
     <tfoot>
       <tr>
         <td colspan="0" class="text-center">
-          <div st-pagination="" st-items-by-page="10"></div>
+          <div st-pagination="" st-items-by-page="rowLimit"></div>
         </td>
       </tr>
     </tfoot>
