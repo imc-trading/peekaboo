@@ -263,12 +263,12 @@ tfoot td {
 }
 
 .pagination > li > a {
-  color: #000000;
+  color: #262626;
   border-color: #c1c1c1;
 }
 
 .pagination > .active > a, .pagination > .active > a:hover {
-  color: #000000;
+  color: #262626;
   background-color: #c1c1c1;
   border-color: #c1c1c1;
 }
