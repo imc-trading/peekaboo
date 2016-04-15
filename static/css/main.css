@@ -147,6 +147,7 @@
 }
 
 .content {
+  margin-top: 25px;
   margin-left: 60px;
   margin-right: 25px;
 }
@@ -241,4 +242,22 @@ tfoot td {
 
 .dropdown-menu > li > .checkbox {
   padding-left: 15px;
+}
+
+.page-title {
+  font-family: Impact, fantasy;
+  font-size: 25px;
+  color: #1a1a1a;
+/*  text-shadow: 0px 2px 3px #888888; */
+  position: absolute;
+  left: 65px;
+  top: 50px;
+}
+
+.th {
+  font-family: Impact, fantasy;
+}
+
+.tr {
+  font-family: "Lucida Console", Monaco, monospace;
 }

@@ -8,8 +8,8 @@
 <div class="container-fluid content" ng-controller="interfacesController">
   <flash-message duration="4" show-close="true" on-dismiss="myCallback(flash);"></flash-message>
 
-  <div class="form-group pull-right">
-    <div class="input-btn-group">
+  <div class="form-group ">
+    <div class="input-btn-group pull-right">
       <div class="btn-group" uib-dropdown is-open="status.isopen">
         <button id="rowLimit" type="button" class="btn btn-default" uib-dropdown-toggle>
           <i class="fa fa-list" aria-hidden="true"></i>
@@ -46,6 +46,8 @@
       <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>
     </div>
   </div>
+
+  <h1 class="page-title">Interfaces</h1>
 
   <table st-table="displayedInterfaces" st-safe-src="interfaces" class="table table-striped sortable">
     <thead>
