@@ -9,18 +9,6 @@
   <flash-message duration="4" show-close="true" on-dismiss="myCallback(flash);"></flash-message>
   <div class="form-group pull-right">
     <div class="input-btn-group">
-      <div class="btn-group" uib-dropdown is-open="status.isopen">
-        <button id="rowLimit" type="button" class="btn btn-default" uib-dropdown-toggle>
-          <i class="fa fa-list" aria-hidden="true"></i>
-        </button>
-        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="rowLimit">
-          <li role="menuitem" ng-click="rowLimit = 5"><a href="">5</a></li>
-          <li role="menuitem" ng-click="rowLimit = 10"><a href="">10</a></li>
-          <li role="menuitem" ng-click="rowLimit = 15"><a href="">15</a></li>
-          <li role="menuitem" ng-click="rowLimit = 20"><a href="">20</a></li>
-          <li role="menuitem" ng-click="rowLimit = 25"><a href="">25</a></li>
-        </ul>
-      </div>
       <div class="btn-group" uib-dropdown> <!-- is-open="status.isopen"> -->
         <button id="toggleColumns" type="button" class="btn btn-default" uib-dropdown-toggle>
           <i class="fa fa-columns" aria-hidden="true"></i>
@@ -36,6 +24,18 @@
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.size"> Size</label></div></li>
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.names"> Names</label></div></li>
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.labels"> Labels</label></div></li>
+        </ul>
+      </div>
+      <div class="btn-group" uib-dropdown is-open="status.isopen">
+        <button id="rowLimit" type="button" class="btn btn-default" uib-dropdown-toggle>
+          <i class="fa fa-list" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="rowLimit">
+          <li role="menuitem" ng-click="rowLimit = 5"><a href="">5</a></li>
+          <li role="menuitem" ng-click="rowLimit = 10"><a href="">10</a></li>
+          <li role="menuitem" ng-click="rowLimit = 15"><a href="">15</a></li>
+          <li role="menuitem" ng-click="rowLimit = 20"><a href="">20</a></li>
+          <li role="menuitem" ng-click="rowLimit = 25"><a href="">25</a></li>
         </ul>
       </div>
       <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>

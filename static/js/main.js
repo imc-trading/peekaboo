@@ -270,6 +270,20 @@ app.controller('interfacesController', [ '$scope', '$resource', 'Flash', functio
 app.controller('routesController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
   var resource = $resource('/api/network/routes');
 
+  var toggle = {
+    destination: true,
+    gateway: true,
+    genmask: true,
+    flags: true,
+    mss: true,
+    window: true,
+    irtt: true,
+    interface: true,
+  }
+
+  $scope.toggle = toggle
+  $scope.rowLimit = 10
+
   resource.query().$promise.then(function(value) {
     $scope.routes = value;
 //    console.log (value);
@@ -295,6 +309,8 @@ app.controller('routesController', [ '$scope', '$resource', 'Flash', function($s
 // Disks
 app.controller('disksController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
   var resource = $resource('/api/storage/disks');
+
+  $scope.rowLimit = 10
 
   resource.query().$promise.then(function(value) {
     $scope.disks = value;
@@ -634,6 +650,16 @@ app.controller('rpmsController', [ '$scope', '$resource', 'Flash', function($sco
 // PCICards
 app.controller('pciCardsController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
   var resource = $resource('/api/system/pcicards');
+
+  var toggle = {
+    slot: true,
+    class: true,
+    vendor: true,
+    device: true,
+  }
+
+  $scope.toggle = toggle
+  $scope.rowLimit = 10
 
   resource.query().$promise.then(function(value) {
     $scope.pciCards = value;

@@ -7,8 +7,20 @@
 <!-- Content -->
 <div class="container-fluid content" ng-controller="disksController">
   <flash-message duration="4" show-close="true" on-dismiss="myCallback(flash);"></flash-message>
-  <div class="form-group">
-    <div class="input-btn-group pull-right">
+  <div class="form-group pull-right">
+    <div class="input-btn-group">
+      <div class="btn-group" uib-dropdown is-open="status.isopen">
+        <button id="rowLimit" type="button" class="btn btn-default" uib-dropdown-toggle>
+          <i class="fa fa-list" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="rowLimit">
+          <li role="menuitem" ng-click="rowLimit = 5"><a href="">5</a></li>
+          <li role="menuitem" ng-click="rowLimit = 10"><a href="">10</a></li>
+          <li role="menuitem" ng-click="rowLimit = 15"><a href="">15</a></li>
+          <li role="menuitem" ng-click="rowLimit = 20"><a href="">20</a></li>
+          <li role="menuitem" ng-click="rowLimit = 25"><a href="">25</a></li>
+        </ul>
+      </div>
       <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>
     </div>
   </div>
@@ -28,22 +40,22 @@
         </th>
       </tr>
       <tr>
-        <th st-range="30" st-sort="device">Device</th>
-        <th st-range="30" st-sort="name">Name</th>
-        <th st-range="40" st-sort="sizeGB">Size (GB)</th>
+        <th st-sort="device">Device</th>
+        <th st-sort="name">Name</th>
+        <th st-sort="sizeGB">Size (GB)</th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="disk in displayedDisks">
-        <td st-range=="30">{{ disk.device }}</td>
-        <td st-range=="30">{{ disk.name }}</td>
-        <td st-range=="40">{{ disk.sizeGB | number:2 }}</td>
+        <td>{{ disk.device }}</td>
+        <td>{{ disk.name }}</td>
+        <td>{{ disk.sizeGB | number:2 }}</td>
       </tr>
     </tbody>
     <tfoot>
       <tr>
         <td colspan="0" class="text-center">
-          <div st-pagination="" st-items-by-page="10"></div>
+          <div st-pagination="" st-items-by-page="rowLimit"></div>
         </td>
       </tr>
     </tfoot>

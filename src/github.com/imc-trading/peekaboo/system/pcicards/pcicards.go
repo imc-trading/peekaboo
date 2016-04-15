@@ -51,6 +51,8 @@ func Get() (PCICards, error) {
 			p.Class = val
 		case "Vendor":
 			p.Vendor = val
+		case "Device":
+			p.Device = val
 		case "SVendor":
 			p.SubVendor = val
 		case "SDevice":
