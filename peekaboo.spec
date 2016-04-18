@@ -50,8 +50,7 @@ if [ "${1}" == "1" ]; then
   if which systemctl &>/dev/null; then
     systemctl condrestart peekaboo
   else
-# Need condrestart in init.d script
-    service peekaboo restart
+    service peekaboo condrestart
   fi
 fi
 

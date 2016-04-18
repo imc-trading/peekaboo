@@ -54,6 +54,13 @@ case $1 in
     restart)
         restart
     ;;
+    condrestart)
+        if [ -f ${LOCKFILE} ]; then
+            stop
+            sleep 3
+            start
+	fi
+	;;
     status)
         status -l $(basename ${LOCKFILE}) ${PROG}
         RETVAL=$?
