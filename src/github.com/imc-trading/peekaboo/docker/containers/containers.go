@@ -12,8 +12,8 @@ type Container struct {
 	ID         string `json:"id"`
 	Image      string `json:"image"`
 	Command    string `json:"command"`
-	CreatedAt  string `json:"created_at"`
-	RunningFor string `json:"running_for"`
+	CreatedAt  string `json:"createdAt"`
+	RunningFor string `json:"runningFor"`
 	Ports      string `json:"ports"`
 	Status     string `json:"status"`
 	Size       string `json:"size"`
