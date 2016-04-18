@@ -237,7 +237,7 @@ app.controller('interfacesController', [ '$scope', '$resource', 'Flash', functio
     ipAddr: true,
     hwAddr: true,
     flags: true,
-    swChassisId: true,
+    swName: true,
     swPortId: true
   }
 
@@ -338,6 +338,8 @@ app.controller('disksController', [ '$scope', '$resource', 'Flash', function($sc
 app.controller('mountsController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
   var resource = $resource('/api/storage/mounts');
 
+  $scope.rowLimit = 10
+
   resource.query().$promise.then(function(value) {
     $scope.mounts = value;
 //    console.log (value);
@@ -363,6 +365,8 @@ app.controller('mountsController', [ '$scope', '$resource', 'Flash', function($s
 // LVM Physical Volumes
 app.controller('physVolsController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
   var resource = $resource('/api/storage/lvm/physvols');
+
+  $scope.rowLimit = 10
 
   resource.query().$promise.then(function(value) {
     $scope.physVols = value;
@@ -390,6 +394,8 @@ app.controller('physVolsController', [ '$scope', '$resource', 'Flash', function(
 app.controller('logVolsController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
   var resource = $resource('/api/storage/lvm/logvols');
 
+  $scope.rowLimit = 10
+
   resource.query().$promise.then(function(value) {
     $scope.logVols = value;
 //    console.log (value);
@@ -416,6 +422,8 @@ app.controller('logVolsController', [ '$scope', '$resource', 'Flash', function($
 app.controller('volGrpsController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
   var resource = $resource('/api/storage/lvm/volgrps');
 
+  $scope.rowLimit = 10
+
   resource.query().$promise.then(function(value) {
     $scope.volGrps = value;
 //    console.log (value);
@@ -441,6 +449,8 @@ app.controller('volGrpsController', [ '$scope', '$resource', 'Flash', function($
 // Sysctls
 app.controller('sysctlsController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
   var resource = $resource('/api/system/sysctls');
+
+  $scope.rowLimit = 10
 
   resource.query().$promise.then(function(value) {
     $scope.sysctls = value;
@@ -599,6 +609,8 @@ app.controller('ipmiController', [ '$scope', '$resource', 'Flash', function($sco
 app.controller('kernelCfgController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
   var resource = $resource('/api/system/kernelcfg');
 
+  $scope.rowLimit = 10
+
   resource.query().$promise.then(function(value) {
     $scope.kernelCfgs = value;
 //    console.log (value);
@@ -624,6 +636,8 @@ app.controller('kernelCfgController', [ '$scope', '$resource', 'Flash', function
 // RPMs
 app.controller('rpmsController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
   var resource = $resource('/api/system/rpms');
+
+  $scope.rowLimit = 10
 
   resource.query().$promise.then(function(value) {
     $scope.rpms = value;
@@ -712,6 +726,8 @@ app.controller('networkController', [ '$scope', '$resource', 'Flash', function($
 // Modules
 app.controller('modulesController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
   var resource = $resource('/api/system/modules');
+
+  $scope.rowLimit = 10
 
   resource.query().$promise.then(function(value) {
     $scope.modules = value;

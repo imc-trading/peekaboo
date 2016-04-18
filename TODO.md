@@ -22,9 +22,6 @@
 - Button for horizontal table in Front-end
 - Front-end check if a plugin is enabled/ available otherwise hide the page
 
-Minor
-- Missing shadow on menu
-- Make sure all controllers have rowLimit set
-- Nw Interfaces dupl. "Sw Chassis Id"
+# Minor
 - Don't close Dropdown for columns on click
-- Menu no abbrev. i.e. wider
+- REST call for Set Timeout
