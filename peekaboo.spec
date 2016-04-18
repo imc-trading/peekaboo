@@ -32,6 +32,28 @@ cp %{sources}/files/%{name} %{buildroot}/etc/sysconfig/%{name}
 %post
 which systemctl &>/dev/null && systemctl daemon-reload
 
+%preun
+# Disable and stop on uninstall
+if [ "${1}" == "0" ]; then
+  if which systemctl &>/dev/null; then
+    systemctl stop peekaboo
+    systemctl disable peekaboo
+  else
+    service peekaboo stop
+    chkconfig program off
+  fi
+fi
+
+%postun
+# Restart on upgrade
+if [ "${1}" == "1" ]; then
+  if which systemctl &>/dev/null; then
+    systemctl restart peekaboo
+  else
+    service peekaboo restart
+  fi
+fi
+
 %files
 %defattr(-,root,root)
 /usr/bin/%{name}
