@@ -1,10 +1,30 @@
+# General
+- Support for plugins i.e. arbitrary endpoints
+- Endpoint for enabled plugins "/plugins"
+- Configuration file for endpoints/ timeouts, hide/ show
+- Improve documentation
+
+# Security
 - TLS 1.2+
 - Split daemon in root/ non-root using a socket for communication or similar solution to minimize security risks
-- Support for plugins
-- Configuration file for endpoints/ timeouts, hide/ show
-- Toggle to enable/ hide columns in Front-end (responsive tables?)
+
+# Backend
+- Improve IPMI for diff. HW
+- Keep history for metrics allow for Dashboards file per day or circular db?
+- Nw Interface cable S/N
+- Add endpoint for disk space "df"
+
+# Message Bus
+- Re-add Kafka support
+- Kafka events on changes use JSON PATCH
+
+# Front-end
 - Button for horizontal table in Front-end
-- Refresh cache button in Front-end
-- Endpoint for enabled plugins "/plugins"
-- Front-end check if a plugin is enabled otherwise hide the page
-- Improve documentation
+- Front-end check if a plugin is enabled/ available otherwise hide the page
+
+Minor
+- Missing shadow on menu
+- Make sure all controllers have rowLimit set
+- Nw Interfaces dupl. "Sw Chassis Id"
+- Don't close Dropdown for columns on click
+- Menu no abbrev. i.e. wider
