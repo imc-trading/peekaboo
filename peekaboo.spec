@@ -48,8 +48,9 @@ fi
 # Restart on upgrade
 if [ "${1}" == "1" ]; then
   if which systemctl &>/dev/null; then
-    systemctl restart peekaboo
+    systemctl condrestart peekaboo
   else
+# Need condrestart in init.d script
     service peekaboo restart
   fi
 fi

@@ -25,3 +25,4 @@
 # Minor
 - Don't close Dropdown for columns on click
 - REST call for Set Timeout
+- condrestart init.d script
