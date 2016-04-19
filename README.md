@@ -34,13 +34,13 @@ http://myserver.example.com:5050
 /api/system
 /api/system/cpu
 /api/system/ipmi
-/api/system/kernelcfg
 /api/system/memory
 /api/system/os
 /api/system/pcicards
 /api/system/rpms
 /api/system/sysctls
-/api/system/modules
+/api/system/kernel/config
+/api/system/kernel/modules
 ```
 
 ### Methods
