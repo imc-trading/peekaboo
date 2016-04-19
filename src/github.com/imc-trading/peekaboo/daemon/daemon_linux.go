@@ -25,9 +25,9 @@ import (
 	"github.com/imc-trading/peekaboo/system/cpu"
 	"github.com/imc-trading/peekaboo/system/ipmi"
 	"github.com/imc-trading/peekaboo/system/ipmi/sensors"
-	"github.com/imc-trading/peekaboo/system/kernelcfg"
+	"github.com/imc-trading/peekaboo/system/kernel/config"
+	"github.com/imc-trading/peekaboo/system/kernel/modules"
 	"github.com/imc-trading/peekaboo/system/memory"
-	"github.com/imc-trading/peekaboo/system/modules"
 	"github.com/imc-trading/peekaboo/system/opsys"
 	"github.com/imc-trading/peekaboo/system/pcicards"
 	"github.com/imc-trading/peekaboo/system/rpms"
@@ -38,28 +38,28 @@ func New() Daemon {
 	return &daemon{
 		data: map[string]interface{}{},
 		cache: map[string]cache{
-			apiURL + "/system":               {Timeout: 5 * 60},  // 5 min.
-			apiURL + "/system/os":            {Timeout: 5 * 60},  // 5 min.
-			apiURL + "/system/kernelcfg":     {Timeout: 5 * 60},  // 5 min.
-			apiURL + "/system/cpu":           {Timeout: 5 * 60},  // 5 min.
-			apiURL + "/system/memory":        {Timeout: 5 * 60},  // 5 min.
-			apiURL + "/system/sysctls":       {Timeout: 5 * 60},  // 5 min.
-			apiURL + "/system/ipmi":          {Timeout: 5 * 60},  // 5 min.
-			apiURL + "/system/ipmi/sensors":  {Timeout: 5 * 60},  // 5 min.
-			apiURL + "/system/rpms":          {Timeout: 5 * 60},  // 5 min.
-			apiURL + "/system/pcicards":      {Timeout: 5 * 60},  // 5 min.
-			apiURL + "/system/modules":       {Timeout: 5 * 60},  // 5 min.
-			apiURL + "/network":              {Timeout: 5 * 60},  // 5 min.
-			apiURL + "/network/interfaces":   {Timeout: 5 * 60},  // 5 min.
-			apiURL + "/network/routes":       {Timeout: 5 * 60},  // 5 min.
-			apiURL + "/storage/disks":        {Timeout: 5 * 60},  // 5 min.
-			apiURL + "/storage/mounts":       {Timeout: 5 * 60},  // 5 min.
-			apiURL + "/storage/lvm/physvols": {Timeout: 15 * 60}, // 15 min.
-			apiURL + "/storage/lvm/logvols":  {Timeout: 15 * 60}, // 15 min.
-			apiURL + "/storage/lvm/volgrps":  {Timeout: 15 * 60}, // 15 min.
-			apiURL + "/docker":               {Timeout: 5 * 60},  // 5 min.
-			apiURL + "/docker/containers":    {Timeout: 5 * 60},  // 5 min.
-			apiURL + "/docker/images":        {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/system":                {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/system/os":             {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/system/kernel/config":  {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/system/cpu":            {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/system/memory":         {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/system/sysctls":        {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/system/ipmi":           {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/system/ipmi/sensors":   {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/system/rpms":           {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/system/pcicards":       {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/system/kernel/modules": {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/network":               {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/network/interfaces":    {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/network/routes":        {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/storage/disks":         {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/storage/mounts":        {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/storage/lvm/physvols":  {Timeout: 15 * 60}, // 15 min.
+			apiURL + "/storage/lvm/logvols":   {Timeout: 15 * 60}, // 15 min.
+			apiURL + "/storage/lvm/volgrps":   {Timeout: 15 * 60}, // 15 min.
+			apiURL + "/docker":                {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/docker/containers":     {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/docker/images":         {Timeout: 5 * 60},  // 5 min.
 		},
 		router: mux.NewRouter(),
 	}
@@ -72,7 +72,7 @@ func (d *daemon) Run(bind string, static string) error {
 	d.addAPIRoute(apiURL+"/network/routes", routes.GetInterface)
 	d.addAPIRoute(apiURL+"/system", system.GetInterface)
 	d.addAPIRoute(apiURL+"/system/os", opsys.GetInterface)
-	d.addAPIRoute(apiURL+"/system/kernelcfg", kernelcfg.GetInterface)
+	d.addAPIRoute(apiURL+"/system/kernel/config", config.GetInterface)
 	d.addAPIRoute(apiURL+"/system/cpu", cpu.GetInterface)
 	d.addAPIRoute(apiURL+"/system/memory", memory.GetInterface)
 	d.addAPIRoute(apiURL+"/system/sysctls", sysctls.GetInterface)
@@ -80,7 +80,7 @@ func (d *daemon) Run(bind string, static string) error {
 	d.addAPIRoute(apiURL+"/system/ipmi/sensors", sensors.GetInterface)
 	d.addAPIRoute(apiURL+"/system/rpms", rpms.GetInterface)
 	d.addAPIRoute(apiURL+"/system/pcicards", pcicards.GetInterface)
-	d.addAPIRoute(apiURL+"/system/modules", modules.GetInterface)
+	d.addAPIRoute(apiURL+"/system/kernel/modules", modules.GetInterface)
 	d.addAPIRoute(apiURL+"/storage/disks", disks.GetInterface)
 	d.addAPIRoute(apiURL+"/storage/mounts", mounts.GetInterface)
 	d.addAPIRoute(apiURL+"/storage/lvm/physvols", physvols.GetInterface)

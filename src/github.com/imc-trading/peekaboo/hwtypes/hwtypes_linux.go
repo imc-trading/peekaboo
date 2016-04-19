@@ -19,9 +19,9 @@ import (
 	"github.com/imc-trading/peekaboo/system/cpu"
 	"github.com/imc-trading/peekaboo/system/ipmi"
 	"github.com/imc-trading/peekaboo/system/ipmi/sensors"
-	"github.com/imc-trading/peekaboo/system/kernelcfg"
+	"github.com/imc-trading/peekaboo/system/kernel/config"
+	"github.com/imc-trading/peekaboo/system/kernel/modules"
 	"github.com/imc-trading/peekaboo/system/memory"
-	"github.com/imc-trading/peekaboo/system/modules"
 	"github.com/imc-trading/peekaboo/system/opsys"
 	"github.com/imc-trading/peekaboo/system/pcicards"
 	"github.com/imc-trading/peekaboo/system/rpms"
@@ -68,8 +68,8 @@ func Get(hwType string) error {
 		r, err = system.Get()
 	case "os", "system/os":
 		r, err = opsys.Get()
-	case "kcfg", "system/kernelcfg":
-		r, err = kernelcfg.Get()
+	case "kcfg", "system/kernel/config":
+		r, err = config.Get()
 	case "cpu", "system/cpu":
 		r, err = cpu.Get()
 	case "sysctls", "system/sysctls":
@@ -84,7 +84,7 @@ func Get(hwType string) error {
 		r, err = rpms.Get()
 	case "pci", "system/pcicards":
 		r, err = pcicards.Get()
-	case "mods", "system/modules":
+	case "mods", "system/kernel/modules":
 		r, err = modules.Get()
 	case "disks", "storage/disks":
 		r, err = disks.Get()

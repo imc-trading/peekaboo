@@ -1,6 +1,6 @@
 // +build linux
 
-package kernelcfg
+package config
 
 import (
 	"fmt"

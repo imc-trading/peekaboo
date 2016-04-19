@@ -608,7 +608,7 @@ app.controller('ipmiController', [ '$scope', '$resource', 'Flash', function($sco
 
 // Kernel Config
 app.controller('kernelCfgController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
-  var resource = $resource('/api/system/kernelcfg');
+  var resource = $resource('/api/system/kernel/config');
 
   $scope.rowLimit = 10
 
@@ -621,7 +621,7 @@ app.controller('kernelCfgController', [ '$scope', '$resource', 'Flash', function
   });
 
   $scope.refresh = function() {
-    var resource = $resource('/api/system/kernelcfg?refresh=true');
+    var resource = $resource('/api/system/kernel/config?refresh=true');
 
     resource.query().$promise.then(function(value) {
       $scope.kernelCfgs = value;
@@ -726,7 +726,7 @@ app.controller('networkController', [ '$scope', '$resource', 'Flash', function($
 
 // Modules
 app.controller('modulesController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
-  var resource = $resource('/api/system/modules');
+  var resource = $resource('/api/system/kernel/modules');
 
   $scope.rowLimit = 10
 
@@ -739,7 +739,7 @@ app.controller('modulesController', [ '$scope', '$resource', 'Flash', function($
   });
 
   $scope.refresh = function() {
-    var resource = $resource('/api/system/modules?refresh=true');
+    var resource = $resource('/api/system/kernel/modules?refresh=true');
 
     resource.query().$promise.then(function(value) {
       $scope.modules = value;

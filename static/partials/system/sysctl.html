@@ -22,6 +22,7 @@
           <li role="menuitem" ng-click="rowLimit = 50"><a href="">50</a></li>
         </ul>
       </div>
+      <a href="api/system/sysctls" class="btn btn-default">JSON</a>
       <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>
     </div>
   </div>
@@ -41,14 +42,14 @@
         </th>
       </tr>
       <tr>
-        <th st-ratio="30" st-sort="key">Key</th>
-        <th st-ratio="70" st-sort="value">Value</th>
+        <th st-sort="key">Key</th>
+        <th st-sort="value">Value</th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="sysctl in displayedSysctls">
-        <td st-ratio="30">{{ sysctl.key }}</td>
-        <td st-ratio="70">{{ sysctl.value }}</td>
+        <td>{{ sysctl.key }}</td>
+        <td>{{ sysctl.value }}</td>
       </tr>
     </tbody>
     <tfoot>
