@@ -24,6 +24,7 @@ import (
 	"github.com/imc-trading/peekaboo/system"
 	"github.com/imc-trading/peekaboo/system/cpu"
 	"github.com/imc-trading/peekaboo/system/ipmi"
+	"github.com/imc-trading/peekaboo/system/ipmi/sensors"
 	"github.com/imc-trading/peekaboo/system/kernelcfg"
 	"github.com/imc-trading/peekaboo/system/memory"
 	"github.com/imc-trading/peekaboo/system/modules"
@@ -44,6 +45,7 @@ func New() Daemon {
 			apiURL + "/system/memory":        {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/system/sysctls":       {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/system/ipmi":          {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/system/ipmi/sensors":  {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/system/rpms":          {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/system/pcicards":      {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/system/modules":       {Timeout: 5 * 60},  // 5 min.
@@ -75,6 +77,7 @@ func (d *daemon) Run(bind string, static string) error {
 	d.addAPIRoute(apiURL+"/system/memory", memory.GetInterface)
 	d.addAPIRoute(apiURL+"/system/sysctls", sysctls.GetInterface)
 	d.addAPIRoute(apiURL+"/system/ipmi", ipmi.GetInterface)
+	d.addAPIRoute(apiURL+"/system/ipmi/sensors", sensors.GetInterface)
 	d.addAPIRoute(apiURL+"/system/rpms", rpms.GetInterface)
 	d.addAPIRoute(apiURL+"/system/pcicards", pcicards.GetInterface)
 	d.addAPIRoute(apiURL+"/system/modules", modules.GetInterface)

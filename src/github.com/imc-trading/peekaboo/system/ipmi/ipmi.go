@@ -2,7 +2,7 @@ package ipmi
 
 import (
 	"fmt"
-	"regexp"
+	"os"
 	"strconv"
 	"strings"
 
@@ -74,19 +74,23 @@ func Get() (IPMI, error) {
 		return i, nil
 	}
 
+	// Create sdr dump, too speed up cons. queries
+	sdr := "/tmp/peekaboo.sdr"
+	if _, err := os.Stat(sdr); os.IsNotExist(err) {
+		_, err := parse.Exec("ipmitool", []string{"sdr", "dump", sdr})
+		if err != nil {
+			return IPMI{}, err
+		}
+	}
+
 	// Fans
-	m, err := parse.ExecRegexpMap("ipmitool", []string{"sdr", "type", "fan"}, "\\|.*\\|", "\\|\\sok")
+	m, err := parse.ExecRegexpMap("ipmitool", []string{"sdr", "-S", sdr, "type", "fan"}, "\\|.*\\|", "\\|\\sok")
 	if err != nil {
 		return IPMI{}, err
 	}
 
 	i.Fans = Fans{}
 	for k, v := range m {
-		matched, _ := regexp.MatchString("Fan[0-9].*", k)
-		if !matched {
-			continue
-		}
-
 		arr := strings.Split(v, " ")
 		rpm, err := strconv.Atoi(arr[0])
 		if err != nil {
@@ -100,7 +104,7 @@ func Get() (IPMI, error) {
 	}
 
 	// Voltage
-	m, err = parse.ExecRegexpMap("ipmitool", []string{"sdr", "type", "voltage"}, "\\|.*\\|", "\\|\\sok")
+	m, err = parse.ExecRegexpMap("ipmitool", []string{"sdr", "-S", sdr, "type", "voltage"}, "\\|.*\\|", "\\|\\sok")
 	if err != nil {
 		return IPMI{}, err
 	}
@@ -116,7 +120,7 @@ func Get() (IPMI, error) {
 	}
 
 	// Current
-	m, err = parse.ExecRegexpMap("ipmitool", []string{"sdr", "type", "current"}, "\\|.*\\|", "\\|\\sok")
+	m, err = parse.ExecRegexpMap("ipmitool", []string{"sdr", "-S", sdr, "type", "current"}, "\\|.*\\|", "\\|\\sok")
 	if err != nil {
 		return IPMI{}, err
 	}
@@ -137,7 +141,7 @@ func Get() (IPMI, error) {
 	}
 
 	// Temperature
-	m, err = parse.ExecRegexpMap("ipmitool", []string{"sdr", "type", "temperature"}, "\\|.*\\|", "\\|\\sok")
+	m, err = parse.ExecRegexpMap("ipmitool", []string{"sdr", "-S", sdr, "type", "temperature"}, "\\|.*\\|", "\\|\\sok")
 	if err != nil {
 		return IPMI{}, err
 	}
