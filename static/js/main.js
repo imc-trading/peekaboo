@@ -61,6 +61,7 @@ app.config(['$routeProvider', function ($routeProvider) {
     .when("/system/sysctl", {templateUrl: "partials/system/sysctl.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "sysctl"})
     .when("/system/memory", {templateUrl: "partials/system/memory.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "memory"})
     .when("/system/ipmi", {templateUrl: "partials/system/ipmi.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "ipmi"})
+    .when("/system/ipmi/sensors", {templateUrl: "partials/system/ipmi/sensors.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "ipmi/sensors"})
     .when("/system/rpms", {templateUrl: "partials/system/rpms.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "rpms"})
     .when("/system/pcicards", {templateUrl: "partials/system/pcicards.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "pcicards"})
     .when("/system/kernel/config", {templateUrl: "partials/system/kernel/config.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "kernel/config"})
@@ -742,6 +743,34 @@ app.controller('modulesController', [ '$scope', '$resource', 'Flash', function($
 
     resource.query().$promise.then(function(value) {
       $scope.modules = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
+} ]);
+
+// IPMI Sensors
+app.controller('sensorsController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
+  var resource = $resource('/api/system/ipmi/sensors');
+
+  $scope.rowLimit = 10
+
+  resource.query().$promise.then(function(value) {
+    $scope.sensors = value;
+//    console.log (value);
+  }, function(err) {
+    var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+    var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+  });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/system/ipmi/sensors?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.sensors = value;
 //      console.log (value);
     }, function(err) {
       var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
