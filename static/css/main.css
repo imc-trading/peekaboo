@@ -14,12 +14,20 @@
   padding: 0px;
 }
 
-.navbar-brand>img {
+a.navbar-text {
+  text-decoration: none;
+  color: white !important;
+  font-family: Impact, fantasy;
+  font-size: 18px;
+  margin: 15px 15px 0px 0px;
+}
+
+.navbar-brand > img {
   height: 46px;
+  width: 50px;
   padding: 6px 0px 3px 0px;
   margin-left: 15px;
-  margin-right: 15px;
-  width: auto;
+  margin-right: 8px;
 }
 
 .navbar-right {

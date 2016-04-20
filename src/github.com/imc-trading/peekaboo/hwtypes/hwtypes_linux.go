@@ -1,8 +1,10 @@
 package hwtypes
 
 import (
-	"encoding/json"
+	//	"encoding/json"
 	"fmt"
+
+	"github.com/mickep76/dquery"
 
 	"github.com/imc-trading/peekaboo/docker"
 	"github.com/imc-trading/peekaboo/docker/containers"
@@ -53,7 +55,7 @@ var hwTypes = []string{
 	"docker/images (short: imgs)",
 }
 
-func Get(hwType string) error {
+func Get(hwType string, filter string) error {
 	var r interface{}
 	var err error
 
@@ -61,7 +63,7 @@ func Get(hwType string) error {
 	case "net", "network":
 		r, err = network.Get()
 	case "ifs", "network/interfaces":
-		r, err = interfaces.Get()
+		r, err = interfaces.GetInterface()
 	case "routes", "network/routes":
 		r, err = routes.Get()
 	case "sys", "system":
@@ -110,8 +112,11 @@ func Get(hwType string) error {
 		return err
 	}
 
-	b, _ := json.MarshalIndent(r, "", "  ")
-	fmt.Println(string(b))
+	j, err := dquery.FilterJSON(filter, r)
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(j))
 
 	return nil
 }

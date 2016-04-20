@@ -1,7 +1,10 @@
 <nav class="navbar navbar-inverse navbar-static-top" ng-controller="osController">
   <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#/" uib-tooltip="Dashboard" tooltip-placement="bottom" tooltip-popup-delay="1000" tooltip-trigger="mouseenter"><img class="img-responsive2" src="/img/peekaboo_dark.png"></a>
+    <div class="navbar-header" uib-tooltip="Dashboard" tooltip-placement="bottom" tooltip-popup-delay="1000" tooltip-trigger="mouseenter" ng-mouseover="logoImg='peekaboo-open-hands.svg'" ng-mouseleave="logoImg='peekaboo.svg'">
+      <a class="navbar-brand" href="#/">
+        <img class="img-responsive2" ng-src="img/{{logoImg}}">
+      </a>
+      <a class="navbar-text" href="#/">Peekaboo</a>
     </div>
     <div>
       <ul ng-if="os.kernel == 'linux'" class="nav navbar-nav">

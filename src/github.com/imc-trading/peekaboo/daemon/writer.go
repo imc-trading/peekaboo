@@ -4,13 +4,11 @@ import (
 	"encoding/json"
 	"net/http"
 	"strings"
+
+	"github.com/mickep76/dquery"
 )
 
 func writeJSON(w http.ResponseWriter, r *http.Request, data interface{}, cache interface{}) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.WriteHeader(http.StatusOK)
-
 	if strings.ToLower(r.URL.Query().Get("envelope")) == "true" {
 		e := map[string]interface{}{
 			"status": http.StatusOK,
@@ -19,8 +17,45 @@ func writeJSON(w http.ResponseWriter, r *http.Request, data interface{}, cache i
 			"cache":  cache,
 		}
 
+		filter := r.URL.Query().Get("filter")
+		if filter != "" {
+			d, err := dquery.Filter(filter, e)
+			if err != nil {
+				writeJSONError(w, r, nil, err.Error(), http.StatusBadRequest)
+				return
+			}
+
+			w.Header().Set("Content-Type", "application/json; charset=utf-8")
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.WriteHeader(http.StatusOK)
+			writeMIME(w, r, d)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.WriteHeader(http.StatusOK)
 		writeMIME(w, r, e)
 	} else {
+
+		filter := r.URL.Query().Get("filter")
+		if filter != "" {
+			d, err := dquery.Filter(filter, data)
+			if err != nil {
+				writeJSONError(w, r, nil, err.Error(), http.StatusBadRequest)
+				return
+			}
+
+			w.Header().Set("Content-Type", "application/json; charset=utf-8")
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.WriteHeader(http.StatusOK)
+			writeMIME(w, r, d)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.WriteHeader(http.StatusOK)
 		writeMIME(w, r, data)
 	}
 }

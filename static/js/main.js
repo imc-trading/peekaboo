@@ -85,6 +85,7 @@ app.controller('PageCtrl', ['$scope', '$route', 'Flash', function($scope, $route
   Flash.clear();
   $scope.activeTab = $route.current.activeTab;
   $scope.sideActiveTab = $route.current.sideActiveTab;
+  $scope.logoImg = "peekaboo.svg"
 } ]);
 
 /*

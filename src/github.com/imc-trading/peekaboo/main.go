@@ -18,7 +18,7 @@ func main() {
 Usage:
   peekaboo daemon [--debug] [--bind=<addr>] [--static=<dir>]
   peekaboo list
-  peekaboo get <hardware-type>
+  peekaboo get <hardware-type> [--filter=<path>]
   peekaboo -h | --help
   peekaboo --version
 
@@ -36,6 +36,7 @@ Options:
   -d --debug           Debug.
   -b --bind=<addr>     Bind to address and port. [default: 0.0.0.0:5050]
   -s --static=<dir>    Directory for static content. [default: static]
+  -f --filter=<path>   Filter result. [default: .]
 `
 
 	args, err := docopt.Parse(usage, nil, true, "Peekaboo "+version.Version, false)
@@ -60,7 +61,7 @@ Options:
 
 	// Get hardware type.
 	if args["get"].(bool) {
-		if err := hwtypes.Get(args["<hardware-type>"].(string)); err != nil {
+		if err := hwtypes.Get(args["<hardware-type>"].(string), args["--filter"].(string)); err != nil {
 			log.Fatal(err.Error())
 		}
 	}
