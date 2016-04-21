@@ -1,6 +1,7 @@
 package interfaces
 
 import (
+	"encoding/hex"
 	"fmt"
 	"net"
 	"runtime"
@@ -30,6 +31,7 @@ type Interface struct {
 	SwPortID        *string  `json:"swPortId,omitempty"`
 	SwPortDescr     *string  `json:"swPortDescr,omitempty"`
 	SwVLAN          *string  `json:"swVLan,omitempty"`
+	TwinexCableSN   *string  `json:"twinexCableSN,omitempty"`
 }
 
 // Get network interfaces.
@@ -42,6 +44,11 @@ func Get() (Interfaces, error) {
 	hasLldpctl := false
 	if err := parse.Exists("lldpctl"); err == nil {
 		hasLldpctl = true
+	}
+
+	hasSfctool := false
+	if err := parse.Exists("sfctool"); err == nil {
+		hasSfctool = true
 	}
 
 	rIntfs, err := net.Interfaces()
@@ -104,6 +111,58 @@ func Get() (Interfaces, error) {
 				wIntf.PCIBus = &s4
 				s5 := fmt.Sprintf("/pci/%v", m["bus-info"])
 				wIntf.PCIBusURL = &s5
+			}
+		}
+
+		var sn string
+		if runtime.GOOS == "linux" && hasEthtool && hasSfctool && *wIntf.Driver == "sfc" {
+			o, err := parse.Exec("sfctool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0040", "length", "16"})
+			if err != nil {
+				return Interfaces{}, err
+			}
+
+			for _, line := range strings.Split(o, "\n") {
+				arr := strings.SplitN(line, ":", 2)
+				if len(arr) < 2 {
+					continue
+				}
+
+				key := strings.TrimSpace(arr[0])
+				val := strings.TrimSpace(arr[1])
+
+				switch key {
+				case "0x0040":
+					b, err := hex.DecodeString(strings.Replace(val, " ", "", -1))
+					if err != nil {
+					}
+					sn = strings.Replace(string(b), "\u0000", "", -1)
+				}
+			}
+		}
+
+		if runtime.GOOS == "linux" && hasEthtool && hasSfctool && *wIntf.Driver == "sfc" && sn != "" {
+			o, err := parse.Exec("sfctool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0078", "length", "1"})
+			if err != nil {
+				return Interfaces{}, err
+			}
+
+			for _, line := range strings.Split(o, "\n") {
+				arr := strings.SplitN(line, ":", 2)
+				if len(arr) < 2 {
+					continue
+				}
+
+				key := strings.TrimSpace(arr[0])
+				val := strings.TrimSpace(arr[1])
+
+				switch key {
+				case "0x0078":
+					b, err := hex.DecodeString(strings.Replace(val, " ", "", -1))
+					if err != nil {
+					}
+					s := strings.Replace(sn+":"+string(b), "\u0000", "", -1)
+					wIntf.TwinexCableSN = &s
+				}
 			}
 		}
 

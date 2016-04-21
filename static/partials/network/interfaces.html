@@ -29,6 +29,7 @@
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.swPortId"> Sw. Port Id</label></div></li>
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.swPortDescr"> Sw. Port Descr.</label></div></li>
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.swVLAN"> Sw. VLAN</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.twinexCableSN"> Twinex Cable S/N</label></div></li>
         </ul>
       </div>
       <div class="btn-group" uib-dropdown is-open="status.isopen">
@@ -77,6 +78,7 @@
         <th ng-hide="!toggle.swPortId" st-sort="swPortId">Sw. Port Id</th>
         <th ng-hide="!toggle.swPortDescr" st-sort="swPortDescr">Sw. Port Descr.</th>
         <th ng-hide="!toggle.swVLAN" st-sort="swVLan">Sw. VLAN</th>
+        <th ng-hide="!toggle.twinexCableSN" st-sort="swVLan">Twinex Cable S/N</th>
       </tr>
     </thead>
     <tbody>
@@ -95,6 +97,7 @@
         <td ng-hide="!toggle.swPortId">{{ interface.swPortId }}</td>
         <td ng-hide="!toggle.swPortDescr">{{ interface.swPortDescr }}</td>
         <td ng-hide="!toggle.swVLAN">{{ interface.swVLAN }}</td>
+        <td ng-hide="!toggle.twinexCableSN">{{ interface.twinexCableSN }}</td>
       </tr>
     </tbody>
     <tfoot>
