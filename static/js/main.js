@@ -80,12 +80,22 @@ app.config(['$routeProvider', function ($routeProvider) {
  * Controls all other Pages
  */
 
-app.controller('PageCtrl', ['$scope', '$route', 'Flash', function($scope, $route, Flash) {
+app.controller('PageCtrl', ['$scope', '$route', 'Flash', '$interval', '$timeout', function($scope, $route, Flash, $interval, $timeout) {
   console.log("Page Controller reporting for duty.");
   Flash.clear();
   $scope.activeTab = $route.current.activeTab;
   $scope.sideActiveTab = $route.current.sideActiveTab;
   $scope.logoImg = "peekaboo.svg"
+
+  $interval(function() {
+    $scope.logoImg = "peekaboo-open-hands.svg"
+
+    $timeout(function() {
+      $scope.logoImg = "peekaboo.svg"
+    }, Math.random() * 4000 + 1000);
+
+  }, Math.random() * 17000 + 3000);
+
 } ]);
 
 /*
