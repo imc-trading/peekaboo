@@ -268,14 +268,6 @@ tfoot td {
   top: 50px;
 }
 
-.th {
-  font-family: Impact, fantasy;
-}
-
-.tr {
-  font-family: "Lucida Console", Monaco, monospace;
-}
-
 /* Pagination */
 
 .pagination > li > a {
