@@ -29,8 +29,8 @@
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.swPortId"> Sw. Port Id</label></div></li>
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.swPortDescr"> Sw. Port Descr.</label></div></li>
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.swVLAN"> Sw. VLAN</label></div></li>
-          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.twinexCableSN"> Twinax S/N</label></div></li>
-          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.twinexCableSA"> Twinax Sub Ass.</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.twinaxCableSN"> Twinax S/N</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.twinaxCableSA"> Twinax SA</label></div></li>
         </ul>
       </div>
       <div class="btn-group" uib-dropdown is-open="status.isopen">
@@ -79,8 +79,8 @@
         <th ng-hide="!toggle.swPortId" st-sort="swPortId">Sw. Port Id</th>
         <th ng-hide="!toggle.swPortDescr" st-sort="swPortDescr">Sw. Port Descr.</th>
         <th ng-hide="!toggle.swVLAN" st-sort="swVLan">Sw. VLAN</th>
-        <th ng-hide="!toggle.twinexCableSN" st-sort="twinexCableSN">Twinax S/N</th>
-        <th ng-hide="!toggle.twinexCableAS" st-sort="twinexCableSA">Twinax Sub Ass.</th>
+        <th ng-hide="!toggle.twinaxCableSN" st-sort="twinaxCableSN">Twinax S/N</th>
+        <th ng-hide="!toggle.twinaxCableSA" st-sort="twinaxCableSA">Twinax SA</th>
       </tr>
     </thead>
     <tbody>
@@ -99,8 +99,8 @@
         <td ng-hide="!toggle.swPortId">{{ interface.swPortId }}</td>
         <td ng-hide="!toggle.swPortDescr">{{ interface.swPortDescr }}</td>
         <td ng-hide="!toggle.swVLAN">{{ interface.swVLAN }}</td>
-        <td ng-hide="!toggle.twinexCableSN">{{ interface.twinexCableSN }}</td>
-        <td ng-hide="!toggle.twinexCableSA">{{ interface.twinexCableSA }}</td>
+        <td ng-hide="!toggle.twinaxCableSN">{{ interface.twinaxCableSN }}</td>
+        <td ng-hide="!toggle.twinaxCableSA">{{ interface.twinaxCableSA }}</td>
       </tr>
     </tbody>
     <tfoot>
