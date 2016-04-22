@@ -15,23 +15,25 @@ type Interfaces []Interface
 
 // Interface single network interface.
 type Interface struct {
-	Name            string   `json:"name"`
-	MTU             int      `json:"mtu"`
-	IPAddr          []string `json:"ipAddr"`
-	HWAddr          string   `json:"hwAddr"`
-	Flags           []string `json:"flags"`
-	Driver          *string  `json:"driver,omitempty"`
-	DriverVersion   *string  `json:"driverVersion,omitempty"`
-	FirmwareVersion *string  `json:"firmwareVersion,omitempty"`
-	PCIBus          *string  `json:"pciBus,omitempty"`
-	PCIBusURL       *string  `json:"pciBusURL,omitempty"`
-	SwChassisID     *string  `json:"swChassisId,omitempty"`
-	SwName          *string  `json:"swName,omitempty"`
-	SwDescr         *string  `json:"swDescr,omitempty"`
-	SwPortID        *string  `json:"swPortId,omitempty"`
-	SwPortDescr     *string  `json:"swPortDescr,omitempty"`
-	SwVLAN          *string  `json:"swVLan,omitempty"`
-	TwinexCableSN   *string  `json:"twinexCableSN,omitempty"`
+	Name              string   `json:"name"`
+	MTU               int      `json:"mtu"`
+	IPAddr            []string `json:"ipAddr"`
+	HWAddr            string   `json:"hwAddr"`
+	Flags             []string `json:"flags"`
+	Driver            *string  `json:"driver,omitempty"`
+	DriverVersion     *string  `json:"driverVersion,omitempty"`
+	FirmwareVersion   *string  `json:"firmwareVersion,omitempty"`
+	PCIBus            *string  `json:"pciBus,omitempty"`
+	PCIBusURL         *string  `json:"pciBusURL,omitempty"`
+	SwChassisID       *string  `json:"swChassisId,omitempty"`
+	SwName            *string  `json:"swName,omitempty"`
+	SwDescr           *string  `json:"swDescr,omitempty"`
+	SwPortID          *string  `json:"swPortId,omitempty"`
+	SwPortDescr       *string  `json:"swPortDescr,omitempty"`
+	SwVLAN            *string  `json:"swVLan,omitempty"`
+	TwinaxCableSN     *string  `json:"twinaxCableSN,omitempty"`
+	TwinaxCableSA     *string  `json:"twinaxCableSA,omitempty"`
+	TwinaxCableEeprom *string  `json:"twinaxCableEeprom,omitempty"`
 }
 
 // Get network interfaces.
@@ -114,7 +116,6 @@ func Get() (Interfaces, error) {
 			}
 		}
 
-		var sn string
 		if runtime.GOOS == "linux" && hasEthtool && hasSfctool && *wIntf.Driver == "sfc" {
 			o, err := parse.Exec("sfctool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0040", "length", "16"})
 			if err != nil {
@@ -135,12 +136,16 @@ func Get() (Interfaces, error) {
 					b, err := hex.DecodeString(strings.Replace(val, " ", "", -1))
 					if err != nil {
 					}
-					sn = strings.Replace(string(b), "\u0000", "", -1)
+					s := strings.Replace(string(b), "\u0000", "", -1)
+					if s != "" {
+						wIntf.TwinaxCableSN = &s
+					}
+					break
 				}
 			}
 		}
 
-		if runtime.GOOS == "linux" && hasEthtool && hasSfctool && *wIntf.Driver == "sfc" && sn != "" {
+		if runtime.GOOS == "linux" && hasEthtool && hasSfctool && *wIntf.Driver == "sfc" && wIntf.TwinaxCableSN != nil {
 			o, err := parse.Exec("sfctool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0078", "length", "1"})
 			if err != nil {
 				return Interfaces{}, err
@@ -160,10 +165,23 @@ func Get() (Interfaces, error) {
 					b, err := hex.DecodeString(strings.Replace(val, " ", "", -1))
 					if err != nil {
 					}
-					s := strings.Replace(sn+":"+string(b), "\u0000", "", -1)
-					wIntf.TwinexCableSN = &s
+					s := strings.Replace(string(b), "\u0000", "", -1)
+					if s != "" {
+						wIntf.TwinaxCableSA = &s
+					}
+					break
 				}
 			}
+		}
+
+		if runtime.GOOS == "linux" && hasEthtool && hasSfctool && *wIntf.Driver == "sfc" && wIntf.TwinaxCableSN != nil {
+			o, err := parse.Exec("sfctool", []string{"-m", rIntf.Name, "raw", "on"})
+			if err != nil {
+				return Interfaces{}, err
+			}
+
+			s := hex.EncodeToString([]byte(o))
+			wIntf.TwinaxCableEeprom = &s
 		}
 
 		if runtime.GOOS == "linux" && hasLldpctl == true {
