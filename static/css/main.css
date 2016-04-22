@@ -30,6 +30,11 @@ a.navbar-text {
   margin-right: 8px;
 }
 
+.navbar-header .navbar-brand-text > img {
+  height: 46px;
+  width: 100px;
+}
+
 .navbar-right {
   margin-right: 15px;
 }
