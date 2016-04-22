@@ -116,72 +116,130 @@ func Get() (Interfaces, error) {
 			}
 		}
 
-		if runtime.GOOS == "linux" && hasEthtool && hasSfctool && *wIntf.Driver == "sfc" {
+		if runtime.GOOS == "linux" && hasEthtool && *wIntf.Driver != "sfc" {
+			o, err := parse.Exec("ethtool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0040", "length", "16"})
+
+			// Do nothing on error, doesn't support getting Eeprom info
+			if err != nil {
+				for _, line := range strings.Split(o, "\n") {
+					arr := strings.SplitN(line, ":", 2)
+					if len(arr) < 2 {
+						continue
+					}
+
+					key := strings.TrimSpace(arr[0])
+					val := strings.TrimSpace(arr[1])
+
+					switch key {
+					case "0x0040":
+						b, err := hex.DecodeString(strings.Replace(val, " ", "", -1))
+						if err != nil {
+						}
+						s := strings.Replace(string(b), "\u0000", "", -1)
+						if s != "" {
+							wIntf.TwinaxCableSN = &s
+						}
+						break
+					}
+				}
+			}
+		}
+
+		if runtime.GOOS == "linux" && hasEthtool && *wIntf.Driver != "sfc" && wIntf.TwinaxCableSN != nil {
+			o, err := parse.Exec("ethtool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0078", "length", "1"})
+
+			// Do nothing on error, doesn't support getting Eeprom info
+			if err == nil {
+				for _, line := range strings.Split(o, "\n") {
+					arr := strings.SplitN(line, ":", 2)
+					if len(arr) < 2 {
+						continue
+					}
+
+					key := strings.TrimSpace(arr[0])
+					val := strings.TrimSpace(arr[1])
+
+					switch key {
+					case "0x0078":
+						b, err := hex.DecodeString(strings.Replace(val, " ", "", -1))
+						if err != nil {
+						}
+						s := strings.Replace(string(b), "\u0000", "", -1)
+						if s != "" {
+							wIntf.TwinaxCableSA = &s
+						}
+						break
+					}
+				}
+			}
+		}
+
+		if runtime.GOOS == "linux" && hasSfctool && *wIntf.Driver == "sfc" {
 			o, err := parse.Exec("sfctool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0040", "length", "16"})
-			if err != nil {
-				return Interfaces{}, err
-			}
 
-			for _, line := range strings.Split(o, "\n") {
-				arr := strings.SplitN(line, ":", 2)
-				if len(arr) < 2 {
-					continue
-				}
-
-				key := strings.TrimSpace(arr[0])
-				val := strings.TrimSpace(arr[1])
-
-				switch key {
-				case "0x0040":
-					b, err := hex.DecodeString(strings.Replace(val, " ", "", -1))
-					if err != nil {
+			// Do nothing on error, doesn't support getting Eeprom info
+			if err == nil {
+				for _, line := range strings.Split(o, "\n") {
+					arr := strings.SplitN(line, ":", 2)
+					if len(arr) < 2 {
+						continue
 					}
-					s := strings.Replace(string(b), "\u0000", "", -1)
-					if s != "" {
-						wIntf.TwinaxCableSN = &s
+
+					key := strings.TrimSpace(arr[0])
+					val := strings.TrimSpace(arr[1])
+
+					switch key {
+					case "0x0040":
+						b, err := hex.DecodeString(strings.Replace(val, " ", "", -1))
+						if err != nil {
+						}
+						s := strings.Replace(string(b), "\u0000", "", -1)
+						if s != "" {
+							wIntf.TwinaxCableSN = &s
+						}
+						break
 					}
-					break
 				}
 			}
 		}
 
-		if runtime.GOOS == "linux" && hasEthtool && hasSfctool && *wIntf.Driver == "sfc" && wIntf.TwinaxCableSN != nil {
+		if runtime.GOOS == "linux" && hasSfctool && *wIntf.Driver == "sfc" && wIntf.TwinaxCableSN != nil {
 			o, err := parse.Exec("sfctool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0078", "length", "1"})
-			if err != nil {
-				return Interfaces{}, err
-			}
 
-			for _, line := range strings.Split(o, "\n") {
-				arr := strings.SplitN(line, ":", 2)
-				if len(arr) < 2 {
-					continue
-				}
-
-				key := strings.TrimSpace(arr[0])
-				val := strings.TrimSpace(arr[1])
-
-				switch key {
-				case "0x0078":
-					b, err := hex.DecodeString(strings.Replace(val, " ", "", -1))
-					if err != nil {
+			// Do nothing on error, doesn't support getting Eeprom info
+			if err == nil {
+				for _, line := range strings.Split(o, "\n") {
+					arr := strings.SplitN(line, ":", 2)
+					if len(arr) < 2 {
+						continue
 					}
-					s := strings.Replace(string(b), "\u0000", "", -1)
-					if s != "" {
-						wIntf.TwinaxCableSA = &s
+
+					key := strings.TrimSpace(arr[0])
+					val := strings.TrimSpace(arr[1])
+
+					switch key {
+					case "0x0078":
+						b, err := hex.DecodeString(strings.Replace(val, " ", "", -1))
+						if err != nil {
+						}
+						s := strings.Replace(string(b), "\u0000", "", -1)
+						if s != "" {
+							wIntf.TwinaxCableSA = &s
+						}
+						break
 					}
-					break
 				}
 			}
 		}
 
-		if runtime.GOOS == "linux" && hasEthtool && hasSfctool && *wIntf.Driver == "sfc" && wIntf.TwinaxCableSN != nil {
+		if runtime.GOOS == "linux" && hasSfctool && *wIntf.Driver == "sfc" && wIntf.TwinaxCableSN != nil {
 			o, err := parse.Exec("sfctool", []string{"-m", rIntf.Name, "raw", "on"})
-			if err != nil {
-				return Interfaces{}, err
-			}
 
-			s := hex.EncodeToString([]byte(o))
-			wIntf.TwinaxCableEeprom = &s
+			// Do nothing on error, doesn't support getting Eeprom info
+			if err == nil {
+				s := hex.EncodeToString([]byte(o))
+				wIntf.TwinaxCableEeprom = &s
+			}
 		}
 
 		if runtime.GOOS == "linux" && hasLldpctl == true {
