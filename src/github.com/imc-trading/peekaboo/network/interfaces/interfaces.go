@@ -98,25 +98,25 @@ func Get() (Interfaces, error) {
 
 		if runtime.GOOS == "linux" && hasEthtool == true {
 			m, err := parse.ExecRegexpMap("ethtool", []string{"-i", rIntf.Name}, ":", "\\S+:\\s\\S+")
-			if err != nil {
-				return Interfaces{}, err
-			}
 
-			s1 := m["driver"]
-			wIntf.Driver = &s1
-			s2 := m["version"]
-			wIntf.DriverVersion = &s2
-			s3 := m["firmware-version"]
-			wIntf.FirmwareVersion = &s3
-			if strings.HasPrefix(m["bus-info"], "0000:") {
-				s4 := m["bus-info"]
-				wIntf.PCIBus = &s4
-				s5 := fmt.Sprintf("/pci/%v", m["bus-info"])
-				wIntf.PCIBusURL = &s5
+			// Do nothing on error
+			if err == nil {
+				s1 := m["driver"]
+				wIntf.Driver = &s1
+				s2 := m["version"]
+				wIntf.DriverVersion = &s2
+				s3 := m["firmware-version"]
+				wIntf.FirmwareVersion = &s3
+				if strings.HasPrefix(m["bus-info"], "0000:") {
+					s4 := m["bus-info"]
+					wIntf.PCIBus = &s4
+					s5 := fmt.Sprintf("/pci/%v", m["bus-info"])
+					wIntf.PCIBusURL = &s5
+				}
 			}
 		}
 
-		if runtime.GOOS == "linux" && hasEthtool && *wIntf.Driver != "sfc" {
+		if runtime.GOOS == "linux" && hasEthtool && wIntf.Driver != nil && *wIntf.Driver != "sfc" {
 			o, err := parse.Exec("ethtool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0040", "length", "16"})
 
 			// Do nothing on error, doesn't support getting Eeprom info
@@ -145,7 +145,7 @@ func Get() (Interfaces, error) {
 			}
 		}
 
-		if runtime.GOOS == "linux" && hasEthtool && *wIntf.Driver != "sfc" && wIntf.TwinaxCableSN != nil {
+		if runtime.GOOS == "linux" && hasEthtool && wIntf.Driver != nil && *wIntf.Driver != "sfc" && wIntf.TwinaxCableSN != nil {
 			o, err := parse.Exec("ethtool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0078", "length", "1"})
 
 			// Do nothing on error, doesn't support getting Eeprom info
@@ -174,7 +174,7 @@ func Get() (Interfaces, error) {
 			}
 		}
 
-		if runtime.GOOS == "linux" && hasSfctool && *wIntf.Driver == "sfc" {
+		if runtime.GOOS == "linux" && hasSfctool && wIntf.Driver != nil && *wIntf.Driver == "sfc" {
 			o, err := parse.Exec("sfctool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0040", "length", "16"})
 
 			// Do nothing on error, doesn't support getting Eeprom info
@@ -203,7 +203,7 @@ func Get() (Interfaces, error) {
 			}
 		}
 
-		if runtime.GOOS == "linux" && hasSfctool && *wIntf.Driver == "sfc" && wIntf.TwinaxCableSN != nil {
+		if runtime.GOOS == "linux" && hasSfctool && wIntf.Driver != nil && *wIntf.Driver == "sfc" && wIntf.TwinaxCableSN != nil {
 			o, err := parse.Exec("sfctool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0078", "length", "1"})
 
 			// Do nothing on error, doesn't support getting Eeprom info
@@ -232,7 +232,7 @@ func Get() (Interfaces, error) {
 			}
 		}
 
-		if runtime.GOOS == "linux" && hasSfctool && *wIntf.Driver == "sfc" && wIntf.TwinaxCableSN != nil {
+		if runtime.GOOS == "linux" && hasSfctool && wIntf.Driver != nil && *wIntf.Driver == "sfc" && wIntf.TwinaxCableSN != nil {
 			o, err := parse.Exec("sfctool", []string{"-m", rIntf.Name, "raw", "on"})
 
 			// Do nothing on error, doesn't support getting Eeprom info
@@ -244,33 +244,34 @@ func Get() (Interfaces, error) {
 
 		if runtime.GOOS == "linux" && hasLldpctl == true {
 			o, err := parse.Exec("lldpctl", []string{rIntf.Name})
-			if err != nil {
-				return Interfaces{}, err
-			}
 
-			for _, line := range strings.Split(o, "\n") {
-				arr := strings.SplitN(line, ":", 2)
-				if len(arr) < 2 {
-					continue
+			// Do nothing on error
+			if err == nil {
+				for _, line := range strings.Split(o, "\n") {
+					arr := strings.SplitN(line, ":", 2)
+					if len(arr) < 2 {
+						continue
+					}
+
+					key := strings.TrimSpace(arr[0])
+					val := strings.TrimSpace(arr[1])
+
+					switch key {
+					case "ChassisID":
+						wIntf.SwChassisID = &val
+					case "SysName":
+						wIntf.SwName = &val
+					case "SysDescr":
+						wIntf.SwDescr = &val
+					case "PortID":
+						wIntf.SwPortID = &val
+					case "PortDescr":
+						wIntf.SwPortDescr = &val
+					case "VLAN":
+						wIntf.SwVLAN = &val
+					}
 				}
 
-				key := strings.TrimSpace(arr[0])
-				val := strings.TrimSpace(arr[1])
-
-				switch key {
-				case "ChassisID":
-					wIntf.SwChassisID = &val
-				case "SysName":
-					wIntf.SwName = &val
-				case "SysDescr":
-					wIntf.SwDescr = &val
-				case "PortID":
-					wIntf.SwPortID = &val
-				case "PortDescr":
-					wIntf.SwPortDescr = &val
-				case "VLAN":
-					wIntf.SwVLAN = &val
-				}
 			}
 		}
 
