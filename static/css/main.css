@@ -104,7 +104,7 @@ a.navbar-text {
 .sidebar {
   position: absolute;
   top: 130px;
-  left: -205px;;
+  left: -205px;
   transition: 100ms left;
   z-index: 1000;
 }

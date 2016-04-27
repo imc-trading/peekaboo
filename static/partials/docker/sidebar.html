@@ -1,7 +1,7 @@
 <div class="container">
   <div ng-controller="SidebarController">
-    <a href="" id="navigation-toggle" ng-click="toggleState()" uib-tooltip="Menu" tooltip-placement="right-bottom" tooltip-popup-delay="1000" tooltip-trigger="mouseenter"><i class="fa fa-bars" aria-hidden="true"></i></a>
-    <div class="sidebar" sidebar-directive="state">
+    <a href="" id="navigation-toggle" ng-click="state = !state" uib-tooltip="Menu" tooltip-placement="right-bottom" tooltip-popup-delay="1000" tooltip-trigger="mouseenter"><i class="fa fa-bars" aria-hidden="true"></i></a>
+    <div class="sidebar" sidebar-directive="state" click-outside="state = false" outside-if-not="navigation-toggle">
       <ul class="navigation">
         <li class="navigation-items" ng-class="{active: sideActiveTab == 'general'}"><a href="#/docker/general">General</a></li>
         <li class="navigation-items" ng-class="{active: sideActiveTab == 'images'}"><a href="#/docker/images">Images</a></li>

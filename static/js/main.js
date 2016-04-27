@@ -8,18 +8,12 @@ var app = angular.module('peekaboo', [
   'ui.bootstrap',
   'smart-table',
   'ngFlash',
-  'ngAnimate'
+  'ngAnimate',
+  'angular-click-outside'
 ])
 
-
-app.controller('SidebarController', function($scope) {
-    
-    $scope.state = false;
-    
-    $scope.toggleState = function() {
-        $scope.state = !$scope.state;
-    };
-    
+app.controller('SidebarController', function($scope, $rootScope) {
+  $scope.state = false;
 });
 
 app.directive('sidebarDirective', function() {
