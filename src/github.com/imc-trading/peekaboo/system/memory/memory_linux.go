@@ -313,7 +313,7 @@ func Get() (Memory, error) {
 	}
 
 	// VmallocUsed
-	m.VmallocUsedKB, m.VmallocUsedGB, err = strToIntPtr(o, "")
+	m.VmallocUsedKB, m.VmallocUsedGB, err = strToIntPtr(o, "VmalllocUsed")
 	if err != nil {
 		return Memory{}, err
 	}

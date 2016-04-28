@@ -27,7 +27,9 @@
       <dd>{{ memory.buffersGB | number:2 }} GB</dd>
       <dt>Cached</dt>
       <dd>{{ memory.cachedGB | number:2 }} GB</dd>
-      <dt>Capacity Used</dt>
+    </dl>
+    <dl class="dl-horizontal">
+      <dt uib-tooltip="Total amount of allocated memory for all applications (Committed_AS + Hugepagesize * HugePages_Total)" tooltip-trigger="mouseenter">Capacity Used</dt>
       <dd>{{ memory.capacityUsedGB | number:2 }} GB</dt>
       <dt>Capacity Free</dt>
       <dd>{{ memory.capacityFreeGB | number:2 }} GB</dt>
