@@ -9,18 +9,23 @@ import (
 type PCICards []PCICard
 
 type PCICard struct {
-	Slot      string `json:"slot"`
-	Class     string `json:"class"`
-	Vendor    string `json:"vendor"`
-	Device    string `json:"device"`
-	SubVendor string `json:"subVendor"`
-	SubDevice string `json:"subDevice"`
-	Revision  string `json:"revision"`
-	ProgIntf  string `json:"progIntf"`
+	Slot        string  `json:"slot"`
+	Class       string  `json:"class"`
+	ClassId     string  `json:"classId"`
+	Vendor      string  `json:"vendor"`
+	VendorId    string  `json:"vendorId"`
+	Device      string  `json:"device"`
+	DeviceId    string  `json:"deviceId"`
+	SubVendor   *string `json:"subVendor,omitempty"`
+	SubVendorId *string `json:"subVendorId,omitempty"`
+	SubDevice   *string `json:"subDevice,omitempty"`
+	SubDeviceId *string `json:"subDeviceId,omitempty"`
+	Revision    *string `json:"revision,omitempty"`
+	ProgIntf    *string `json:"progIntf,omitempty"`
 }
 
 func Get() (PCICards, error) {
-	o, err := parse.Exec("lspci", []string{"-vmm"})
+	o, err := parse.Exec("lspci", []string{"-vmm", "-nn"})
 	if err != nil {
 		return PCICards{}, err
 	}
@@ -41,7 +46,14 @@ func Get() (PCICards, error) {
 		}
 
 		key := strings.TrimSpace(arr[0])
-		val := strings.TrimSpace(arr[1])
+
+		arr2 := strings.SplitN(arr[1], "[", 2)
+		val := strings.TrimSpace(arr2[0])
+
+		id := ""
+		if len(arr2) > 1 {
+			id = strings.TrimRight(arr2[1], "]")
+		}
 
 		switch key {
 		case "Slot":
@@ -49,18 +61,31 @@ func Get() (PCICards, error) {
 			first = false
 		case "Class":
 			p.Class = val
+			p.ClassId = id
 		case "Vendor":
 			p.Vendor = val
+			p.VendorId = id
 		case "Device":
 			p.Device = val
+			p.DeviceId = id
 		case "SVendor":
-			p.SubVendor = val
+			if val != "" {
+				p.SubVendor = &val
+				p.SubVendorId = &id
+			}
 		case "SDevice":
-			p.SubDevice = val
+			if val != "" {
+				p.SubDevice = &val
+				p.SubDeviceId = &id
+			}
 		case "Rev":
-			p.Revision = val
+			if val != "" {
+				p.Revision = &val
+			}
 		case "ProgIf":
-			p.ProgIntf = val
+			if val != "" {
+				p.ProgIntf = &val
+			}
 		}
 	}
 

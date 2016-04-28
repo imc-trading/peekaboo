@@ -16,10 +16,15 @@
         <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="toggleColumns">
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.slot"> Slot</label></div></li>
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.class"> Class</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.classId"> Class Id</label></div></li>
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.vendor"> Vendor</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.vendorId"> Vendor Id</label></div></li>
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.device"> Device</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.deviceId"> Device Id</label></div></li>
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.subVendor"> Subsys. Vendor</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.subVendorId"> Subsys. Vendor Id</label></div></li>
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.subDevice"> Subsys. Device</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.subDeviceId"> Subsys. Device Id</label></div></li>
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.revision"> Revision</label></div></li>
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.progIntf"> Prog. Interface</label></div></li>
         </ul>
@@ -59,10 +64,15 @@
       <tr>
         <th ng-hide="!toggle.slot" st-sort="slot">Slot</th>
         <th ng-hide="!toggle.class" st-sort="class">Class</th>
+        <th ng-hide="!toggle.classId" st-sort="class">Class Id</th>
         <th ng-hide="!toggle.vendor" st-sort="vendor">Vendor</th>
+        <th ng-hide="!toggle.vendorId" st-sort="vendor">Vendor Id</th>
         <th ng-hide="!toggle.device" st-sort="device">Device</th>
+        <th ng-hide="!toggle.deviceId" st-sort="device">Device Id</th>
         <th ng-hide="!toggle.subVendor" st-sort="subVendor">Subsys. Vendor</th>
+        <th ng-hide="!toggle.subVendorId" st-sort="subVendor">Subsys. Vendor Id</th>
         <th ng-hide="!toggle.subDevice" st-sort="subDevice">Subsys. Device</th>
+        <th ng-hide="!toggle.subDeviceId" st-sort="subDevice">Subsys. Device Id</th>
         <th ng-hide="!toggle.revision" st-sort="revision">Revision</th>
         <th ng-hide="!toggle.progIntf" st-sort="progIntf">Prog. Interface</th>
       </tr>
@@ -71,10 +81,15 @@
       <tr ng-repeat="pciCard in displayedPCICards">
         <td ng-hide="!toggle.slot">{{ pciCard.slot }}</td>
         <td ng-hide="!toggle.class">{{ pciCard.class }}</td>
+        <td ng-hide="!toggle.classId">{{ pciCard.classId }}</td>
         <td ng-hide="!toggle.vendor">{{ pciCard.vendor }}</td>
+        <td ng-hide="!toggle.vendorId">{{ pciCard.vendorId }}</td>
         <td ng-hide="!toggle.device">{{ pciCard.device }}</td>
+        <td ng-hide="!toggle.deviceId">{{ pciCard.deviceId }}</td>
         <td ng-hide="!toggle.subVendor">{{ pciCard.subVendor }}</td>
+        <td ng-hide="!toggle.subVendorId">{{ pciCard.subVendorId }}</td>
         <td ng-hide="!toggle.subDevice">{{ pciCard.subDevice }}</td>
+        <td ng-hide="!toggle.subDeviceId">{{ pciCard.subDeviceId }}</td>
         <td ng-hide="!toggle.revision">{{ pciCard.revision }}</td>
         <td ng-hide="!toggle.progIntf">{{ pciCard.progIntf }}</td>
       </tr>
