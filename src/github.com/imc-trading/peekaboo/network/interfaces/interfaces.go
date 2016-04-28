@@ -31,9 +31,9 @@ type Interface struct {
 	SwPortID          *string  `json:"swPortId,omitempty"`
 	SwPortDescr       *string  `json:"swPortDescr,omitempty"`
 	SwVLAN            *string  `json:"swVLan,omitempty"`
-	TwinaxCableSN     *string  `json:"twinaxCableSN,omitempty"`
-	TwinaxCableSA     *string  `json:"twinaxCableSA,omitempty"`
-	TwinaxCableEeprom *string  `json:"twinaxCableEeprom,omitempty"`
+	TransceiverSN     *string  `json:"transceiverSN,omitempty"`
+	TransceiverSA     *string  `json:"transceiverSA,omitempty"`
+	TransceiverEeprom *string  `json:"transceiverEeprom,omitempty"`
 }
 
 // Get network interfaces.
@@ -137,7 +137,7 @@ func Get() (Interfaces, error) {
 						}
 						s := strings.Replace(string(b), "\u0000", "", -1)
 						if s != "" {
-							wIntf.TwinaxCableSN = &s
+							wIntf.TransceiverSN = &s
 						}
 						break
 					}
@@ -145,7 +145,7 @@ func Get() (Interfaces, error) {
 			}
 		}
 
-		if runtime.GOOS == "linux" && hasEthtool && wIntf.Driver != nil && *wIntf.Driver != "sfc" && wIntf.TwinaxCableSN != nil {
+		if runtime.GOOS == "linux" && hasEthtool && wIntf.Driver != nil && *wIntf.Driver != "sfc" && wIntf.TransceiverSN != nil {
 			o, err := parse.Exec("ethtool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0078", "length", "1"})
 
 			// Do nothing on error, doesn't support getting Eeprom info
@@ -166,7 +166,7 @@ func Get() (Interfaces, error) {
 						}
 						s := strings.Replace(string(b), "\u0000", "", -1)
 						if s != "" {
-							wIntf.TwinaxCableSA = &s
+							wIntf.TransceiverSA = &s
 						}
 						break
 					}
@@ -195,7 +195,7 @@ func Get() (Interfaces, error) {
 						}
 						s := strings.Replace(string(b), "\u0000", "", -1)
 						if s != "" {
-							wIntf.TwinaxCableSN = &s
+							wIntf.TransceiverSN = &s
 						}
 						break
 					}
@@ -203,7 +203,7 @@ func Get() (Interfaces, error) {
 			}
 		}
 
-		if runtime.GOOS == "linux" && hasSfctool && wIntf.Driver != nil && *wIntf.Driver == "sfc" && wIntf.TwinaxCableSN != nil {
+		if runtime.GOOS == "linux" && hasSfctool && wIntf.Driver != nil && *wIntf.Driver == "sfc" && wIntf.TransceiverSN != nil {
 			o, err := parse.Exec("sfctool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0078", "length", "1"})
 
 			// Do nothing on error, doesn't support getting Eeprom info
@@ -224,7 +224,7 @@ func Get() (Interfaces, error) {
 						}
 						s := strings.Replace(string(b), "\u0000", "", -1)
 						if s != "" {
-							wIntf.TwinaxCableSA = &s
+							wIntf.TransceiverSA = &s
 						}
 						break
 					}
@@ -232,13 +232,13 @@ func Get() (Interfaces, error) {
 			}
 		}
 
-		if runtime.GOOS == "linux" && hasSfctool && wIntf.Driver != nil && *wIntf.Driver == "sfc" && wIntf.TwinaxCableSN != nil {
+		if runtime.GOOS == "linux" && hasSfctool && wIntf.Driver != nil && *wIntf.Driver == "sfc" && wIntf.TransceiverSN != nil {
 			o, err := parse.Exec("sfctool", []string{"-m", rIntf.Name, "raw", "on"})
 
 			// Do nothing on error, doesn't support getting Eeprom info
 			if err == nil {
 				s := hex.EncodeToString([]byte(o))
-				wIntf.TwinaxCableEeprom = &s
+				wIntf.TransceiverEeprom = &s
 			}
 		}
 
