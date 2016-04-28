@@ -24,4 +24,24 @@
       <dd>{{ ipmi.ipmitoolVersion }}</dt>
     </dl>
   </fieldset>
+  <fieldset>
+    <legend>Management Interface</legend>
+    <dl class="dl-horizontal">
+    <dl class="dl-horizontal">
+      <dt>DNS Names</dt>
+      <dd>
+        <ul ng-repeat="dnsName in ipmi.dnsNames" class="list-unstyled">
+          <li><a href="http://{{ dnsName }}" target="_blank">{{ dnsName }}</a></li>
+        </ul>
+      </dd>
+      <dt>IP Source</dt>
+      <dd>{{ ipmi.ipSource }}</dt>
+      <dt>IP Address</dt>
+      <dd><a href="http://{{ ipmi.ipAddr }}" target="_blank">{{ ipmi.ipAddr }}</a></dt>
+      <dt>Netmask</dt>
+      <dd>{{ ipmi.netmask }}</dt>
+      <dt>Gateway</dt>
+      <dd>{{ ipmi.gateway }}</dt>
+    </dl>
+  </fieldset>
 </div>
