@@ -243,6 +243,9 @@ app.controller('interfacesController', [ '$scope', '$resource', 'Flash', functio
     ipAddr: true,
     hwAddr: true,
     flags: true,
+    speedMbs: true,
+    duplex: true,
+    linkDetected: true,
     swName: true,
     swPortId: true
   }

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net"
 	"runtime"
+	"strconv"
 	"strings"
 
 	"github.com/imc-trading/peekaboo/parse"
@@ -25,6 +26,9 @@ type Interface struct {
 	FirmwareVersion   *string  `json:"firmwareVersion,omitempty"`
 	PCIBus            *string  `json:"pciBus,omitempty"`
 	PCIBusURL         *string  `json:"pciBusURL,omitempty"`
+	SpeedMbs          *int     `json:"speedMbs,omitempty"`
+	Duplex            *string  `json:"duplex,omitempty"`
+	LinkDetected      *bool    `json:"linkDetected,omitempty"`
 	SwChassisID       *string  `json:"swChassisId,omitempty"`
 	SwName            *string  `json:"swName,omitempty"`
 	SwDescr           *string  `json:"swDescr,omitempty"`
@@ -112,6 +116,30 @@ func Get() (Interfaces, error) {
 					wIntf.PCIBus = &s4
 					s5 := fmt.Sprintf("/pci/%v", m["bus-info"])
 					wIntf.PCIBusURL = &s5
+				}
+			}
+		}
+
+		if runtime.GOOS == "linux" && hasEthtool == true {
+			m, err := parse.ExecRegexpMap("ethtool", []string{rIntf.Name}, ":", "\\S+:\\s\\S+")
+
+			// Do nothing on error
+			if err == nil {
+				i, err := strconv.Atoi(strings.TrimRight(m["Speed"], "Mb/s"))
+				if err == nil {
+					wIntf.SpeedMbs = &i
+				}
+
+				s := m["Duplex"]
+				wIntf.Duplex = &s
+
+				switch m["Link detected"] {
+				case "yes":
+					b := true
+					wIntf.LinkDetected = &b
+				case "no":
+					b := false
+					wIntf.LinkDetected = &b
 				}
 			}
 		}

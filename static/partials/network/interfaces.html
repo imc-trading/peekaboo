@@ -23,6 +23,9 @@
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.driver"> Driver</label></div></li>
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.driverVersion"> Driver Version</label></div></li>
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.firmwareVersion"> Firmware Version</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.speedMbs"> Speed Mb/s</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.duplex"> Duplex</label></div></li>
+          <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.linkDetected"> Link Detected</label></div></li>
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.swChassisId"> Sw. Chassis Id</label></div></li>
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.swName"> Sw. Name</label></div></li>
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.swDescr"> Sw. Descr.</label></div></li>
@@ -67,20 +70,23 @@
       <tr>
         <th ng-hide="!toggle.name" st-sort="name">Name</th>
         <th ng-hide="!toggle.mtu" st-sort="mtu">MTU</th>
-        <th ng-hide="!toggle.ipAddr" st-sort="ipAddr">IP Address</th>
-        <th ng-hide="!toggle.hwAddr" st-sort="hwAddr">HW Address</th>
+        <th ng-hide="!toggle.ipAddr" st-sort="ipAddr">IP&nbsp;Address</th>
+        <th ng-hide="!toggle.hwAddr" st-sort="hwAddr">HW&nbsp;Address</th>
         <th ng-hide="!toggle.flags" st-sort="flags">Flags</th>
         <th ng-hide="!toggle.driver" st-sort="driver">Driver</th>
-        <th ng-hide="!toggle.driverVersion" st-sort="driverVersion">Driver Version</th>
-        <th ng-hide="!toggle.firmwareVersion" st-sort="firmwareVersion">Firmware Version</th>
-        <th ng-hide="!toggle.swChassisId" st-sort="swChassisId">Sw. Chassis ID</th>
-        <th ng-hide="!toggle.swName" st-sort="swName">Sw. Name</th>
-        <th ng-hide="!toggle.swDescr" st-sort="swDescr">Sw. Descr.</th>
-        <th ng-hide="!toggle.swPortId" st-sort="swPortId">Sw. Port Id</th>
-        <th ng-hide="!toggle.swPortDescr" st-sort="swPortDescr">Sw. Port Descr.</th>
-        <th ng-hide="!toggle.swVLAN" st-sort="swVLan">Sw. VLAN</th>
-        <th ng-hide="!toggle.transceiverSN" st-sort="transceiverSN">Transceiver S/N</th>
-        <th ng-hide="!toggle.transceiverSA" st-sort="transceiverSA">Transceiver SA</th>
+        <th ng-hide="!toggle.driverVersion" st-sort="driverVersion">Driver&nbsp;Version</th>
+        <th ng-hide="!toggle.firmwareVersion" st-sort="firmwareVersion">Firmware&nbsp;Version</th>
+        <th ng-hide="!toggle.speedMbs" st-sort="speedMbs">Speed&nbsp;Mb/s</th>
+        <th ng-hide="!toggle.duplex" st-sort="duplex">Duplex</th>
+        <th ng-hide="!toggle.linkDetected" st-sort="linkDetected">Link&nbsp;Detected</th>
+        <th ng-hide="!toggle.swChassisId" st-sort="swChassisId">Sw.&nbsp;Chassis&nbsp;ID</th>
+        <th ng-hide="!toggle.swName" st-sort="swName">Sw.&nbsp;Name</th>
+        <th ng-hide="!toggle.swDescr" st-sort="swDescr">Sw.&nbsp;Descr.</th>
+        <th ng-hide="!toggle.swPortId" st-sort="swPortId">Sw.&nbsp;Port&nbsp;Id</th>
+        <th ng-hide="!toggle.swPortDescr" st-sort="swPortDescr">Sw.&nbsp;Port&nbsp;Descr.</th>
+        <th ng-hide="!toggle.swVLAN" st-sort="swVLan">Sw.&nbsp;VLAN</th>
+        <th ng-hide="!toggle.transceiverSN" st-sort="transceiverSN">Transceiver&nbsp;S/N</th>
+        <th ng-hide="!toggle.transceiverSA" st-sort="transceiverSA">Transceiver&nbsp;SA</th>
       </tr>
     </thead>
     <tbody>
@@ -93,6 +99,9 @@
         <td ng-hide="!toggle.driver">{{ interface.driver }}</td>
         <td ng-hide="!toggle.driverVersion">{{ interface.driverVersion }}</td>
         <td ng-hide="!toggle.firmwareVersion">{{ interface.firmwareVersion }}</td>
+        <td ng-hide="!toggle.speedMbs">{{ interface.speedMbs }}</td>
+        <td ng-hide="!toggle.duplex">{{ interface.duplex }}</td>
+        <td ng-hide="!toggle.linkDetected">{{ interface.linkDetected }}</td>
         <td ng-hide="!toggle.swChassisId">{{ interface.swChassisId }}</td>
         <td ng-hide="!toggle.swName">{{ interface.swName }}</td>
         <td ng-hide="!toggle.swDescr">{{ interface.swDescr }}</td>
