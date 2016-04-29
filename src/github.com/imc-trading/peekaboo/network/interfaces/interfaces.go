@@ -130,8 +130,10 @@ func Get() (Interfaces, error) {
 					wIntf.SpeedMbs = &i
 				}
 
-				s := m["Duplex"]
-				wIntf.Duplex = &s
+				if wIntf.SpeedMbs != nil {
+					s := m["Duplex"]
+					wIntf.Duplex = &s
+				}
 
 				switch m["Link detected"] {
 				case "yes":
