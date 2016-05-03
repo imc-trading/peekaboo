@@ -18,9 +18,9 @@ RUN set -ex ;\
     mkdir ${PROJECT}
 
 # Install lldpd
-RUN cd /etc/yum.repos.d ;\
-    wget http://download.opensuse.org/repositories/home:vbernat/RHEL_7/home:vbernat.repo ;\
-    yum install -y lldpd
+#RUN cd /etc/yum.repos.d ;\
+#    wget http://download.opensuse.org/repositories/home:vbernat/RHEL_7/home:vbernat.repo ;\
+#    yum install -y lldpd
 
 # Add mock binaries
 COPY mock/ipmitool /usr/local/bin/ipmitool
