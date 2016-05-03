@@ -13,7 +13,7 @@
         <button id="toggleColumns" type="button" class="btn btn-default" uib-dropdown-toggle>
           <i class="fa fa-columns" aria-hidden="true"></i>
         </button>
-        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="toggleColumns">
+        <ul ng-click="$event.stopPropagation();" class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="toggleColumns">
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.slot"> Slot</label></div></li>
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.class"> Class</label></div></li>
           <li role="menuitem"><div class="checkbox"><label><input type="checkbox" ng-model="toggle.classId"> Class Id</label></div></li>
