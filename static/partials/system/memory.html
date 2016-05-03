@@ -16,16 +16,18 @@
   <h1 class="page-title">Memory</h1>
   <fieldset class="top-margin">
     <legend>General</legend>
-    <div class="col-md-6">
+    <div class="col-md-3">
       <dl class="dl-horizontal">
         <dt>Total</dt>
         <dd>{{ memory.totalGB | number:2 }} GB</dd>
         <dt>Free</dt>
-        <dd>{{ memory.freeGB | number:2 }} GB</dd>
+        <dd>{{ memory.freeGB | number:2 }} GB <div class="legend-item" style="background-color: #50b03e;"></dd>
         <dt>Buffers</dt>
-        <dd>{{ memory.buffersGB | number:2 }} GB</dd>
+        <dd>{{ memory.buffersGB | number:2 }} GB <div class="legend-item" style="background-color: #0c72aa;"></dd>
         <dt>Cached</dt>
-        <dd>{{ memory.cachedGB | number:2 }} GB</dd>
+        <dd>{{ memory.cachedGB | number:2 }} GB <div class="legend-item" style="background-color: #dfac54;"></dd>
+        <dt>Used</dt>
+        <dd>{{ memory.usedGB | number:2 }} GB <div class="legend-item" style="background-color: #c13c2a;"></dd>
       </dl>
       <dl class="dl-horizontal">
         <dt uib-tooltip="Available memory (Free + Buffers + Cached)" tooltip-trigger="mouseenter">Available</dt>
@@ -38,8 +40,10 @@
         <dd>{{ memory.capacityFreeGB | number:2 }} GB</dt>
       </dl>
     </div>
-    <div class="col-md-6">
-      <div google-chart chart="memoryChart"></div>
+    <div class="col-md-5">
+      <canvas id="doughnut" class="chart chart-doughnut"
+        chart-data="data" chart-labels="labels" chart-colours="colours">
+      </canvas> 
     </div>
   </fieldset>
   <fieldset>
