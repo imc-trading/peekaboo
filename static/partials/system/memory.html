@@ -16,24 +16,31 @@
   <h1 class="page-title">Memory</h1>
   <fieldset class="top-margin">
     <legend>General</legend>
-    <dl class="dl-horizontal">
-      <dt>Total</dt>
-      <dd>{{ memory.totalGB | number:2 }} GB</dd>
-      <dt>Free</dt>
-      <dd>{{ memory.freeGB | number:2 }} GB</dd>
-      <dt>Available</dt>
-      <dd>{{ memory.availableGB | number:2 }} GB</dd>
-      <dt>Buffers</dt>
-      <dd>{{ memory.buffersGB | number:2 }} GB</dd>
-      <dt>Cached</dt>
-      <dd>{{ memory.cachedGB | number:2 }} GB</dd>
-    </dl>
-    <dl class="dl-horizontal">
-      <dt uib-tooltip="Total amount of allocated memory for all applications (Committed_AS + Hugepagesize * HugePages_Total)" tooltip-trigger="mouseenter">Capacity Used</dt>
-      <dd>{{ memory.capacityUsedGB | number:2 }} GB</dt>
-      <dt>Capacity Free</dt>
-      <dd>{{ memory.capacityFreeGB | number:2 }} GB</dt>
-    </dl>
+    <div class="col-md-6">
+      <dl class="dl-horizontal">
+        <dt>Total</dt>
+        <dd>{{ memory.totalGB | number:2 }} GB</dd>
+        <dt>Free</dt>
+        <dd>{{ memory.freeGB | number:2 }} GB</dd>
+        <dt>Buffers</dt>
+        <dd>{{ memory.buffersGB | number:2 }} GB</dd>
+        <dt>Cached</dt>
+        <dd>{{ memory.cachedGB | number:2 }} GB</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt uib-tooltip="Available memory (Free + Buffers + Cached)" tooltip-trigger="mouseenter">Available</dt>
+        <dd>{{ memory.availableGB | number:2 }} GB</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt uib-tooltip="Total amount of allocated memory for all applications (Committed_AS + Hugepagesize * HugePages_Total)" tooltip-trigger="mouseenter">Capacity Used</dt>
+        <dd>{{ memory.capacityUsedGB | number:2 }} GB</dt>
+        <dt>Capacity Free</dt>
+        <dd>{{ memory.capacityFreeGB | number:2 }} GB</dt>
+      </dl>
+    </div>
+    <div class="col-md-6">
+      <div google-chart chart="memoryChart"></div>
+    </div>
   </fieldset>
   <fieldset>
     <legend>Swap</legend>

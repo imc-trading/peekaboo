@@ -9,7 +9,8 @@ var app = angular.module('peekaboo', [
   'smart-table',
   'ngFlash',
   'ngAnimate',
-  'angular-click-outside'
+  'angular-click-outside',
+  'googlechart'
 ])
 
 app.controller('SidebarController', function($scope, $rootScope) {
@@ -161,6 +162,45 @@ app.controller('memoryController', [ '$scope', '$resource', 'Flash', function($s
 
   resource.get().$promise.then(function(value) {
     $scope.memory = value;
+
+    $scope.memoryChart = {};
+    $scope.memoryChart.type = "PieChart";
+    
+    $scope.memoryChart.data = {"cols": [
+        {id: "t", label: "Memory", type: "string"},
+        {id: "s", label: "Amount", type: "number"}
+    ], "rows": [
+        {c: [
+            {v: "Free (GB)"},
+            {v: $scope.memory.freeGB }
+        ]},
+        {c: [
+            {v: "Cached (GB)"},
+            {v: $scope.memory.cachedGB }
+        ]},
+        {c: [
+            {v: "Used (GB)"},
+            {v: $scope.memory.totalGB - $scope.memory.availableGB }
+        ]},
+        {c: [
+            {v: "Buffers (GB)"},
+            {v: $scope.memory.buffersGB }
+        ]},
+    ]};
+
+    $scope.memoryChart.options = {
+      pieHole: 0.4,
+      slices: {
+        0: { color: '#50b03e' },
+        1: { color: '#0c72aa' },
+        2: { color: '#c13c2a' },
+        3: { color: '#dfac54' }
+      },
+      width: 450,
+      height: 300,
+      chartArea: {'width': '100%', 'height': '90%'}
+    };
+
 //    console.log (value); 
   }, function(err) {
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
