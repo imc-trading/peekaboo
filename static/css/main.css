@@ -3,17 +3,24 @@
   width: 15px;
   height: 15px;
   float: right;
+  margin-top: 2px;
 }
 
-.doughnut-inner {
-   margin-top: -100px;
-   margin-bottom: 100px;
-}
-.doughnut-inner h5 {
-   margin-bottom: 5px;
-   margin-top: 0;
+.legend-green {
+  background-color: #50b03e;
 }
 
+.legend-red {
+  background-color: #c13c2a;
+}
+
+.legend-blue {
+  background-color: #0c72aa;
+}
+
+.legend-yellow {
+  background-color: #dfac54;
+}
 
 /* Remove round corners on navbar */
 .navbar {
