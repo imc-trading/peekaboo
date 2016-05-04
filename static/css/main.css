@@ -6,20 +6,60 @@
   margin-top: 2px;
 }
 
-.legend-green {
-  background-color: #50b03e;
+/*
+ * Chart colors
+ */
+
+.bkgr-primary {
+  background-color: #337ab7;
 }
 
-.legend-red {
-  background-color: #c13c2a;
+.bkgr-success {
+  background-color: #5cb85c;
 }
 
-.legend-blue {
-  background-color: #0c72aa;
+.bkgr-info {
+  background-color: #5bc0de;
 }
 
-.legend-yellow {
-  background-color: #dfac54;
+.bkgr-warning {
+  background-color: #f0ad4e;
+}
+
+.bkgr-danger {
+  background-color: #d9534f;
+}
+
+.bkgr-lt-primary {
+  background-color: #2865a8;
+}
+
+.bkgr-lt-success {
+  background-color: #d7eecf;
+}
+
+.bkgr-lt-info {
+  background-color: #d1e8f4;
+}
+
+.bkgr-lt-warning {
+  background-color: #fbf7dc;
+}
+
+.bkgr-lt-green {
+  background-color: #d7efd7;
+}
+
+.bkgr-lt-red {
+  background-color: #f5d4d5;
+}
+
+.bkgr-lt-blue {
+  background-color: #ceddee;
+}
+
+.bkgr-lt-yellow {
+  background-color: #fbecd5;
 }
 
 /* Remove round corners on navbar */

@@ -1,4 +1,20 @@
 /*
+ * Bootstrap colors
+ */
+
+var primaryColor = "#337ab7";
+var successColor = "#5cb85c";
+var infoColor = "#5bc0de";
+var warningColor = "#f0ad4e";
+var dangerColor = "#d9534f";
+
+var primaryLtColor = "#2865a8";
+var successLtColor = "#d7eecf";
+var infoLtColor = "#d1e8f4";
+var warningLtColor = "#fbf7dc";
+var dangerLtColor = "#efd6d6";
+
+/*
  * Application
  */
 
@@ -156,6 +172,10 @@ app.controller('cpuController', [ '$scope', '$resource', 'Flash',  function($sco
 
 } ]);
 
+app.directive('chartStackedBar', function (ChartJsFactory) { 
+  return new ChartJsFactory('StackedBar'); 
+});
+
 // Memory
 app.controller('memoryController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
   var resource = $resource('/api/system/memory');
@@ -165,8 +185,27 @@ app.controller('memoryController', [ '$scope', '$resource', 'Flash', function($s
 
     $scope.memory.usedGB = $scope.memory.totalGB - $scope.memory.availableGB
     $scope.labels = ["Free (GB)", "Buffers (GB)", "Cached (GB)", "Used (GB)"];
-    $scope.data = [$scope.memory.freeGB.toFixed(2), $scope.memory.buffersGB.toFixed(2), $scope.memory.cachedGB.toFixed(2), $scope.memory.usedGB.toFixed(2) ];
-    $scope.colours = [ "#50b03e", "#0c72aa", "#dfac54", "#c13c2a" ]
+    $scope.data = [ $scope.memory.freeGB.toFixed(2), $scope.memory.buffersGB.toFixed(2), $scope.memory.cachedGB.toFixed(2), $scope.memory.usedGB.toFixed(2) ];
+    $scope.colours = [ successColor, primaryColor, warningColor, dangerColor ]
+
+    $scope.labels2 = [ 'Memory', 'Available', 'Capacity' ];
+    $scope.type2 = 'StackedBar';
+
+    $scope.data2 = [
+      [ $scope.memory.usedGB.toFixed(2), 0, 0],
+      [ $scope.memory.cachedGB.toFixed(2), 0, 0 ],
+      [ $scope.memory.buffersGB.toFixed(2), 0, 0 ],
+      [ 0, $scope.memory.usedGB.toFixed(2), $scope.memory.capacityUsedGB.toFixed(2) ],
+      [ $scope.memory.freeGB.toFixed(2), $scope.memory.availableGB.toFixed(2), $scope.memory.capacityFreeGB.toFixed(2) ],
+    ];
+
+    $scope.colours2 = [ dangerColor, warningColor, primaryColor, dangerColor, successColor ]
+
+    $scope.options2 = {
+      barShowStroke: false,
+      scaleShowGridLines: false,
+      tooltipHideZero: true,
+   }
 
 //    console.log (value); 
   }, function(err) {
