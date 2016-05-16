@@ -147,7 +147,7 @@ func Get() (Interfaces, error) {
 		}
 
 		if runtime.GOOS == "linux" && hasEthtool && wIntf.Driver != nil && *wIntf.Driver != "sfc" {
-			o, err := parse.Exec("ethtool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0040", "length", "16"})
+			o, err := parse.Exec("ethtool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0044", "length", "16"})
 
 			// Do nothing on error, doesn't support getting Eeprom info
 			if err != nil {
@@ -161,11 +161,11 @@ func Get() (Interfaces, error) {
 					val := strings.TrimSpace(arr[1])
 
 					switch key {
-					case "0x0040":
+					case "0x0044":
 						b, err := hex.DecodeString(strings.Replace(val, " ", "", -1))
 						if err != nil {
 						}
-						s := strings.Replace(string(b), "\u0000", "", -1)
+						s := strings.TrimRight(strings.Replace(string(b), "\u0000", "", -1), " ")
 						if s != "" {
 							wIntf.TransceiverSN = &s
 						}
@@ -205,7 +205,7 @@ func Get() (Interfaces, error) {
 		}
 
 		if runtime.GOOS == "linux" && hasSfctool && wIntf.Driver != nil && *wIntf.Driver == "sfc" {
-			o, err := parse.Exec("sfctool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0040", "length", "16"})
+			o, err := parse.Exec("sfctool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0044", "length", "16"})
 
 			// Do nothing on error, doesn't support getting Eeprom info
 			if err == nil {
@@ -219,11 +219,11 @@ func Get() (Interfaces, error) {
 					val := strings.TrimSpace(arr[1])
 
 					switch key {
-					case "0x0040":
+					case "0x0044":
 						b, err := hex.DecodeString(strings.Replace(val, " ", "", -1))
 						if err != nil {
 						}
-						s := strings.Replace(string(b), "\u0000", "", -1)
+						s := strings.TrimRight(strings.Replace(string(b), "\u0000", "", -1), " ")
 						if s != "" {
 							wIntf.TransceiverSN = &s
 						}
