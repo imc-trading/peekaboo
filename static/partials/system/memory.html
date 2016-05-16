@@ -16,25 +16,25 @@
   <h1 class="page-title">Memory</h1>
   <fieldset class="top-margin">
     <div class="col-md-6">
-<!--
       <canvas id="doughnut" class="chart chart-doughnut"
         chart-data="data" chart-labels="labels" chart-colours="colours">
       </canvas>
--->
+<!--
       <canvas class="chart chart-base" chart-type="type2" data="data2" labels="labels2" chart-colours="colours2" options="options2"></canvas>
+-->
     </div>
     <div class="col-md-3">
       <dl class="dl-horizontal">
         <dt>Total</dt>
         <dd>{{ memory.totalGB | number:2 }} GB</dd>
         <dt>Free</dt>
-        <dd>{{ memory.freeGB | number:2 }} GB <div class="legend-item bkgr-lt-green"></dd>
+        <dd>{{ memory.freeGB | number:2 }} GB <div class="legend-item bkgr-success"></dd>
         <dt>Buffers</dt>
-        <dd>{{ memory.buffersGB | number:2 }} GB <div class="legend-item bkgr-lt-blue"></dd>
+        <dd>{{ memory.buffersGB | number:2 }} GB <div class="legend-item bkgr-primary"></dd>
         <dt>Cached</dt>
-        <dd>{{ memory.cachedGB | number:2 }} GB <div class="legend-item bkgr-lt-yellow"></dd>
+        <dd>{{ memory.cachedGB | number:2 }} GB <div class="legend-item bkgr-warning"></dd>
         <dt>Used</dt>
-        <dd>{{ memory.usedGB | number:2 }} GB <div class="legend-item bkgr-lt-red"></dd>
+        <dd>{{ memory.usedGB | number:2 }} GB <div class="legend-item bkgr-danger"></dd>
       </dl>
       <dl class="dl-horizontal">
         <dt uib-tooltip="Available memory (Free + Buffers + Cached)" tooltip-trigger="mouseenter">Available</dt>
@@ -42,9 +42,9 @@
       </dl>
       <dl class="dl-horizontal">
         <dt uib-tooltip="Total amount of allocated memory for all applications (Committed_AS + Hugepagesize * HugePages_Total)" tooltip-trigger="mouseenter">Capacity Used</dt>
-        <dd>{{ memory.capacityUsedGB | number:2 }} GB <div class="legend-item bkgr-lt-red"></dt>
+        <dd>{{ memory.capacityUsedGB | number:2 }} GB</dt>
         <dt>Capacity Free</dt>
-        <dd>{{ memory.capacityFreeGB | number:2 }} GB <div class="legend-item bkgr-lt-green"></dt>
+        <dd>{{ memory.capacityFreeGB | number:2 }} GB</dt>
       </dl>
     </div>
   </fieldset>

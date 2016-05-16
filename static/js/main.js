@@ -172,9 +172,11 @@ app.controller('cpuController', [ '$scope', '$resource', 'Flash',  function($sco
 
 } ]);
 
+/*
 app.directive('chartStackedBar', function (ChartJsFactory) { 
   return new ChartJsFactory('StackedBar'); 
 });
+*/
 
 // Memory
 app.controller('memoryController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
@@ -188,6 +190,7 @@ app.controller('memoryController', [ '$scope', '$resource', 'Flash', function($s
     $scope.data = [ $scope.memory.freeGB.toFixed(2), $scope.memory.buffersGB.toFixed(2), $scope.memory.cachedGB.toFixed(2), $scope.memory.usedGB.toFixed(2) ];
     $scope.colours = [ successColor, primaryColor, warningColor, dangerColor ]
 
+/*
     $scope.labels2 = [ 'Memory', 'Available', 'Capacity' ];
     $scope.type2 = 'StackedBar';
 
@@ -206,6 +209,7 @@ app.controller('memoryController', [ '$scope', '$resource', 'Flash', function($s
       scaleShowGridLines: false,
       tooltipHideZero: true,
    }
+*/
 
 //    console.log (value); 
   }, function(err) {

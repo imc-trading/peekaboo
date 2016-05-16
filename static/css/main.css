@@ -46,22 +46,6 @@
   background-color: #fbf7dc;
 }
 
-.bkgr-lt-green {
-  background-color: #d7efd7;
-}
-
-.bkgr-lt-red {
-  background-color: #f5d4d5;
-}
-
-.bkgr-lt-blue {
-  background-color: #ceddee;
-}
-
-.bkgr-lt-yellow {
-  background-color: #fbecd5;
-}
-
 /* Remove round corners on navbar */
 .navbar {
   border-radius: 0 !important;

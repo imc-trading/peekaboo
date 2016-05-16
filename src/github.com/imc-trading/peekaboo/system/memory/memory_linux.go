@@ -17,6 +17,8 @@ type Memory struct {
 	FreeGB              *float32 `json:"freeGB,omitempty"`
 	AvailableKB         *int     `json:"availableKB,omitempty"`
 	AvailableGB         *float32 `json:"availableGB,omitempty"`
+	UsedKB              *int     `json:"usedKB,omitempty"`
+	UsedGB              *float32 `json:"usedGB,omitempty"`
 	BuffersKB           *int     `json:"buffersKB,omitempty"`
 	BuffersGB           *float32 `json:"buffersGB,omitempty"`
 	CachedKB            *int     `json:"cachedKB,omitempty"`
@@ -128,12 +130,6 @@ func Get() (Memory, error) {
 
 	// MemFree
 	m.FreeKB, m.FreeGB, err = strToIntPtr(o, "MemFree")
-	if err != nil {
-		return Memory{}, err
-	}
-
-	// MemAvailable
-	m.AvailableKB, m.AvailableGB, err = strToIntPtr(o, "MemAvailable")
 	if err != nil {
 		return Memory{}, err
 	}
@@ -394,10 +390,35 @@ func Get() (Memory, error) {
 		m.CapacityUsedGB = &usedGB
 
 		freeKB = *m.TotalKB - *m.CapacityUsedKB
+
+		if freeKB < 0 {
+			freeKB = 0
+		}
+
 		freeGB = float32(freeKB) / 1024 / 1024
 		m.CapacityFreeKB = &freeKB
 		m.CapacityFreeGB = &freeGB
 	}
+
+	// MemAvailable
+	// Not always available
+	/*
+	   m.AvailableKB, m.AvailableGB, err = strToIntPtr(o, "MemAvailable")
+	   if err != nil {
+	       return Memory{}, err
+	   }
+	*/
+	availableKB := *m.FreeKB + *m.BuffersKB + *m.CachedKB
+	usedKB := *m.TotalKB - availableKB
+
+	m.AvailableKB = &availableKB
+	m.UsedKB = &usedKB
+
+	availableGB := float32(availableKB) / 1024 / 1024
+	usedGB := float32(usedKB) / 1024 / 1024
+
+	m.AvailableGB = &availableGB
+	m.UsedGB = &usedGB
 
 	return m, nil
 }
