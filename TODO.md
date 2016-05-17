@@ -11,7 +11,6 @@
 # Backend
 - Improve IPMI for diff. HW
 - Keep history for metrics allow for Dashboards file per day or circular db?
-- Nw Interface cable S/N
 - Add endpoint for disk space "df"
 
 # Message Bus
@@ -23,5 +22,4 @@
 - Front-end check if a plugin is enabled/ available otherwise hide the page
 
 # Minor
-- Don't close Dropdown for columns on click
 - REST call for Set Timeout

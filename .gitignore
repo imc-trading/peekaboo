@@ -1,5 +1,6 @@
 .DS_Store
-pkg
-bin
-*.rpm
-.build
+/pkg
+/bin
+/*.rpm
+/.build
+/vendor

@@ -1,0 +1,35 @@
+package: .
+import:
+- package: github.com/docopt/docopt-go
+- package: github.com/gorilla/handlers
+- package: github.com/gorilla/mux
+- package: github.com/imc-trading/peekaboo
+  subpackages:
+  - daemon
+  - docker
+  - docker/containers
+  - docker/images
+  - hwtypes
+  - log
+  - network
+  - network/interfaces
+  - network/routes
+  - parse
+  - storage/disks
+  - storage/lvm/logvols
+  - storage/lvm/physvols
+  - storage/lvm/volgrps
+  - storage/mounts
+  - system
+  - system/cpu
+  - system/ipmi
+  - system/ipmi/sensors
+  - system/kernel/config
+  - system/kernel/modules
+  - system/memory
+  - system/opsys
+  - system/pcicards
+  - system/rpms
+  - system/sysctls
+  - version
+- package: github.com/mickep76/dquery
