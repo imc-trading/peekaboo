@@ -20,6 +20,7 @@ import (
 	"github.com/imc-trading/peekaboo/storage/lvm/logvols"
 	"github.com/imc-trading/peekaboo/storage/lvm/physvols"
 	"github.com/imc-trading/peekaboo/storage/lvm/volgrps"
+	"github.com/imc-trading/peekaboo/storage/filesystems"
 	"github.com/imc-trading/peekaboo/storage/mounts"
 	"github.com/imc-trading/peekaboo/system"
 	"github.com/imc-trading/peekaboo/system/cpu"
@@ -57,6 +58,7 @@ func New() Daemon {
 			apiURL + "/storage/lvm/physvols":  {Timeout: 15 * 60}, // 15 min.
 			apiURL + "/storage/lvm/logvols":   {Timeout: 15 * 60}, // 15 min.
 			apiURL + "/storage/lvm/volgrps":   {Timeout: 15 * 60}, // 15 min.
+			apiURL + "/storage/filesystems":   {Timeout: 5 * 60}, // 5 min.
 			apiURL + "/docker":                {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/docker/containers":     {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/docker/images":         {Timeout: 5 * 60},  // 5 min.
@@ -86,6 +88,7 @@ func (d *daemon) Run(bind string, static string) error {
 	d.addAPIRoute(apiURL+"/storage/lvm/physvols", physvols.GetInterface)
 	d.addAPIRoute(apiURL+"/storage/lvm/logvols", logvols.GetInterface)
 	d.addAPIRoute(apiURL+"/storage/lvm/volgrps", volgrps.GetInterface)
+	d.addAPIRoute(apiURL+"/storage/filesystems", filesystems.GetInterface)
 	d.addAPIRoute(apiURL+"/docker", docker.GetInterface)
 	d.addAPIRoute(apiURL+"/docker/containers", containers.GetInterface)
 	d.addAPIRoute(apiURL+"/docker/images", images.GetInterface)

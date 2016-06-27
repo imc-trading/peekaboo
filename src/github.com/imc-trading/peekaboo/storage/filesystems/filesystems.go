@@ -1,22 +1,30 @@
 // +build linux
 
-package fs
+package filesystems
 
 import (
-	"fmt"
-	"io/ioutil"
-	"os"
+        "os/exec"
 	"strings"
+	"errors"
+	"strconv"
 )
 
 type Filesystems []Filesystem
 
 type Filesystem struct {
-        Name    `json:"filesystem`
-        Used    `json:"used"`
-        Available       `json:"available"`
-        UsedPerc        `json:"used_perc"`
-        MountedOn       `json:"mounted_on"`
+        Name    string `json:"filesystem`
+        UsedKB   int `json:"used_kb"`
+        UsedMB   float32 `json:"used_mb"`
+        UsedGB   float32 `json:"used_gb"`
+        AvailableKB int      `json:"available_kb"`
+        AvailableMB float32      `json:"available_mb"`
+        AvailableGB float32      `json:"available_gb"`
+	TotalKB	int `json:"total_kb"`
+	TotalMB	float32 `json:"total_mb"`
+	TotalGB	float32 `json:"total_gb"`
+        UsedPct     float32  `json:"used_pct"`
+        AvailablePct     float32  `json:"available_pct"`
+        MountedOn  string     `json:"mounted_on"`
 }
 
 func Get() (Filesystems, error) {
@@ -24,7 +32,7 @@ func Get() (Filesystems, error) {
 
         _, err := exec.LookPath("df")
         if err != nil {
-                return LogVols{}, errors.New("command doesn't exist: df")
+                return Filesystems{}, errors.New("command doesn't exist: df")
         }
 
         var o []byte
@@ -34,11 +42,6 @@ func Get() (Filesystems, error) {
                 return Filesystems{}, err
         }
 
-/*
-Filesystem                          1K-blocks       Used   Available Use% Mounted on
-/dev/mapper/vg_root-lv_root          59544948    3541116    53501740   7% /
-*/
-
 	for c, line := range strings.Split(string(o), "\n") {
 		v := strings.Fields(line)
 		if c < 1 || len(v) < 1 {
@@ -47,11 +50,33 @@ Filesystem                          1K-blocks       Used   Available Use% Mounte
 
 		f := Filesystem{}
 
-		m.Name = v[0]
-		m.Used = v[1]
-		m.Available = v[2]
-		m.UsedPerc = v[3]
-		m.MountedOn = v[4]
+		f.Name = v[0]
+
+                f.TotalKB, err = strconv.Atoi(v[1])
+                if err != nil {
+                        return Filesystems{}, err
+                }
+                f.TotalMB = float32(f.TotalKB) / 1024
+                f.TotalGB = float32(f.TotalMB) / 1024
+
+                f.UsedKB, err = strconv.Atoi(v[2])
+                if err != nil {
+                        return Filesystems{}, err
+                }
+                f.UsedMB = float32(f.UsedKB) / 1024
+                f.UsedGB = float32(f.UsedMB) / 1024
+
+                f.AvailableKB, err = strconv.Atoi(v[3])
+                if err != nil {
+                        return Filesystems{}, err
+                }
+                f.AvailableMB = float32(f.AvailableKB) / 1024
+                f.AvailableGB = float32(f.AvailableMB) / 1024
+
+		f.UsedPct = float32(f.UsedKB) / float32(f.TotalKB) * 100
+		f.AvailablePct = float32(f.AvailableKB) / float32(f.TotalKB) * 100
+
+		f.MountedOn = v[5]
 
 		fs = append(fs, f)
 	}

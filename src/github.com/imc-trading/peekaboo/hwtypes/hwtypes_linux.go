@@ -17,6 +17,7 @@ import (
 	"github.com/imc-trading/peekaboo/storage/lvm/physvols"
 	"github.com/imc-trading/peekaboo/storage/lvm/volgrps"
 	"github.com/imc-trading/peekaboo/storage/mounts"
+	"github.com/imc-trading/peekaboo/storage/filesystems"
 	"github.com/imc-trading/peekaboo/system"
 	"github.com/imc-trading/peekaboo/system/cpu"
 	"github.com/imc-trading/peekaboo/system/ipmi"
@@ -50,6 +51,7 @@ var hwTypes = []string{
 	"storage/lvm/physvols (short: pvs)",
 	"storage/lvm/logvols (short: lvs)",
 	"storage/lvm/volgrps (short: vgs)",
+	"storage/filesystems (short: fs)",
 	"docker (short: dkr)",
 	"docker/containers (short: cnts)",
 	"docker/images (short: imgs)",
@@ -98,6 +100,8 @@ func Get(hwType string, filter string) error {
 		r, err = logvols.Get()
 	case "vgs", "storage/lvm/volgrps":
 		r, err = volgrps.Get()
+        case "fs", "storage/filesystems":
+                r, err = filesystems.Get()
 	case "dkr", "docker":
 		r, err = docker.Get()
 	case "cnts", "docker/containers":
