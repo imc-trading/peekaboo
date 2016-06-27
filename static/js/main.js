@@ -67,6 +67,7 @@ app.config(['$routeProvider', function ($routeProvider) {
     .when("/storage/lvm/logvols", {templateUrl: "partials/storage/lvm/logvols.html", controller: "PageCtrl", activeTab: "storage", sideActiveTab: "lvm/logvols"})
     .when("/storage/lvm/volgrps", {templateUrl: "partials/storage/lvm/volgrps.html", controller: "PageCtrl", activeTab: "storage", sideActiveTab: "lvm/volgrps"})
     .when("/storage/mounts", {templateUrl: "partials/storage/mounts.html", controller: "PageCtrl", activeTab: "storage", sideActiveTab: "mounts"})
+    .when("/storage/filesystems", {templateUrl: "partials/storage/filesystems.html", controller: "PageCtrl", activeTab: "storage", sideActiveTab: "filesystems"})
 
     .when("/system", {templateUrl: "partials/system/memory.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "memory"})
     .when("/system/sysctl", {templateUrl: "partials/system/sysctl.html", controller: "PageCtrl", activeTab: "system", sideActiveTab: "sysctl"})
@@ -496,6 +497,34 @@ app.controller('volGrpsController', [ '$scope', '$resource', 'Flash', function($
 
     resource.query().$promise.then(function(value) {
       $scope.volGrps = value;
+//      console.log (value);
+    }, function(err) {
+      var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+      var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+    });
+  }
+
+} ]);
+
+// Filesystems
+app.controller('filesystemsController', [ '$scope', '$resource', 'Flash', function($scope, $resource, Flash) {
+  var resource = $resource('/api/storage/filesystems');
+
+  $scope.rowLimit = 10
+
+  resource.query().$promise.then(function(value) {
+    $scope.filesystems = value;
+//    console.log (value);
+  }, function(err) {
+    var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
+    var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
+  });
+
+  $scope.refresh = function() {
+    var resource = $resource('/api/storage/filesystems?refresh=true');
+
+    resource.query().$promise.then(function(value) {
+      $scope.filesystems = value;
 //      console.log (value);
     }, function(err) {
       var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;

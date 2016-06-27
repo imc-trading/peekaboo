@@ -1,0 +1,70 @@
+<!-- Header -->
+<div ng-include='"templates/header.html"'></div>
+
+<!-- Sidebar -->
+<div ng-include='"partials/storage/sidebar.html"'></div>
+
+<!-- Content -->
+<div class="container-fluid content" ng-controller="filesystemsController">
+  <flash-message duration="4" show-close="true" on-dismiss="myCallback(flash);"></flash-message>
+  <div class="form-group">
+    <div class="input-btn-group pull-right">
+      <div class="btn-group" uib-dropdown is-open="status.isopen">
+        <button id="rowLimit" type="button" class="btn btn-default" uib-dropdown-toggle>
+          <i class="fa fa-list" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="rowLimit">
+          <li role="menuitem" ng-click="rowLimit = 5"><a href="">5</a></li>
+          <li role="menuitem" ng-click="rowLimit = 10"><a href="">10</a></li>
+          <li role="menuitem" ng-click="rowLimit = 15"><a href="">15</a></li>
+          <li role="menuitem" ng-click="rowLimit = 20"><a href="">20</a></li>
+          <li role="menuitem" ng-click="rowLimit = 25"><a href="">25</a></li>
+        </ul>
+      </div>
+      <a href="api/storage/filesystems" class="btn btn-default">JSON</a>
+      <button type="button" ng-click="refresh()" class="btn btn-md btn-success"><i class="fa fa-refresh"> Refresh</i></button>
+    </div>
+  </div>
+
+  <h1 class="page-title">Filesystems</h1>
+
+  <table st-table="displayedFilesystems" st-safe-src="filesystems" class="table table-striped sortable">
+    <thead>
+      <tr>
+        <th colspan="0" class="th-no-border">
+          <div class="btn-toolbar" role="toolbar">
+            <div class="input-group">
+              <div class="input-group-addon"><i class="fa fa-search"></i></div>
+              <input st-search="" type="text" class="form-control" placeholder="Search...">
+            </div>
+          </div>
+        </th>
+      </tr>
+      <tr>
+        <th st-sort="filesystem">Filesystem</th>
+        <th st-sort="availableGB">Available (GB)</th>
+        <th st-sort="usedGB">Used (GB)</th>
+        <th st-sort="totalGB">Total (GB)</th>
+        <th st-sort="usedPct">Used (%)</th>
+        <th st-sort="mountedOn">Mounted On</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="filesystem in displayedFilesystems">
+        <td>{{ filesystem.filesystem }}</td>
+        <td>{{ filesystem.availableGB | number:2 }}</td>
+        <td>{{ filesystem.usedGB | number:2 }}</td>
+        <td>{{ filesystem.totalGB | number:2 }}</td>
+        <td>{{ filesystem.usedPct | number:2 }}</td>
+        <td>{{ filesystem.mountedOn }}</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="0" class="text-center">
+          <div st-pagination="" st-items-by-page="rowLimit"></div>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>

@@ -12,19 +12,19 @@ import (
 type Filesystems []Filesystem
 
 type Filesystem struct {
-        Name    string `json:"filesystem`
-        UsedKB   int `json:"used_kb"`
-        UsedMB   float32 `json:"used_mb"`
-        UsedGB   float32 `json:"used_gb"`
-        AvailableKB int      `json:"available_kb"`
-        AvailableMB float32      `json:"available_mb"`
-        AvailableGB float32      `json:"available_gb"`
-	TotalKB	int `json:"total_kb"`
-	TotalMB	float32 `json:"total_mb"`
-	TotalGB	float32 `json:"total_gb"`
-        UsedPct     float32  `json:"used_pct"`
-        AvailablePct     float32  `json:"available_pct"`
-        MountedOn  string     `json:"mounted_on"`
+        Name    string `json:"filesystem"`
+        UsedKB   int `json:"usedKB"`
+        UsedMB   float32 `json:"usedMB"`
+        UsedGB   float32 `json:"usedGB"`
+        AvailableKB int      `json:"availableKB"`
+        AvailableMB float32      `json:"availableMB"`
+        AvailableGB float32      `json:"availableGB"`
+	TotalKB	int `json:"totalKB"`
+	TotalMB	float32 `json:"totalMB"`
+	TotalGB	float32 `json:"totalGB"`
+        UsedPct     float32  `json:"usedPct"`
+        AvailablePct     float32  `json:"availablePct"`
+        MountedOn  string     `json:"mountedOn"`
 }
 
 func Get() (Filesystems, error) {
