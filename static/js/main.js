@@ -61,7 +61,7 @@ app.config(['$routeProvider', function ($routeProvider) {
     .when("/network/interfaces", {templateUrl: "partials/network/interfaces.html", controller: "PageCtrl", activeTab: "network", sideActiveTab: "interfaces"})
     .when("/network/routes", {templateUrl: "partials/network/routes_linux.html", controller: "PageCtrl", activeTab: "network", sideActiveTab: "routes"})
 
-    .when("/storage", {templateUrl: "partials/storage/disks.html", controller: "PageCtrl", activeTab: "storage", sideActiveTab: "disks"})
+    .when("/storage", {templateUrl: "partials/storage/filesystems.html", controller: "PageCtrl", activeTab: "storage", sideActiveTab: "filesystems"})
     .when("/storage/disks", {templateUrl: "partials/storage/disks.html", controller: "PageCtrl", activeTab: "storage", sideActiveTab: "disks"})
     .when("/storage/lvm/physvols", {templateUrl: "partials/storage/lvm/physvols.html", controller: "PageCtrl", activeTab: "storage", sideActiveTab: "lvm/physvols"})
     .when("/storage/lvm/logvols", {templateUrl: "partials/storage/lvm/logvols.html", controller: "PageCtrl", activeTab: "storage", sideActiveTab: "lvm/logvols"})
@@ -515,6 +515,31 @@ app.controller('filesystemsController', [ '$scope', '$resource', 'Flash', functi
   resource.query().$promise.then(function(value) {
     $scope.filesystems = value;
 //    console.log (value);
+
+    $scope.labels = new Array()
+    $scope.data = new Array()
+    $scope.data[0] = new Array()
+    $scope.colours = new Array()
+
+    for (i = 0, len = $scope.filesystems.length; i < len; i++) {
+      $scope.labels.push($scope.filesystems[i].filesystem)
+      $scope.data[0].push($scope.filesystems[i].usedPct)
+
+      barColor = successColor
+      if ( $scope.filesystems[i].usedPct >= 90 ) {
+        barColor = dangerColor
+      } else if ( $scope.filesystems[i].usedPct >= 80 ) {
+        barColor = warningColor
+      }
+
+      $scope.colours.push({
+        fillColor: barColor,
+        strokeColor: barColor,
+        highlightFill: barColor,
+        highlightStroke: barColor
+      });
+    }
+
   }, function(err) {
     var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
     var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
