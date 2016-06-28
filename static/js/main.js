@@ -129,9 +129,6 @@ app.filter('replace', function () {
   };
 });
 
-
-
-
 app.directive('stRatio',function(){
         return {
           link:function(scope, element, attr){
@@ -141,6 +138,10 @@ app.directive('stRatio',function(){
             
           }
         };
+    });
+
+app.directive('chartStackedBar', function (ChartJsFactory) {
+      return new ChartJsFactory('StackedBar');
     });
 
 /*
@@ -512,6 +513,22 @@ app.controller('filesystemsController', [ '$scope', '$resource', 'Flash', functi
 
   $scope.rowLimit = 10
 
+  $scope.colours = [{
+    fillColor: successColor,
+    strokeColor: successColor,
+    highlightFill: successColor,
+    highlightStroke: successColor
+  },
+  {
+    fillColor: warningColor,
+    strokeColor: warningColor,
+    highlightFill: warningColor,
+    highlightStroke: warningColor
+  }];
+
+  $scope.options = {
+  }
+
   resource.query().$promise.then(function(value) {
     $scope.filesystems = value;
 //    console.log (value);
@@ -519,25 +536,12 @@ app.controller('filesystemsController', [ '$scope', '$resource', 'Flash', functi
     $scope.labels = new Array()
     $scope.data = new Array()
     $scope.data[0] = new Array()
-    $scope.colours = new Array()
+    $scope.data[1] = new Array()
 
     for (i = 0, len = $scope.filesystems.length; i < len; i++) {
       $scope.labels.push($scope.filesystems[i].filesystem)
-      $scope.data[0].push($scope.filesystems[i].usedPct)
-
-      barColor = successColor
-      if ( $scope.filesystems[i].usedPct >= 90 ) {
-        barColor = dangerColor
-      } else if ( $scope.filesystems[i].usedPct >= 80 ) {
-        barColor = warningColor
-      }
-
-      $scope.colours.push({
-        fillColor: barColor,
-        strokeColor: barColor,
-        highlightFill: barColor,
-        highlightStroke: barColor
-      });
+      $scope.data[0].push($scope.filesystems[i].availableGB)
+      $scope.data[1].push($scope.filesystems[i].usedGB)
     }
 
   }, function(err) {
@@ -551,6 +555,18 @@ app.controller('filesystemsController', [ '$scope', '$resource', 'Flash', functi
     resource.query().$promise.then(function(value) {
       $scope.filesystems = value;
 //      console.log (value);
+
+      $scope.labels = new Array()
+      $scope.data = new Array()
+      $scope.data[0] = new Array()
+      $scope.data[1] = new Array()
+
+      for (i = 0, len = $scope.filesystems.length; i < len; i++) {
+        $scope.labels.push($scope.filesystems[i].filesystem)
+        $scope.data[0].push($scope.filesystems[i].availableGB)
+        $scope.data[1].push($scope.filesystems[i].usedGB)
+      }
+
     }, function(err) {
       var msg = "<strong>Failed to request URL</strong>: " + err.config.url + " <strong>error</strong>: " + err.data;
       var id = Flash.create('danger', msg, 10000, {class: 'custom-class', id: 'custom-id'}, true);
