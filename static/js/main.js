@@ -540,8 +540,8 @@ app.controller('filesystemsController', [ '$scope', '$resource', 'Flash', functi
 
     for (i = 0, len = $scope.filesystems.length; i < len; i++) {
       $scope.labels.push($scope.filesystems[i].filesystem)
-      $scope.data[0].push($scope.filesystems[i].availableGB)
-      $scope.data[1].push($scope.filesystems[i].usedGB)
+      $scope.data[0].push($scope.filesystems[i].availableGB.toFixed(2))
+      $scope.data[1].push($scope.filesystems[i].usedGB.toFixed(2))
     }
 
   }, function(err) {
