@@ -19,7 +19,7 @@ type Interface struct {
 	Name              string   `json:"name"`
 	MTU               int      `json:"mtu"`
 	IPAddr            []string `json:"ipAddr"`
-	PermanentHWAddr   string   `json:"permanentHwAddr,omitempty"`
+	PermanentHWAddr   *string  `json:"permanentHwAddr,omitempty"`
 	HWAddr            string   `json:"hwAddr"`
 	Flags             []string `json:"flags"`
 	Driver            *string  `json:"driver,omitempty"`
@@ -155,7 +155,7 @@ func Get() (Interfaces, error) {
 			// Do nothing on error
 			if err == nil {
 				bia := m["Permanent address"]
-				wIntf.PermanentHWAddr = bia
+				wIntf.PermanentHWAddr = &bia
 			}
 		}
 
