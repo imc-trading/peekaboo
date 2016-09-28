@@ -19,6 +19,7 @@ type Interface struct {
 	Name              string   `json:"name"`
 	MTU               int      `json:"mtu"`
 	IPAddr            []string `json:"ipAddr"`
+	PermanentHWAddr   string   `json:"permanentHwAddr,omitempty"`
 	HWAddr            string   `json:"hwAddr"`
 	Flags             []string `json:"flags"`
 	Driver            *string  `json:"driver,omitempty"`
@@ -145,6 +146,16 @@ func Get() (Interfaces, error) {
 					b := false
 					wIntf.LinkDetected = &b
 				}
+			}
+		}
+
+		if runtime.GOOS == "linux" && hasEthtool == true {
+			m, err := parse.ExecRegexpMap("ethtool", []string{"-P", rIntf.Name}, ":[ ]", "\\S+:\\s([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})")
+
+			// Do nothing on error
+			if err == nil {
+				bia := m["Permanent address"]
+				wIntf.PermanentHWAddr = bia
 			}
 		}
 
