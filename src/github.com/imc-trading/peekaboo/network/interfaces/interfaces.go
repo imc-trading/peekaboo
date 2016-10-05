@@ -19,6 +19,7 @@ type Interface struct {
 	Name              string   `json:"name"`
 	MTU               int      `json:"mtu"`
 	IPAddr            []string `json:"ipAddr"`
+	PermanentHWAddr   *string  `json:"permanentHwAddr,omitempty"`
 	HWAddr            string   `json:"hwAddr"`
 	Flags             []string `json:"flags"`
 	Driver            *string  `json:"driver,omitempty"`
@@ -36,7 +37,9 @@ type Interface struct {
 	SwPortDescr       *string  `json:"swPortDescr,omitempty"`
 	SwVLAN            *string  `json:"swVLan,omitempty"`
 	TransceiverSN     *string  `json:"transceiverSN,omitempty"`
-	TransceiverSA     *string  `json:"transceiverSA,omitempty"`
+	TransceiverSA     *int     `json:"transceiverSA,omitempty"`
+	TransceiverVN     *string  `json:"transceiverVN,omitempty"`
+	TransceiverPN     *string  `json:"transceiverPN,omitempty"`
 	TransceiverEeprom *string  `json:"transceiverEeprom,omitempty"`
 }
 
@@ -146,129 +149,123 @@ func Get() (Interfaces, error) {
 			}
 		}
 
-		if runtime.GOOS == "linux" && hasEthtool && wIntf.Driver != nil && *wIntf.Driver != "sfc" {
-			o, err := parse.Exec("ethtool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0044", "length", "16"})
+		if runtime.GOOS == "linux" && hasEthtool == true {
+			m, err := parse.ExecRegexpMap("ethtool", []string{"-P", rIntf.Name}, ":[ ]", "\\S+:\\s([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})")
 
-			// Do nothing on error, doesn't support getting Eeprom info
-			if err != nil {
-				for _, line := range strings.Split(o, "\n") {
-					arr := strings.SplitN(line, ":", 2)
-					if len(arr) < 2 {
-						continue
-					}
-
-					key := strings.TrimSpace(arr[0])
-					val := strings.TrimSpace(arr[1])
-
-					switch key {
-					case "0x0044":
-						b, err := hex.DecodeString(strings.Replace(val, " ", "", -1))
-						if err != nil {
-						}
-						s := strings.TrimRight(strings.Replace(string(b), "\u0000", "", -1), " ")
-						if s != "" {
-							wIntf.TransceiverSN = &s
-						}
-						break
-					}
-				}
+			// Do nothing on error
+			if err == nil {
+				bia := m["Permanent address"]
+				wIntf.PermanentHWAddr = &bia
 			}
 		}
 
-		if runtime.GOOS == "linux" && hasEthtool && wIntf.Driver != nil && *wIntf.Driver != "sfc" && wIntf.TransceiverSN != nil {
-			o, err := parse.Exec("ethtool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0078", "length", "1"})
+		if runtime.GOOS == "linux" && hasEthtool && wIntf.Driver != nil && *wIntf.Driver != "sfc" {
+			o, err := parse.Exec("ethtool", []string{"-m", rIntf.Name, "raw", "on"})
 
 			// Do nothing on error, doesn't support getting Eeprom info
 			if err == nil {
-				for _, line := range strings.Split(o, "\n") {
-					arr := strings.SplitN(line, ":", 2)
-					if len(arr) < 2 {
-						continue
+				s := hex.EncodeToString([]byte(o))
+
+				var b []byte
+				var eeprom string = ""
+
+				switch s[:2] {
+				case "03":   // SFP+
+					eeprom = s[0:]
+				case "0d":   // QSFP+
+					eeprom = s[256:768]
+				}
+				
+				length := len(eeprom)
+				if length >= 512 {
+					ep := eeprom
+					wIntf.TransceiverEeprom = &ep
+
+					// Serial Number
+					b, err = hex.DecodeString(eeprom[136:168])
+					if err == nil {
+						sn := strings.Trim(string(b), " ")
+						wIntf.TransceiverSN = &sn
 					}
-
-					key := strings.TrimSpace(arr[0])
-					val := strings.TrimSpace(arr[1])
-
-					switch key {
-					case "0x0078":
-						b, err := hex.DecodeString(strings.Replace(val, " ", "", -1))
-						if err != nil {
+					
+					// Vendor Name
+					b, err = hex.DecodeString(eeprom[40:72])
+					if err == nil {
+						vn := strings.Trim(string(b), " ")
+						wIntf.TransceiverVN = &vn
+					}
+					
+					// Product Name
+					b, err = hex.DecodeString(eeprom[80:112])
+					if err == nil {
+						pn := strings.Trim(string(b), " ")
+						wIntf.TransceiverPN = &pn
+					}
+					
+					// Arista specific QSFP-4xSFP sub-assembly
+					if *wIntf.TransceiverVN == "Arista Networks" && strings.HasPrefix(*wIntf.TransceiverPN, "CAB-Q-S-") {
+						b, err = hex.DecodeString(eeprom[240:242])
+						if err == nil {
+							sa := int(b[0])
+							wIntf.TransceiverSA = &sa
 						}
-						s := strings.Replace(string(b), "\u0000", "", -1)
-						if s != "" {
-							wIntf.TransceiverSA = &s
-						}
-						break
 					}
 				}
 			}
 		}
 
 		if runtime.GOOS == "linux" && hasSfctool && wIntf.Driver != nil && *wIntf.Driver == "sfc" {
-			o, err := parse.Exec("sfctool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0044", "length", "16"})
-
-			// Do nothing on error, doesn't support getting Eeprom info
-			if err == nil {
-				for _, line := range strings.Split(o, "\n") {
-					arr := strings.SplitN(line, ":", 2)
-					if len(arr) < 2 {
-						continue
-					}
-
-					key := strings.TrimSpace(arr[0])
-					val := strings.TrimSpace(arr[1])
-
-					switch key {
-					case "0x0044":
-						b, err := hex.DecodeString(strings.Replace(val, " ", "", -1))
-						if err != nil {
-						}
-						s := strings.TrimRight(strings.Replace(string(b), "\u0000", "", -1), " ")
-						if s != "" {
-							wIntf.TransceiverSN = &s
-						}
-						break
-					}
-				}
-			}
-		}
-
-		if runtime.GOOS == "linux" && hasSfctool && wIntf.Driver != nil && *wIntf.Driver == "sfc" && wIntf.TransceiverSN != nil {
-			o, err := parse.Exec("sfctool", []string{"-m", rIntf.Name, "hex", "on", "offset", "0x0078", "length", "1"})
-
-			// Do nothing on error, doesn't support getting Eeprom info
-			if err == nil {
-				for _, line := range strings.Split(o, "\n") {
-					arr := strings.SplitN(line, ":", 2)
-					if len(arr) < 2 {
-						continue
-					}
-
-					key := strings.TrimSpace(arr[0])
-					val := strings.TrimSpace(arr[1])
-
-					switch key {
-					case "0x0078":
-						b, err := hex.DecodeString(strings.Replace(val, " ", "", -1))
-						if err != nil {
-						}
-						s := strings.Replace(string(b), "\u0000", "", -1)
-						if s != "" {
-							wIntf.TransceiverSA = &s
-						}
-						break
-					}
-				}
-			}
-		}
-
-		if runtime.GOOS == "linux" && hasSfctool && wIntf.Driver != nil && *wIntf.Driver == "sfc" && wIntf.TransceiverSN != nil {
 			o, err := parse.Exec("sfctool", []string{"-m", rIntf.Name, "raw", "on"})
 
 			// Do nothing on error, doesn't support getting Eeprom info
 			if err == nil {
 				s := hex.EncodeToString([]byte(o))
-				wIntf.TransceiverEeprom = &s
+
+				var b []byte
+				var eeprom string = ""
+
+				switch s[:2] {
+				case "03":   // SFP+
+					eeprom = s[0:512]
+				case "0d":   // QSFP+
+					eeprom = s[256:768]
+				}
+				
+				length := len(eeprom)
+				if length == 512 {
+					ep := eeprom
+					wIntf.TransceiverEeprom = &ep
+
+					// Serial Number
+					b, err = hex.DecodeString(eeprom[136:168])
+					if err == nil {
+						sn := strings.Trim(string(b), " ")
+						wIntf.TransceiverSN = &sn
+					}
+					
+					// Vendor Name
+					b, err = hex.DecodeString(eeprom[40:72])
+					if err == nil {
+						vn := strings.Trim(string(b), " ")
+						wIntf.TransceiverVN = &vn
+					}
+					
+					// Product Name
+					b, err = hex.DecodeString(eeprom[80:112])
+					if err == nil {
+						pn := strings.Trim(string(b), " ")
+						wIntf.TransceiverPN = &pn
+					}
+					
+					// Arista specific QSFP-4xSFP sub-assembly
+					if *wIntf.TransceiverVN == "Arista Networks" && strings.HasPrefix(*wIntf.TransceiverPN, "CAB-Q-S-") {
+						b, err = hex.DecodeString(eeprom[240:242])
+						if err == nil {
+							sa := int(b[0])
+							wIntf.TransceiverSA = &sa
+						}
+					}
+				}
 			}
 		}
 
