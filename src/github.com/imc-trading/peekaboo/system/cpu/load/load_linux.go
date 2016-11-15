@@ -30,7 +30,7 @@ func Get() (Load, error) {
 	avg10, _ := strconv.ParseFloat(tokens[2], 32)
 	l.Avg1 = float32(avg1)
 	l.Avg5 = float32(avg5)
-	l.Avg10 = float32(avg10)
+	l.Avg15 = float32(avg15)
 
 	procTokens := strings.Split(tokens[3], "/")
 	l.Running, _ = strconv.Atoi(procTokens[0])
