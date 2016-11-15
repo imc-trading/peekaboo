@@ -13,13 +13,14 @@ import (
 	"github.com/imc-trading/peekaboo/network/interfaces"
 	"github.com/imc-trading/peekaboo/network/routes"
 	"github.com/imc-trading/peekaboo/storage/disks"
+	"github.com/imc-trading/peekaboo/storage/filesystems"
 	"github.com/imc-trading/peekaboo/storage/lvm/logvols"
 	"github.com/imc-trading/peekaboo/storage/lvm/physvols"
 	"github.com/imc-trading/peekaboo/storage/lvm/volgrps"
 	"github.com/imc-trading/peekaboo/storage/mounts"
-	"github.com/imc-trading/peekaboo/storage/filesystems"
 	"github.com/imc-trading/peekaboo/system"
 	"github.com/imc-trading/peekaboo/system/cpu"
+	"github.com/imc-trading/peekaboo/system/cpu/load"
 	"github.com/imc-trading/peekaboo/system/ipmi"
 	"github.com/imc-trading/peekaboo/system/ipmi/sensors"
 	"github.com/imc-trading/peekaboo/system/kernel/config"
@@ -37,6 +38,7 @@ var hwTypes = []string{
 	"network/routes (short: routes)",
 	"system (short: sys)",
 	"system/cpu (short: cpu)",
+	"system/cpu/load (short: load)",
 	"system/memory (short: mem)",
 	"system/os (short: os)",
 	"system/kernelcfg (short: kcfg)",
@@ -76,6 +78,8 @@ func Get(hwType string, filter string) error {
 		r, err = config.Get()
 	case "cpu", "system/cpu":
 		r, err = cpu.Get()
+	case "load", "system/cpu/load":
+		r, err = load.Get()
 	case "sysctls", "system/sysctls":
 		r, err = sysctls.Get()
 	case "mem", "system/memory":
@@ -100,8 +104,8 @@ func Get(hwType string, filter string) error {
 		r, err = logvols.Get()
 	case "vgs", "storage/lvm/volgrps":
 		r, err = volgrps.Get()
-        case "fs", "storage/filesystems":
-                r, err = filesystems.Get()
+	case "fs", "storage/filesystems":
+		r, err = filesystems.Get()
 	case "dkr", "docker":
 		r, err = docker.Get()
 	case "cnts", "docker/containers":
