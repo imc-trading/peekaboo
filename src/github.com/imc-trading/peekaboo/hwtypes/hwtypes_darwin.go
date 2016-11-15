@@ -11,6 +11,7 @@ import (
 	"github.com/imc-trading/peekaboo/network/routes"
 	"github.com/imc-trading/peekaboo/system"
 	"github.com/imc-trading/peekaboo/system/cpu"
+	"github.com/imc-trading/peekaboo/system/cpu/load"
 	"github.com/imc-trading/peekaboo/system/memory"
 	"github.com/imc-trading/peekaboo/system/opsys"
 	"github.com/mickep76/dquery"
@@ -21,6 +22,7 @@ var hwTypes = []string{
 	"network/routes (short: routes)",
 	"system (short: sys)",
 	"system/cpu (short: cpu)",
+	"system/cpu/load (short: load)",
 	"system/memory (short: mem)",
 	"system/os (short: os)",
 	"docker (short: dkr)",
@@ -43,6 +45,8 @@ func Get(hwType string, filter string) error {
 		r, err = opsys.Get()
 	case "cpu", "system/cpu":
 		r, err = cpu.Get()
+	case "load", "system/cpu/load":
+		r, err = load.Get()
 	case "mem", "system/memory":
 		r, err = memory.Get()
 	case "dkr", "docker":

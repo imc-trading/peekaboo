@@ -17,6 +17,7 @@ import (
 	"github.com/imc-trading/peekaboo/network/routes"
 	"github.com/imc-trading/peekaboo/system"
 	"github.com/imc-trading/peekaboo/system/cpu"
+	"github.com/imc-trading/peekaboo/system/cpu/load"
 	"github.com/imc-trading/peekaboo/system/memory"
 	"github.com/imc-trading/peekaboo/system/opsys"
 )
@@ -28,6 +29,7 @@ func New() Daemon {
 			apiURL + "/system":             {Timeout: 5 * 60}, // 5 min.
 			apiURL + "/system/os":          {Timeout: 5 * 60}, // 5 min.
 			apiURL + "/system/cpu":         {Timeout: 5 * 60}, // 5 min.
+			apiURL + "/system/cpu/load":    {Timeout: 5 * 60}, // 5 min.
 			apiURL + "/system/memory":      {Timeout: 5 * 60}, // 5 min.
 			apiURL + "/network/interfaces": {Timeout: 5 * 60}, // 5 min.
 			apiURL + "/network/routes":     {Timeout: 5 * 60}, // 5 min.
@@ -46,6 +48,7 @@ func (d *daemon) Run(bind string, static string) error {
 	d.addAPIRoute(apiURL+"/system", system.GetInterface)
 	d.addAPIRoute(apiURL+"/system/os", opsys.GetInterface)
 	d.addAPIRoute(apiURL+"/system/cpu", cpu.GetInterface)
+	d.addAPIRoute(apiURL+"/system/cpu/load", load.GetInterface)
 	d.addAPIRoute(apiURL+"/system/memory", memory.GetInterface)
 	d.addAPIRoute(apiURL+"/docker", docker.GetInterface)
 	d.addAPIRoute(apiURL+"/docker/containers", containers.GetInterface)
