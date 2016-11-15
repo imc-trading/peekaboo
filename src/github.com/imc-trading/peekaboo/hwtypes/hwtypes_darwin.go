@@ -13,6 +13,7 @@ import (
 	"github.com/imc-trading/peekaboo/system/cpu"
 	"github.com/imc-trading/peekaboo/system/memory"
 	"github.com/imc-trading/peekaboo/system/opsys"
+	"github.com/mickep76/dquery"
 )
 
 var hwTypes = []string{
@@ -27,7 +28,7 @@ var hwTypes = []string{
 	"docker/images (short: imgs)",
 }
 
-func Get(hwType string) error {
+func Get(hwType string, filter string) error {
 	var r interface{}
 	var err error
 
@@ -59,7 +60,11 @@ func Get(hwType string) error {
 	}
 
 	b, _ := json.MarshalIndent(r, "", "  ")
-	fmt.Println(string(b))
+	j, err := dquery.FilterJSON(filter, b)
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(j))
 
 	return nil
 }
