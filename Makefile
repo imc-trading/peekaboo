@@ -18,7 +18,13 @@ test: clean
 	gb test
 
 build: test
-	gb build all
+	gb build
+
+linux:
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 gb build
+		  
+darwin:
+	GOOS=darwin GOARCH=amd64 gb build
 
 update:
 	gb vendor update --all
