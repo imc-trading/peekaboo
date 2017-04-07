@@ -12,6 +12,7 @@ import (
 	"github.com/imc-trading/peekaboo/network"
 	"github.com/imc-trading/peekaboo/network/interfaces"
 	"github.com/imc-trading/peekaboo/network/routes"
+	"github.com/imc-trading/peekaboo/network/arp"
 	"github.com/imc-trading/peekaboo/storage/disks"
 	"github.com/imc-trading/peekaboo/storage/filesystems"
 	"github.com/imc-trading/peekaboo/storage/lvm/logvols"
@@ -36,6 +37,7 @@ var hwTypes = []string{
 	"network (short: net)",
 	"network/interfaces (short: ifs)",
 	"network/routes (short: routes)",
+	"network/arp (short: arp)",
 	"system (short: sys)",
 	"system/cpu (short: cpu)",
 	"system/cpu/load (short: load)",
@@ -70,6 +72,8 @@ func Get(hwType string, filter string) error {
 		r, err = interfaces.GetInterface()
 	case "routes", "network/routes":
 		r, err = routes.Get()
+	case "arp", "network/arp":
+		r, err = arp.Get()
 	case "sys", "system":
 		r, err = system.Get()
 	case "os", "system/os":

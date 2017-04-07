@@ -55,6 +55,7 @@ func New() Daemon {
 			apiURL + "/network":               {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/network/interfaces":    {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/network/routes":        {Timeout: 5 * 60},  // 5 min.
+			apiURL + "/network/arp":           {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/storage/disks":         {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/storage/mounts":        {Timeout: 5 * 60},  // 5 min.
 			apiURL + "/storage/lvm/physvols":  {Timeout: 15 * 60}, // 15 min.
@@ -74,6 +75,7 @@ func (d *daemon) Run(bind string, static string) error {
 	d.addAPIRoute(apiURL+"/network", network.GetInterface)
 	d.addAPIRoute(apiURL+"/network/interfaces", interfaces.GetInterface)
 	d.addAPIRoute(apiURL+"/network/routes", routes.GetInterface)
+	d.addAPIRoute(apiURL+"/network/arp", routes.GetInterface)
 	d.addAPIRoute(apiURL+"/system", system.GetInterface)
 	d.addAPIRoute(apiURL+"/system/os", opsys.GetInterface)
 	d.addAPIRoute(apiURL+"/system/kernel/config", config.GetInterface)
