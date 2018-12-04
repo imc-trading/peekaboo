@@ -52,6 +52,8 @@ func ExecRegexpMap(cmd string, args []string, delim string, match string) (map[s
 		v := reDelim.Split(l, -1)
 		if len(v) < 1 {
 			continue
+		} else if len (v) > 1 {
+			v[1] = strings.TrimSpace(strings.Join(v[1:], delim))
 		}
 
 		m[strings.TrimSpace(v[0])] = strings.TrimSpace(v[1])
